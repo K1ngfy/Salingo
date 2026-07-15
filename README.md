@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-浏览器打开 [http://localhost:3000](http://localhost:3000)。首次启动不需要配置数据库或账号。
+浏览器打开 [http://localhost:43127](http://localhost:43127)。`npm run dev` 会同时启动网页和统一 AI 代理（`127.0.0.1:43128`），首次启动不需要配置数据库或账号。
 
 生产构建与纯静态导出：
 
@@ -21,7 +21,7 @@ npm run dev
 npm run build
 ```
 
-静态文件会生成到 `out/`，可由任意静态文件服务器托管。项目未使用 Route Handler、Server Action 或其他必须依赖服务端的功能。
+静态文件会生成到 `out/`，可由任意静态文件服务器托管。静态网页未使用 Route Handler 或 Server Action；本地 AI 代理是开发辅助进程，不会被打包进 `out/`。
 
 ## AI 接口配置
 
@@ -32,14 +32,14 @@ cp .env.example .env.local
 ```
 
 ```dotenv
-NEXT_PUBLIC_AI_BASE_URL=https://api.openai.com/v1
-NEXT_PUBLIC_AI_API_KEY=你的独立限额Key
+AI_BASE_URL=https://api.openai.com/v1
+AI_API_KEY=你的独立限额Key
 NEXT_PUBLIC_AI_MODEL=gpt-5-mini
 ```
 
-也可以在网页“设置”中填写。接口需要兼容 `POST /chat/completions`。AI 输出会先通过 Zod 结构校验，校验成功后才会写入题库；请求失败会显示行内错误，不会阻塞页面。
+也可以在网页“设置”中填写并随时切换兼容服务商，无需重启或修改代码。接口地址既可填写 API 根地址，也可填写完整的 `/chat/completions` 地址。统一代理负责 CORS、端点规范化，并在服务商不支持 `response_format` 时自动降级重试；响应兼容标准 `choices` 和常见的 `data.choices` 包装。AI 输出会先通过 Zod 结构校验，校验成功后才会写入题库。
 
-安全说明：纯前端直连意味着 API Key 对本机浏览器可见。此设计只适用于目标约束中的个人本地使用。建议创建独立、限额、可撤销的 Key；不要在共享设备或公开站点中放置长期密钥。
+开发模式下，网页只把 Key 发给本机代理和所选服务商。纯静态部署无法携带这个本地进程：如果目标服务商支持浏览器 CORS，可继续使用 `NEXT_PUBLIC_AI_*` 直连；否则应把 `NEXT_PUBLIC_AI_PROXY_URL` 指向自行部署的同协议代理。建议始终使用独立、限额、可撤销的 Key，不要在公开站点中写入长期密钥。
 
 ## 功能
 

@@ -8,7 +8,7 @@ import { dateKey } from "@/lib/utils";
 const STORAGE_KEY = "salingo:data:v1";
 
 const defaultAI: AISettings = {
-  baseUrl: process.env.NEXT_PUBLIC_AI_BASE_URL ?? "https://api.openai.com/v1",
+  baseUrl: process.env.NEXT_PUBLIC_AI_BASE_URL ?? "",
   apiKey: process.env.NEXT_PUBLIC_AI_API_KEY ?? "",
   model: process.env.NEXT_PUBLIC_AI_MODEL ?? "gpt-5-mini",
 };
