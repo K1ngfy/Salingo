@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+.playwright-cli/
+output/playwright/
+*.tsbuildinfo
+.DS_Store
+*.log
+.env*
+!.env.example
+AGENT.md
+CLAUDE.md
+.agent/
+.codex/
+.claude/
+.skill/
