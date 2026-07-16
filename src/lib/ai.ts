@@ -1,6 +1,7 @@
 import { explanationSchema, questionSchema } from "./validation";
-import type { AISettings, Difficulty, DomainId, Explanation, Question } from "./types";
+import type { AISettings, AnswerResponse, Difficulty, DomainId, Explanation, PrepCard, Question } from "./types";
 import { getDomain } from "./domains";
+import { correctResponse, responseLabel } from "./question-utils";
 
 function chatEndpoint(url: string) {
   const cleanUrl = url.trim().replace(/\/+$/, "");
@@ -107,18 +108,43 @@ export async function generateQuestion(settings: AISettings, input: { domainId: 
   return questionSchema.parse({ ...raw, id: `ai-${input.domainId}-${crypto.randomUUID()}`, domainId: input.domainId, difficulty: input.difficulty, source: "ai", outlineVersion: "2024-current", createdAt: new Date().toISOString() });
 }
 
-export async function explainQuestion(settings: AISettings, question: Question, selectedAnswers: string[]): Promise<Explanation> {
+export async function explainQuestion(settings: AISettings, question: Question, answer: AnswerResponse): Promise<Explanation> {
+  const typeLabel = question.type === "matching" ? "匹配题" : question.type === "multiple" ? "多选题" : "单选题";
+  const promptItems = question.type === "matching"
+    ? `待匹配项：${question.matchingPrompts.map((item) => `${item.id}.${item.text}`).join("；")}\n匹配目标：${question.options.map((option) => `${option.id}.${option.text}`).join("；")}`
+    : `选项：${question.options.map((option) => `${option.id}.${option.text}`).join("；")}`;
+  const optionShape = Object.fromEntries(question.options.map((option) => [option.id, "逐项说明"]));
+  const provenance = question.source === "imported" ? "用户提供的导入练习题" : question.source === "ai" ? "AI 原创练习" : "Salingo 原创练习";
   const response = await chatCompletion(settings, {
     model: settings.model,
     temperature: 0.25,
     response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: "你是严谨的 CISSP 中文导师，只输出有效 JSON，不声称接触过真实考试题。" },
-      { role: "user", content: `依据当前生效的 ISC² CISSP Exam Outline 深度解析以下原创练习。题目：${question.stem}\n选项：${question.options.map((option) => `${option.id}.${option.text}`).join("；")}\n用户选择：${selectedAnswers.join("、") || "未选择"}\n正确答案：${question.correctAnswers.join("、")}。只输出 {"logic":"核心作答逻辑，强调管理者优先顺序","optionAnalysis":{"A":"逐项说明","B":"逐项说明","C":"逐项说明","D":"逐项说明"},"knowledgePoint":"知识域与细分考点","plainLanguage":"企业场景通俗解读"}。` },
+      { role: "system", content: "你是严谨的 CISSP 中文导师，只输出有效 JSON，不声称接触过真实考试题，也不臆造缺失的图形。" },
+      { role: "user", content: `依据当前生效的 ISC² CISSP Exam Outline 深度解析以下${provenance}。如果题目知识与当前考纲或实践可能不一致，必须明确指出。${question.requiresFigure ? "原始图形缺失，只能依据现有文字分析，并明确说明限制。" : ""}\n题型：${typeLabel}\n题目：${question.stem}\n${promptItems}\n用户作答：${responseLabel(answer) || "未作答"}\n正确答案：${responseLabel(correctResponse(question))}。只输出 ${JSON.stringify({ logic: "核心作答逻辑", optionAnalysis: optionShape, knowledgePoint: "知识域与细分考点", plainLanguage: "企业场景通俗解读" })}。` },
     ],
   });
   if (!response.ok) throw await responseError(response, "AI 解析失败");
   const content = extractContent(await response.json());
   if (!content) throw new Error("AI 没有返回解析，已保留内置解析");
   return explanationSchema.parse(parseJsonContent(content));
+}
+
+export async function explainPrepCard(settings: AISettings, card: PrepCard) {
+  const provenance = card.kind === "knowledge" ? "个人备考指南中的知识判断" : card.kind === "vocabulary" ? "个人备考指南中的双语词汇" : "个人备考指南中的学习策略";
+  const response = await chatCompletion(settings, {
+    model: settings.model,
+    temperature: 0.2,
+    response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: "你是严谨的 CISSP 中文导师。必须区分 ISC2 官方考纲与个人经验，只输出有效 JSON。" },
+      { role: "user", content: `请解释以下${provenance}。状态：${card.verificationStatus}。内容：${card.front}\n参考说明：${card.back}\n${card.correction ?? ""}\n不得把个人笔记包装为 ISC2 官方结论；如果可能过时、有争议或缺少权威依据，必须明确说明。只输出 {"explanation":"简明解释","caution":"来源与时效提示"}。` },
+    ],
+  });
+  if (!response.ok) throw await responseError(response, "AI 讲解失败");
+  const content = extractContent(await response.json());
+  if (!content) throw new Error("AI 没有返回讲解");
+  const parsed = parseJsonContent(content);
+  if (typeof parsed.explanation !== "string" || typeof parsed.caution !== "string") throw new Error("AI 返回格式无效");
+  return { explanation: parsed.explanation, caution: parsed.caution };
 }

@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import Dexie from "dexie";
 import { INITIAL_QUESTIONS } from "@/data/full-bank";
 import type { AnswerRecord, AppData, ExamRecord, ReviewCardState } from "./types";
 import {
@@ -7,6 +8,7 @@ import {
   completeExam,
   addQuestions,
   importBackup,
+  installQuestionBank,
   initialAppData,
   initializeDatabase,
   readAppData,
@@ -37,11 +39,11 @@ afterEach(async () => {
 });
 
 function sampleAnswer(): AnswerRecord {
-  return { id: "answer-1", questionId: "d1-care-001", domainId: "d1", selectedAnswers: ["A"], correct: false, answeredAt: "2026-07-15T10:00:00.000Z", durationSeconds: 20, mode: "practice" };
+  return { id: "answer-1", questionId: "d1-care-001", bankId: "salingo-original", sectionId: "d1", domainId: "d1", response: { kind: "choice", selectedAnswers: ["A"] }, correct: false, answeredAt: "2026-07-15T10:00:00.000Z", durationSeconds: 20, mode: "practice" };
 }
 
 function sampleReview(): ReviewCardState {
-  return { questionId: "d1-care-001", due: "2026-07-16T10:00:00.000Z", stability: 1, difficulty: 5, elapsed_days: 0, scheduled_days: 1, learning_steps: 0, reps: 1, lapses: 1, state: 1, mistakeType: "概念盲区", favorite: false };
+  return { id: "question:d1-care-001", targetType: "question", targetId: "d1-care-001", due: "2026-07-16T10:00:00.000Z", stability: 1, difficulty: 5, elapsed_days: 0, scheduled_days: 1, learning_steps: 0, reps: 1, lapses: 1, state: 1, mistakeType: "概念盲区", favorite: false };
 }
 
 describe("IndexedDB initialization", () => {
@@ -100,6 +102,23 @@ describe("IndexedDB initialization", () => {
     expect(await database.questions.get(second.id)).toBeDefined();
     expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length);
   });
+
+  it("upgrades Dexie v2 question reviews to generic v3 review targets", async () => {
+    const name = `salingo-v2-upgrade-${crypto.randomUUID()}`;
+    const legacy = new Dexie(name);
+    legacy.version(2).stores({ questions: "id, bankId", answers: "id", reviews: "questionId, due", exams: "id", streaks: "date", settings: "key", metadata: "key" });
+    await legacy.open();
+    await legacy.table("reviews").put({ questionId: "legacy-q", due: "2026-07-16T00:00:00.000Z", stability: 2, difficulty: 5, elapsed_days: 0, scheduled_days: 1, learning_steps: 0, reps: 2, lapses: 1, state: 1, mistakeType: "审题失误", favorite: true });
+    await legacy.table("settings").put({ key: "preferences", value: { activeBankId: "salingo-original", contentLanguage: "zh" } });
+    await legacy.table("metadata").put({ key: "initialized", value: true });
+    legacy.close();
+    const database = new SalingoDatabase(name);
+    databases.push(database);
+    await database.open();
+    const review = await database.reviewTargets.get("question:legacy-q");
+    expect(review).toMatchObject({ targetType: "question", targetId: "legacy-q", reps: 2, mistakeType: "审题失误", favorite: true });
+    expect((await database.settings.get("preferences"))?.value).toMatchObject({ questionAssistEnabled: true });
+  });
 });
 
 describe("IndexedDB transactions and backups", () => {
@@ -116,7 +135,7 @@ describe("IndexedDB transactions and backups", () => {
   it("rolls back answer and streak when review persistence fails", async () => {
     const database = createDb();
     await initializeDatabase(database, new MemoryStorage());
-    vi.spyOn(database.reviews, "put").mockRejectedValueOnce(new Error("review failed"));
+    vi.spyOn(database.reviewTargets, "put").mockRejectedValueOnce(new Error("review failed"));
     await expect(recordAnswer(database, sampleAnswer(), sampleReview())).rejects.toThrow("review failed");
     expect(await database.answers.count()).toBe(0);
     expect(await database.streaks.count()).toBe(0);
@@ -131,10 +150,20 @@ describe("IndexedDB transactions and backups", () => {
     expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length + 1);
   });
 
+  it("installs a versioned bank idempotently", async () => {
+    const database = createDb();
+    await initializeDatabase(database, new MemoryStorage());
+    const seed = (await database.questions.toArray())[0];
+    const official = { ...seed, id: "official-test-question", bankId: "official-practice-tests" as const, sectionId: "d1", source: "imported" as const };
+    expect(await installQuestionBank(database, "official-practice-tests", 1, [official])).toEqual({ installed: true, count: 1 });
+    expect(await installQuestionBank(database, "official-practice-tests", 1, [official])).toEqual({ installed: false, count: 1 });
+    expect(await database.questions.get(official.id)).toBeDefined();
+  });
+
   it("records an exam and its review set together", async () => {
     const database = createDb();
     await initializeDatabase(database, new MemoryStorage());
-    const exam: ExamRecord = { id: "exam-1", startedAt: "2026-07-15T10:00:00.000Z", finishedAt: "2026-07-15T11:00:00.000Z", durationSeconds: 3600, questionIds: ["d1-care-001"], answers: { "d1-care-001": ["A"] }, score: 0, domainScores: { d1: 0 } };
+    const exam: ExamRecord = { id: "exam-1", bankId: "salingo-original", startedAt: "2026-07-15T10:00:00.000Z", finishedAt: "2026-07-15T11:00:00.000Z", durationSeconds: 3600, questionIds: ["d1-care-001"], answers: { "d1-care-001": { kind: "choice", selectedAnswers: ["A"] } }, score: 0, domainScores: { d1: 0 }, sectionScores: { d1: 0 } };
     await completeExam(database, exam, [sampleReview()]);
     const snapshot = await readAppData(database);
     expect(snapshot.exams).toEqual([exam]);

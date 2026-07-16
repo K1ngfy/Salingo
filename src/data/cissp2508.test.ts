@@ -18,6 +18,8 @@ describe("CISSP2508 imported question bank", () => {
 
   it("provides basic four-part explanations while preserving source answers", () => {
     for (const question of CISSP2508_QUESTIONS) {
+      expect(question.type).not.toBe("matching");
+      if (question.type === "matching") continue;
       expect(question.explanation.logic).toContain(question.correctAnswers.join("、"));
       expect(question.explanation.knowledgePoint).toContain("自动归类");
       expect(question.explanation.plainLanguage).toMatch(/原文件未附解析|保留了源文件随题附带的说明/);

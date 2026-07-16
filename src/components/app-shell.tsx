@@ -9,6 +9,7 @@ import {
   GearSix,
   House,
   Lightning,
+  MapTrifold,
   Notebook,
   Timer,
 } from "@phosphor-icons/react";
@@ -20,16 +21,18 @@ const navigation = [
   { href: "/learn", label: "闯关", icon: Lightning },
   { href: "/review", label: "复习", icon: Notebook },
   { href: "/exam", label: "模考", icon: Timer },
+  { href: "/prep", label: "备考", icon: MapTrifold },
   { href: "/library", label: "题库", icon: Books },
   { href: "/stats", label: "统计", icon: ChartBar },
 ];
 
 function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { data, storageStatus, storageError } = useAppData();
+  const { data, hydrated, storageStatus, storageError } = useAppData();
   const due = data.reviews.filter((item) => new Date(item.due) <= new Date()).length;
   const streak = data.streakDates.length;
 
+  if (!hydrated) return <div className="grid min-h-dvh place-items-center bg-[#fcfcf8]"><div className="text-center"><span className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#58cc02] text-2xl font-black text-white">S</span><p className="mt-4 font-black text-[#777]">正在加载本地题库…</p></div></div>;
   return (
     <div className="min-h-dvh bg-[#fcfcf8] text-[#3c3c3c]">
       <a href="#main-content" className="skip-link">跳到主要内容</a>
@@ -72,7 +75,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-[#e8e8e3] bg-white/96 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl lg:hidden" aria-label="移动端主导航">
         <div className="mx-auto flex max-w-xl justify-around">
-          {navigation.slice(0, 5).map(({ href, label, icon: Icon }) => {
+          {navigation.slice(0, 6).map(({ href, label, icon: Icon }) => {
             const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
             return <Link key={href} href={href} className={cn("relative flex min-w-14 flex-col items-center gap-1 rounded-xl px-2 py-1.5 text-[10px] font-bold", active ? "text-[#58a700]" : "text-[#999]")}><Icon size={23} weight={active ? "fill" : "bold"} /><span>{label}</span>{href === "/review" && due > 0 && <span className="absolute right-1 top-0 size-2 rounded-full bg-[#ff4b4b]" />}</Link>;
           })}

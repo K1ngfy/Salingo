@@ -1,4 +1,4 @@
-import type { Difficulty, DomainId, Explanation, Question, QuestionType } from "@/lib/types";
+import type { Difficulty, DomainId, Explanation, Question } from "@/lib/types";
 
 const CREATED_AT = "2026-07-15T00:00:00.000Z";
 
@@ -15,7 +15,7 @@ function q(
   tags: string[],
   detail: Explanation,
   difficulty: Difficulty = "进阶",
-  type: QuestionType = "single",
+  type: "single" | "multiple" = "single",
 ): Question {
   return {
     id,

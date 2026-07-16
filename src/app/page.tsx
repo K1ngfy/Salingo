@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Brain, CalendarCheck, ChartLineUp, Fire, FlagCheckered, Lightning, Target, Timer } from "@phosphor-icons/react";
+import { ArrowRight, Brain, CalendarCheck, ChartLineUp, Fire, FlagCheckered, Lightning, MapTrifold, Target, Timer } from "@phosphor-icons/react";
 import { DomainIcon } from "@/components/domain-icon";
 import { useAppData } from "@/components/data-provider";
 import { Button } from "@/components/ui/button";
 import { DOMAINS } from "@/lib/domains";
 import { dateKey, percent } from "@/lib/utils";
+import { PREP_CONTENT } from "@/data/prep-source";
+import { buildTodayPlan } from "@/lib/prep";
 
 function calculateStreak(dates: string[]) {
   const set = new Set(dates);
@@ -24,6 +26,7 @@ export default function DashboardPage() {
   const due = data.reviews.filter((item) => new Date(item.due) <= new Date()).length;
   const streak = calculateStreak(data.streakDates);
   const activeDays = new Set(data.answers.map((item) => dateKey(new Date(item.answeredAt)))).size;
+  const todayPlan = buildTodayPlan({ profile: data.prepProfile, answers: data.answers, reviews: data.reviews, objectives: PREP_CONTENT.objectives, outlineProgress: data.outlineProgress });
 
   return (
     <div className="space-y-8">
@@ -45,11 +48,12 @@ export default function DashboardPage() {
           <div><p className="text-sm font-extrabold text-[#58a700]">TODAY</p><h2 id="today-heading" className="mt-1 text-2xl font-black tracking-[-0.025em]">今天的学习路线</h2></div>
           <Link href="/stats" className="text-sm font-extrabold text-[#168fc7] hover:underline">查看详细统计</Link>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {[
             { href: "/learn", icon: Target, eyebrow: "专项闯关", title: "继续八域训练", text: `${data.questions.length} 道练习题已就位`, color: "#58cc02", bg: "#effbe5" },
             { href: "/review", icon: Brain, eyebrow: "FSRS 复习", title: due ? `${due} 道今日到期` : "今日已无到期题", text: due ? "优先修复即将遗忘的知识" : "答错的题会自动排入复习", color: "#ff4b4b", bg: "#fff0f0" },
             { href: "/exam", icon: Timer, eyebrow: "全真模考", title: "检验综合判断", text: "按域组卷 · 统一交卷 · 分项报告", color: "#1cb0f6", bg: "#eaf8ff" },
+            { href: "/prep", icon: MapTrifold, eyebrow: "备考中心", title: `${todayPlan.dueReviews + todayPlan.questionTarget} 项今日任务`, text: todayPlan.objective ? `${todayPlan.objective.number} ${todayPlan.objective.title}` : "考纲目标已经全部掌握", color: "#874eb0", bg: "#f3eaff" },
           ].map((item, index) => (
             <motion.div key={item.href} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.07 }}>
               <Link href={item.href} className="group flex h-full min-h-40 items-center gap-5 rounded-[1.6rem] p-5 transition duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100" style={{ backgroundColor: item.bg }}>
@@ -69,7 +73,8 @@ export default function DashboardPage() {
             {DOMAINS.map((domain, index) => {
               const answers = data.answers.filter((answer) => answer.domainId === domain.id);
               const domainCorrect = answers.filter((answer) => answer.correct).length;
-              const domainDue = data.reviews.filter((review) => review.questionId.startsWith(domain.id) && new Date(review.due) <= new Date()).length;
+              const domainQuestionIds = new Set(data.questions.filter((question) => question.domainId === domain.id).map((question) => question.id));
+              const domainDue = data.reviews.filter((review) => review.targetType === "question" && domainQuestionIds.has(review.targetId) && new Date(review.due) <= new Date()).length;
               const progress = Math.min(100, answers.length * 5);
               return (
                 <motion.article key={domain.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.12 + index * 0.035 }}>

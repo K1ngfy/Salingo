@@ -1,5 +1,6 @@
 import { createEmptyCard, fsrs, Rating, type Card, State } from "ts-fsrs";
 import type { MistakeType, ReviewCardState } from "./types";
+import { reviewId } from "./prep";
 
 const scheduler = fsrs({ request_retention: 0.9, maximum_interval: 3650, enable_fuzz: true });
 
@@ -20,14 +21,17 @@ function toCard(review?: ReviewCardState): Card {
 }
 
 export function scheduleReview(
-  questionId: string,
+  targetId: string,
   previous: ReviewCardState | undefined,
   correct: boolean,
   mistakeType: MistakeType = "概念盲区",
+  targetType: "question" | "prep-card" = "question",
 ): ReviewCardState {
   const result = scheduler.next(toCard(previous), new Date(), correct ? Rating.Good : Rating.Again);
   return {
-    questionId,
+    id: reviewId(targetType, targetId),
+    targetType,
+    targetId,
     due: result.card.due.toISOString(),
     stability: result.card.stability,
     difficulty: result.card.difficulty,

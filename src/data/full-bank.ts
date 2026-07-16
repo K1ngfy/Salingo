@@ -1,14 +1,15 @@
 import { SEED_QUESTIONS } from "./questions";
 import { EXTENDED_QUESTIONS } from "./questions-extended";
 import { CISSP2508_QUESTIONS } from "./cissp2508";
-import type { Question } from "@/lib/types";
+import type { ChoiceQuestion, Question } from "@/lib/types";
+import { normalizeSeedQuestion } from "@/lib/question-banks";
 
 const CONTEXTS = [
   "跨国医疗集团", "区域商业银行", "云原生电商平台", "城市轨道交通运营方", "全球制造企业",
   "高校科研联盟", "公共事业单位", "金融科技初创公司", "航空服务集团", "连锁零售企业",
 ] as const;
 
-function rotateQuestion(seed: Question, variant: number): Question {
+function rotateQuestion(seed: ChoiceQuestion, variant: number): ChoiceQuestion {
   if (variant === 0) return seed;
   const shift = variant % seed.options.length;
   const rotated = [...seed.options.slice(shift), ...seed.options.slice(0, shift)];
@@ -32,11 +33,11 @@ function rotateQuestion(seed: Question, variant: number): Question {
   };
 }
 
-const BLUEPRINTS = [...SEED_QUESTIONS, ...EXTENDED_QUESTIONS];
+const BLUEPRINTS = [...SEED_QUESTIONS, ...EXTENDED_QUESTIONS] as ChoiceQuestion[];
 
 /** 800 道原创变式题，加上用户提供的 277 道 CISSP2508 模拟题。 */
 const ORIGINAL_QUESTIONS: Question[] = BLUEPRINTS.flatMap((seed) =>
   CONTEXTS.map((_, variant) => rotateQuestion(seed, variant)),
 );
 
-export const INITIAL_QUESTIONS: Question[] = [...ORIGINAL_QUESTIONS, ...CISSP2508_QUESTIONS];
+export const INITIAL_QUESTIONS: Question[] = [...ORIGINAL_QUESTIONS, ...CISSP2508_QUESTIONS].map(normalizeSeedQuestion);

@@ -1,0 +1,4894 @@
+{
+  "version": 1,
+  "outlineEffectiveDate": "2024-04-15",
+  "generatedAt": "2026-07-16",
+  "objectives": [
+    {
+      "id": "outline-1-1",
+      "domainId": "d1",
+      "number": "1.1",
+      "title": "理解、遵守并促进职业道德",
+      "bullets": [
+        "ISC2 职业道德规范",
+        "组织道德规范"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-2",
+      "domainId": "d1",
+      "number": "1.2",
+      "title": "理解并应用安全概念",
+      "bullets": [
+        "机密性、完整性、可用性、真实性与不可抵赖性"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-3",
+      "domainId": "d1",
+      "number": "1.3",
+      "title": "评估和应用安全治理原则",
+      "bullets": [
+        "业务目标对齐",
+        "组织流程、角色与责任",
+        "安全控制框架",
+        "尽职调查"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-4",
+      "domainId": "d1",
+      "number": "1.4",
+      "title": "全面了解与信息安全相关的法律法规事项",
+      "bullets": [
+        "网络犯罪与数据泄露",
+        "知识产权、进出口和跨境数据",
+        "隐私、合同、行业标准与监管要求"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-5",
+      "domainId": "d1",
+      "number": "1.5",
+      "title": "了解调查类型的要求",
+      "bullets": [
+        "行政、刑事、民事、监管和行业标准调查"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-6",
+      "domainId": "d1",
+      "number": "1.6",
+      "title": "制定、记录和实施安全政策、标准、程序和指南",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-7",
+      "domainId": "d1",
+      "number": "1.7",
+      "title": "确定并实现业务持续性要求",
+      "bullets": [
+        "业务影响分析",
+        "外部依赖"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-8",
+      "domainId": "d1",
+      "number": "1.8",
+      "title": "促成并执行人员安全政策和程序",
+      "bullets": [
+        "筛选与聘用",
+        "入职、调动和终止",
+        "供应商、顾问和承包商控制"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-9",
+      "domainId": "d1",
+      "number": "1.9",
+      "title": "理解并应用风险管理概念",
+      "bullets": [
+        "威胁和漏洞识别",
+        "风险分析、响应和处理",
+        "控制类型与评估",
+        "持续监控、报告和风险框架"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-10",
+      "domainId": "d1",
+      "number": "1.10",
+      "title": "理解并应用威胁建模概念和方法",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-11",
+      "domainId": "d1",
+      "number": "1.11",
+      "title": "应用供应链风险管理概念",
+      "bullets": [
+        "采购风险",
+        "第三方评估与监控",
+        "最低安全和服务等级要求",
+        "软件物料清单"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-1-12",
+      "domainId": "d1",
+      "number": "1.12",
+      "title": "建立并维护安全意识、教育和培训计划",
+      "bullets": [
+        "社会工程、钓鱼、安全冠军和游戏化",
+        "计划成效评估",
+        "新兴技术与趋势"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 4,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-2-1",
+      "domainId": "d2",
+      "number": "2.1",
+      "title": "对信息和资产进行识别和分类",
+      "bullets": [
+        "数据分类",
+        "资产分类"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 6,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-2-2",
+      "domainId": "d2",
+      "number": "2.2",
+      "title": "制定信息和资产处理要求",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 6,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-2-3",
+      "domainId": "d2",
+      "number": "2.3",
+      "title": "安全地提供信息和资产",
+      "bullets": [
+        "所有权",
+        "资产库存",
+        "资产管理"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 6,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-2-4",
+      "domainId": "d2",
+      "number": "2.4",
+      "title": "管理数据生命周期",
+      "bullets": [
+        "数据角色",
+        "收集、位置、维护、保留、恢复和销毁"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 6,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-2-5",
+      "domainId": "d2",
+      "number": "2.5",
+      "title": "确保适当的资产保留",
+      "bullets": [
+        "使用寿命结束 EOL",
+        "支持终止 EOS"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 6,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-2-6",
+      "domainId": "d2",
+      "number": "2.6",
+      "title": "确定数据安全控制与合规要求",
+      "bullets": [
+        "使用中、传输中和静态数据",
+        "范围界定与定制",
+        "DRM、DLP 和 CASB"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 6,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-1",
+      "domainId": "d3",
+      "number": "3.1",
+      "title": "利用安全设计原则管理工程流程",
+      "bullets": [
+        "威胁建模、最小特权和纵深防御",
+        "安全默认、安全失效和职责分离",
+        "零信任、隐私设计和责任共担"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-2",
+      "domainId": "d3",
+      "number": "3.2",
+      "title": "了解安全模型的基本概念",
+      "bullets": [
+        "Biba、Bell-LaPadula 等安全模型"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-3",
+      "domainId": "d3",
+      "number": "3.3",
+      "title": "根据系统安全需求选择控制措施",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-4",
+      "domainId": "d3",
+      "number": "3.4",
+      "title": "了解信息系统的安全功能",
+      "bullets": [
+        "内存保护",
+        "可信平台模块",
+        "加密与解密"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-5",
+      "domainId": "d3",
+      "number": "3.5",
+      "title": "评估并缓解架构与解决方案组件漏洞",
+      "bullets": [
+        "客户端、服务器、数据库和加密系统",
+        "云、分布式、虚拟化、容器和无服务器",
+        "ICS、IoT、嵌入式、边缘与高性能计算"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-6",
+      "domainId": "d3",
+      "number": "3.6",
+      "title": "选择和确定加密解决方案",
+      "bullets": [
+        "密码生命周期与算法",
+        "对称、非对称、椭圆曲线和量子",
+        "PKI、密钥管理、签名和证书"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-7",
+      "domainId": "d3",
+      "number": "3.7",
+      "title": "了解密码分析攻击的方法",
+      "bullets": [
+        "蛮力、唯密文、已知明文和选择密文",
+        "侧信道、故障注入和时序",
+        "MITM、哈希传递和 Kerberos 利用"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-8",
+      "domainId": "d3",
+      "number": "3.8",
+      "title": "在场地和设施设计中应用安全原则",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-9",
+      "domainId": "d3",
+      "number": "3.9",
+      "title": "设计场地和设施安全控制",
+      "bullets": [
+        "数据中心、介质和证据存储",
+        "环境、火灾、电源与 HVAC",
+        "限制区和工作区"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-3-10",
+      "domainId": "d3",
+      "number": "3.10",
+      "title": "管理信息系统生命周期",
+      "bullets": [
+        "需求、架构、开发和集成",
+        "核查验证、部署、维护和退役"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 7,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-4-1",
+      "domainId": "d4",
+      "number": "4.1",
+      "title": "在网络架构中应用安全设计原则",
+      "bullets": [
+        "OSI、TCP/IP、IPv4 和 IPv6",
+        "安全协议、分段、无线和移动网络",
+        "SDN、VPC、边缘网络、监控和性能"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 9,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-4-2",
+      "domainId": "d4",
+      "number": "4.2",
+      "title": "保护网络组件",
+      "bullets": [
+        "基础设施运行与传输介质",
+        "网络访问控制",
+        "端点安全"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 9,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-4-3",
+      "domainId": "d4",
+      "number": "4.3",
+      "title": "根据设计实现安全通信渠道",
+      "bullets": [
+        "语音、视频与协作",
+        "远程访问",
+        "数据通信与第三方连接"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 9,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-5-1",
+      "domainId": "d5",
+      "number": "5.1",
+      "title": "控制资产的物理和逻辑访问",
+      "bullets": [
+        "信息、系统、设备、设施、应用和服务"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 10,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-5-2",
+      "domainId": "d5",
+      "number": "5.2",
+      "title": "设计识别和身份验证策略",
+      "bullets": [
+        "群组和角色",
+        "AAA、MFA 与无密码认证",
+        "会话、凭证、SSO 和联合身份"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 10,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-5-3",
+      "domainId": "d5",
+      "number": "5.3",
+      "title": "与第三方服务联合身份",
+      "bullets": [
+        "本地、混合和云"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 10,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-5-4",
+      "domainId": "d5",
+      "number": "5.4",
+      "title": "实现和管理授权机制",
+      "bullets": [
+        "RBAC、ABAC、规则与风险访问控制",
+        "MAC、DAC 和策略执行"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 10,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-5-5",
+      "domainId": "d5",
+      "number": "5.5",
+      "title": "管理身份和访问配置生命周期",
+      "bullets": [
+        "访问审查",
+        "置备与取消置备",
+        "角色转换、服务账户和特权升级"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 10,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-5-6",
+      "domainId": "d5",
+      "number": "5.6",
+      "title": "实现身份验证系统",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 10,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-6-1",
+      "domainId": "d6",
+      "number": "6.1",
+      "title": "设计并验证评估、测试及审计策略",
+      "bullets": [
+        "内部、外部和第三方",
+        "本地、云和混合位置"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 11,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-6-2",
+      "domainId": "d6",
+      "number": "6.2",
+      "title": "进行安全控制测试",
+      "bullets": [
+        "漏洞评估和渗透测试",
+        "代码、接口、日志和合规测试",
+        "覆盖率、滥用案例和入侵模拟"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 11,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-6-3",
+      "domainId": "d6",
+      "number": "6.3",
+      "title": "收集安全流程数据",
+      "bullets": [
+        "账户、审批、绩效与风险指标",
+        "培训、灾难恢复和备份验证数据"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 11,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-6-4",
+      "domainId": "d6",
+      "number": "6.4",
+      "title": "分析测试输出并生成报告",
+      "bullets": [
+        "补救",
+        "异常处理",
+        "道德披露"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 11,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-6-5",
+      "domainId": "d6",
+      "number": "6.5",
+      "title": "开展或协调安全审计",
+      "bullets": [
+        "内部、外部和第三方",
+        "本地、云和混合位置"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 11,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-1",
+      "domainId": "d7",
+      "number": "7.1",
+      "title": "了解并配合调查",
+      "bullets": [
+        "证据收集和处理",
+        "报告、工具、策略、程序与工件"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-2",
+      "domainId": "d7",
+      "number": "7.2",
+      "title": "开展记录和监控活动",
+      "bullets": [
+        "IDPS、SIEM、日志与持续监控",
+        "威胁情报、UEBA 和出站监控"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-3",
+      "domainId": "d7",
+      "number": "7.3",
+      "title": "执行配置管理",
+      "bullets": [
+        "置备、基线确定和自动化"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-4",
+      "domainId": "d7",
+      "number": "7.4",
+      "title": "应用基础安全运营概念",
+      "bullets": [
+        "按需知密与最小特权",
+        "职责分离、轮岗、SLA 和特权账户"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-5",
+      "domainId": "d7",
+      "number": "7.5",
+      "title": "应用资源保护",
+      "bullets": [
+        "介质管理和保护",
+        "静态与传输中数据"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-6",
+      "domainId": "d7",
+      "number": "7.6",
+      "title": "执行事件管理",
+      "bullets": [
+        "检测、响应、缓解、报告、恢复、补救和经验教训"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-7",
+      "domainId": "d7",
+      "number": "7.7",
+      "title": "运行和维护检测和预防措施",
+      "bullets": [
+        "防火墙、IDS/IPS、名单和沙盒",
+        "蜜罐、反恶意软件、AI 工具与第三方服务"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-8",
+      "domainId": "d7",
+      "number": "7.8",
+      "title": "实施并支持补丁和漏洞管理",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-9",
+      "domainId": "d7",
+      "number": "7.9",
+      "title": "了解并参与变更管理流程",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-10",
+      "domainId": "d7",
+      "number": "7.10",
+      "title": "实施恢复策略",
+      "bullets": [
+        "备份与恢复站点",
+        "多处理站点",
+        "弹性、高可用、QoS 和容错"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-11",
+      "domainId": "d7",
+      "number": "7.11",
+      "title": "实施灾难恢复流程",
+      "bullets": [
+        "响应、人员、通信、评估、恢复、培训和经验教训"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-12",
+      "domainId": "d7",
+      "number": "7.12",
+      "title": "测试灾难恢复计划",
+      "bullets": [
+        "通读、桌面、演练、模拟、平行和完全中断"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-13",
+      "domainId": "d7",
+      "number": "7.13",
+      "title": "参与业务持续性规划和演习",
+      "bullets": [],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-14",
+      "domainId": "d7",
+      "number": "7.14",
+      "title": "实现和管理物理安全",
+      "bullets": [
+        "边界和内部安全控制"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-7-15",
+      "domainId": "d7",
+      "number": "7.15",
+      "title": "解决人员安全和安保问题",
+      "bullets": [
+        "旅行、紧急情况、胁迫、安全意识和内部威胁"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 12,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-8-1",
+      "domainId": "d8",
+      "number": "8.1",
+      "title": "在软件开发生命周期中融入安全",
+      "bullets": [
+        "敏捷、瀑布、DevOps 和 DevSecOps",
+        "成熟度模型、运维、变更和综合产品团队"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 14,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-8-2",
+      "domainId": "d8",
+      "number": "8.2",
+      "title": "在软件开发生态中识别和应用安全控制",
+      "bullets": [
+        "语言、库、工具、IDE、运行时和代码库",
+        "SAST、DAST、SCA、IAST 和 CI/CD"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 14,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-8-3",
+      "domainId": "d8",
+      "number": "8.3",
+      "title": "评估软件安全的有效性",
+      "bullets": [
+        "变更审计和记录",
+        "风险分析与缓解"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 14,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-8-4",
+      "domainId": "d8",
+      "number": "8.4",
+      "title": "评估所获软件的安全影响",
+      "bullets": [
+        "COTS、开源、第三方、托管与云服务"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 14,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "outline-8-5",
+      "domainId": "d8",
+      "number": "8.5",
+      "title": "定义并应用安全编码指南和标准",
+      "bullets": [
+        "源代码弱点和漏洞",
+        "API 安全",
+        "安全编码和软件定义安全"
+      ],
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 14,
+        "outlineVersion": "2024-04-15",
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "strategy-01",
+      "kind": "strategy",
+      "title": "管理者视角",
+      "front": "管理者视角",
+      "back": "先确认业务目标、治理、风险、合规和连续性要求，再选择具体技术。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 1,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-02",
+      "kind": "strategy",
+      "title": "用考纲识别短板",
+      "front": "用考纲识别短板",
+      "back": "按八域和目标检查覆盖范围，不用单次分数代替系统性复盘。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 1,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-03",
+      "kind": "strategy",
+      "title": "理解错误选项",
+      "front": "理解错误选项",
+      "back": "复盘时不仅说明正确项为什么成立，也要解释其余选项为何不适合题干。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 1,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-04",
+      "kind": "strategy",
+      "title": "合理使用排除法",
+      "front": "合理使用排除法",
+      "back": "先排除与场景、层级或限定词明显冲突的选项，再比较剩余方案。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 1,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-05",
+      "kind": "strategy",
+      "title": "不要困在争议题",
+      "front": "不要困在争议题",
+      "back": "记录争议点和依据，优先掌握考查概念，避免让单题消耗过多时间。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 1,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-06",
+      "kind": "strategy",
+      "title": "错题闭环",
+      "front": "错题闭环",
+      "back": "新题与到期错题并行：练习、归因、复习、再次验证，直到稳定掌握。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 1,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-07",
+      "kind": "strategy",
+      "title": "识别否定表达",
+      "front": "识别否定表达",
+      "back": "看到 NOT、EXCEPT、不是、不属于等词时，先把问题改写成清晰的判断条件。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 2,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-08",
+      "kind": "strategy",
+      "title": "识别优先级词",
+      "front": "识别优先级词",
+      "back": "MOST、BEST、FIRST、LEAST 等词决定比较标准，答案要满足题目要求的优先级。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 2,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-09",
+      "kind": "strategy",
+      "title": "区分目的与功能",
+      "front": "区分目的与功能",
+      "back": "Purpose 关注为什么存在，Function 关注具体做什么，不要把实现手段当最终目标。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 2,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-10",
+      "kind": "strategy",
+      "title": "双语交叉核对",
+      "front": "双语交叉核对",
+      "back": "中文含义不清时对照英文题干和选项，但不要预设所有翻译都有问题。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 2,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-11",
+      "kind": "strategy",
+      "title": "比较包含关系",
+      "front": "比较包含关系",
+      "back": "两个选项都合理时，检查其中一个是否是更完整、上位且符合问题层级的答案。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 2,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "strategy-12",
+      "kind": "strategy",
+      "title": "保持考试状态",
+      "front": "保持考试状态",
+      "back": "提前规划交通、睡眠和入场时间，把注意力留给题目本身。",
+      "objectiveIds": [],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 2,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-001",
+      "kind": "knowledge",
+      "title": "易错知识核验 1",
+      "front": "这条备考判断应该如何理解？",
+      "back": "审计结论应结合控制设计、运行有效性、范围和独立性，不能只凭内部或外部标签判断质量。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-5"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-002",
+      "kind": "knowledge",
+      "title": "易错知识核验 2",
+      "front": "这条备考判断应该如何理解？",
+      "back": "SOC 报告类型和 Type I/II 的用途不同，选项判断应先确认服务对象、控制主题和报告受众。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-003",
+      "kind": "knowledge",
+      "title": "易错知识核验 3",
+      "front": "这条备考判断应该如何理解？",
+      "back": "认证强度、密码策略和访问控制是不同层级的问题，MFA 不等于强化密码本身。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-004",
+      "kind": "knowledge",
+      "title": "易错知识核验 4",
+      "front": "这条备考判断应该如何理解？",
+      "back": "保护云数据要区分访问控制与数据保护目标，认证和加密解决的是不同风险。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-005",
+      "kind": "knowledge",
+      "title": "易错知识核验 5",
+      "front": "这条备考判断应该如何理解？",
+      "back": "最快方案与最具成本效益方案可能不同，必须服从题干中的评价标准。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-006",
+      "kind": "knowledge",
+      "title": "易错知识核验 6",
+      "front": "这条备考判断应该如何理解？",
+      "back": "SSO、IAM 与身份即服务不是同义词，应按能力、交付模式和控制边界区分。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-007",
+      "kind": "knowledge",
+      "title": "易错知识核验 7",
+      "front": "这条备考判断应该如何理解？",
+      "back": "知识因素与行为生物特征的分类取决于被验证的是输入内容还是行为模式。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-008",
+      "kind": "knowledge",
+      "title": "易错知识核验 8",
+      "front": "这条备考判断应该如何理解？",
+      "back": "一次性密码、令牌、智能卡和证书是不同概念，不应仅凭设备外形推断其内部机制。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-009",
+      "kind": "knowledge",
+      "title": "易错知识核验 9",
+      "front": "这条备考判断应该如何理解？",
+      "back": "生物识别要综合考虑 FAR、FRR 和 CER；调整阈值会改变安全性与可用性的平衡。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-010",
+      "kind": "knowledge",
+      "title": "易错知识核验 10",
+      "front": "这条备考判断应该如何理解？",
+      "back": "访问控制主要约束主体对对象的操作，并支持机密性等安全目标。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-011",
+      "kind": "knowledge",
+      "title": "易错知识核验 11",
+      "front": "这条备考判断应该如何理解？",
+      "back": "风险管理、架构设计和安全运营相互约束，题目通常要求先确定治理与风险依据。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-012",
+      "kind": "knowledge",
+      "title": "易错知识核验 12",
+      "front": "这条备考判断应该如何理解？",
+      "back": "CVSS 基础、时间和环境指标用途不同，不能在所有场景都把基础分数当唯一依据。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-013",
+      "kind": "knowledge",
+      "title": "易错知识核验 13",
+      "front": "这条备考判断应该如何理解？",
+      "back": "独立评估通常提高客观性，但是否必须外部执行取决于标准、范围和治理要求。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-014",
+      "kind": "knowledge",
+      "title": "易错知识核验 14",
+      "front": "这条备考判断应该如何理解？",
+      "back": "Clark-Wilson 强调完整性、良构事务和职责分离；不要与其他完整性模型混为一谈。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-015",
+      "kind": "knowledge",
+      "title": "易错知识核验 15",
+      "front": "这条备考判断应该如何理解？",
+      "back": "EOL 与 EOS 表示销售或支持生命周期事件，处置方案还要考虑风险、补偿控制和业务依赖。",
+      "domainId": "d2",
+      "objectiveIds": [
+        "outline-2-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-016",
+      "kind": "knowledge",
+      "title": "易错知识核验 16",
+      "front": "这条备考判断应该如何理解？",
+      "back": "移动设备会扩大丢失、泄露和非受控网络风险，应结合管理、加密和访问控制。",
+      "domainId": "d2",
+      "objectiveIds": [
+        "outline-2-6"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-017",
+      "kind": "knowledge",
+      "title": "易错知识核验 17",
+      "front": "这条备考判断应该如何理解？",
+      "back": "安全基线的范围界定与定制是不同活动，术语应以当前框架定义为准。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-018",
+      "kind": "knowledge",
+      "title": "易错知识核验 18",
+      "front": "这条备考判断应该如何理解？",
+      "back": "冷热通道设计用于控制数据中心气流，具体布局要结合设施设计验证。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-019",
+      "kind": "knowledge",
+      "title": "易错知识核验 19",
+      "front": "这条备考判断应该如何理解？",
+      "back": "供应商最低安全要求应由组织风险容忍度、数据敏感度和合同责任共同决定。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-11"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 3,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-020",
+      "kind": "knowledge",
+      "title": "易错知识核验 20",
+      "front": "这条备考判断应该如何理解？",
+      "back": "定性与定量分析分别处理等级判断和数值估算，实践中常组合使用。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-021",
+      "kind": "knowledge",
+      "title": "易错知识核验 21",
+      "front": "这条备考判断应该如何理解？",
+      "back": "日志通常是间接或辅助证据，其证明力取决于完整性、来源、时间和保管链。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-022",
+      "kind": "knowledge",
+      "title": "易错知识核验 22",
+      "front": "这条备考判断应该如何理解？",
+      "back": "取证保全可能覆盖常规数据保留期限，应依法务保留和调查授权执行。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-023",
+      "kind": "knowledge",
+      "title": "易错知识核验 23",
+      "front": "这条备考判断应该如何理解？",
+      "back": "无线标准的频段与能力需按具体标准版本判断，避免只记单一频段口诀。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-2"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-024",
+      "kind": "knowledge",
+      "title": "易错知识核验 24",
+      "front": "这条备考判断应该如何理解？",
+      "back": "转岗应触发权限复核；RBAC、职责分离和双人控制分别解决不同授权风险。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-025",
+      "kind": "knowledge",
+      "title": "易错知识核验 25",
+      "front": "这条备考判断应该如何理解？",
+      "back": "强制休假和岗位轮换可帮助发现持续性欺诈，但需要与其他监督控制组合。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-8"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-026",
+      "kind": "knowledge",
+      "title": "易错知识核验 26",
+      "front": "这条备考判断应该如何理解？",
+      "back": "软件生命周期模型的选择取决于交付、风险、反馈和文档需求，不宜只凭周期长短判断。",
+      "domainId": "d8",
+      "objectiveIds": [
+        "outline-8-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-027",
+      "kind": "knowledge",
+      "title": "易错知识核验 27",
+      "front": "这条备考判断应该如何理解？",
+      "back": "SYN Cookie 是缓解 SYN Flood 的机制之一，但不是简单增加 Cookie 数量。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-028",
+      "kind": "knowledge",
+      "title": "易错知识核验 28",
+      "front": "这条备考判断应该如何理解？",
+      "back": "排查键盘记录器要区分软件进程、驱动和物理串接设备等攻击面。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-029",
+      "kind": "knowledge",
+      "title": "易错知识核验 29",
+      "front": "这条备考判断应该如何理解？",
+      "back": "业务连续性和灾难恢复计划更新应受版本与变更管理控制，旧版本需妥善归档而非随意删除。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-7"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-030",
+      "kind": "knowledge",
+      "title": "易错知识核验 30",
+      "front": "这条备考判断应该如何理解？",
+      "back": "补丁管理通常属于预防和纠正风险的运营过程，备份承担恢复能力，二者不可互相替代。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-8"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-031",
+      "kind": "knowledge",
+      "title": "易错知识核验 31",
+      "front": "这条备考判断应该如何理解？",
+      "back": "UEBA、EDR 和其他监控产品关注对象不同，应按用户、实体、端点或网络场景选择。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-032",
+      "kind": "knowledge",
+      "title": "易错知识核验 32",
+      "front": "这条备考判断应该如何理解？",
+      "back": "威胁、漏洞和风险不能互换：风险描述威胁利用漏洞后对目标造成影响的可能性与后果。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-033",
+      "kind": "knowledge",
+      "title": "易错知识核验 33",
+      "front": "这条备考判断应该如何理解？",
+      "back": "风险评估和威胁评估的范围不同，风险管理最终服务于组织目标而不只是 CIA。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-034",
+      "kind": "knowledge",
+      "title": "易错知识核验 34",
+      "front": "这条备考判断应该如何理解？",
+      "back": "数据处理目的与存储位置是不同维度，题目应先识别所问的数据生命周期活动。",
+      "domainId": "d2",
+      "objectiveIds": [
+        "outline-2-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-035",
+      "kind": "knowledge",
+      "title": "易错知识核验 35",
+      "front": "这条备考判断应该如何理解？",
+      "back": "MITM 与 meet-in-the-middle 分别指通信拦截和特定密码分析思路。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-6"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-036",
+      "kind": "knowledge",
+      "title": "易错知识核验 36",
+      "front": "这条备考判断应该如何理解？",
+      "back": "NetFlow 与 SIEM 提供不同层级的可见性；统一时间对日志关联分析非常重要。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-037",
+      "kind": "knowledge",
+      "title": "易错知识核验 37",
+      "front": "这条备考判断应该如何理解？",
+      "back": "输入验证、长度限制、范围检查和业务规则校验分别覆盖不同错误类型。",
+      "domainId": "d8",
+      "objectiveIds": [
+        "outline-8-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-038",
+      "kind": "knowledge",
+      "title": "易错知识核验 38",
+      "front": "这条备考判断应该如何理解？",
+      "back": "云服务模型应根据客户与提供商的责任边界判断，而不是只看产品名称。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-5"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-039",
+      "kind": "knowledge",
+      "title": "易错知识核验 39",
+      "front": "这条备考判断应该如何理解？",
+      "back": "电子证据收集也可能称为工件收集，但术语要结合调查流程上下文。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 4,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-040",
+      "kind": "knowledge",
+      "title": "易错知识核验 40",
+      "front": "这条备考判断应该如何理解？",
+      "back": "渗透测试用于模拟利用路径，控制评估用于验证控制设计和有效性，两者目标不同。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-041",
+      "kind": "knowledge",
+      "title": "易错知识核验 41",
+      "front": "这条备考判断应该如何理解？",
+      "back": "旋转门的失效模式取决于生命安全和设施设计，不能一概认定为 fail-open。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-9"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-042",
+      "kind": "knowledge",
+      "title": "易错知识核验 42",
+      "front": "这条备考判断应该如何理解？",
+      "back": "审计频率应由风险和监管要求决定，不能作为衡量安全成熟度的唯一指标。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-5"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-043",
+      "kind": "knowledge",
+      "title": "易错知识核验 43",
+      "front": "这条备考判断应该如何理解？",
+      "back": "安全评估通常经历需求、资产、风险、控制和验证等活动，具体顺序依框架而定。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-044",
+      "kind": "knowledge",
+      "title": "易错知识核验 44",
+      "front": "这条备考判断应该如何理解？",
+      "back": "管理、技术和物理控制可以按功能再分为预防、侦查和纠正等类型。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-045",
+      "kind": "knowledge",
+      "title": "易错知识核验 45",
+      "front": "这条备考判断应该如何理解？",
+      "back": "服务级要求可被纳入 SLA，但术语和结构应以合同文本为准。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-046",
+      "kind": "knowledge",
+      "title": "易错知识核验 46",
+      "front": "这条备考判断应该如何理解？",
+      "back": "桌面演练以讨论为主，场景质量、参与者和目标都会影响演练价值。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-047",
+      "kind": "knowledge",
+      "title": "易错知识核验 47",
+      "front": "这条备考判断应该如何理解？",
+      "back": "数据保留政策必须定义数据类别、期限、法律依据、保存方式和安全销毁。",
+      "domainId": "d2",
+      "objectiveIds": [
+        "outline-2-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-048",
+      "kind": "knowledge",
+      "title": "易错知识核验 48",
+      "front": "这条备考判断应该如何理解？",
+      "back": "事件响应要同时控制当前影响、恢复业务并降低复发概率，不能只强调其中一步。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-6"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-049",
+      "kind": "knowledge",
+      "title": "易错知识核验 49",
+      "front": "这条备考判断应该如何理解？",
+      "back": "虚拟化风险来自共享资源、管理平面、隔离失效和配置错误等多种因素。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-5"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-050",
+      "kind": "knowledge",
+      "title": "易错知识核验 50",
+      "front": "这条备考判断应该如何理解？",
+      "back": "PAP 会以可恢复形式传递凭据，应避免在不受保护的链路使用。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-051",
+      "kind": "knowledge",
+      "title": "易错知识核验 51",
+      "front": "这条备考判断应该如何理解？",
+      "back": "日志支持可追溯性，数字签名支持完整性和不可抵赖性，作用不可互换。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-052",
+      "kind": "knowledge",
+      "title": "易错知识核验 52",
+      "front": "这条备考判断应该如何理解？",
+      "back": "交换机端口安全可限制 MAC 学习，但缓解 CAM 泛洪还需正确配置和监控。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-053",
+      "kind": "knowledge",
+      "title": "易错知识核验 53",
+      "front": "这条备考判断应该如何理解？",
+      "back": "变更控制与发布控制的责任角色因组织流程而异，不应按开发者或用户简单二分。",
+      "domainId": "d8",
+      "objectiveIds": [
+        "outline-8-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-054",
+      "kind": "knowledge",
+      "title": "易错知识核验 54",
+      "front": "这条备考判断应该如何理解？",
+      "back": "VRF 用于在同一设备中隔离多个路由表，是逻辑网络分段手段之一。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-055",
+      "kind": "knowledge",
+      "title": "易错知识核验 55",
+      "front": "这条备考判断应该如何理解？",
+      "back": "弱安全通道不应承载敏感业务；提高局部加密并不一定消除协议整体风险。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-3"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-056",
+      "kind": "knowledge",
+      "title": "易错知识核验 56",
+      "front": "这条备考判断应该如何理解？",
+      "back": "POST 是上电后的自检流程，题目需区分触发事件与流程步骤。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-057",
+      "kind": "knowledge",
+      "title": "易错知识核验 57",
+      "front": "这条备考判断应该如何理解？",
+      "back": "DAC 的核心是对象所有者可决定访问，不存在通用的所谓最高级 DAC 类型。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-4"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-058",
+      "kind": "knowledge",
+      "title": "易错知识核验 58",
+      "front": "这条备考判断应该如何理解？",
+      "back": "SOAR 的价值在于编排、自动化和响应协同，效果取决于流程质量与集成成熟度。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-059",
+      "kind": "knowledge",
+      "title": "易错知识核验 59",
+      "front": "这条备考判断应该如何理解？",
+      "back": "完全中断测试风险最高；测试方式应根据目标、业务容忍度和成熟度选择。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-060",
+      "kind": "knowledge",
+      "title": "易错知识核验 60",
+      "front": "这条备考判断应该如何理解？",
+      "back": "MFA 增强认证保障，但不会自动改善密码长度、复杂度或保管方式。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-6"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-061",
+      "kind": "knowledge",
+      "title": "易错知识核验 61",
+      "front": "这条备考判断应该如何理解？",
+      "back": "内存中数据保护可能使用加密、隔离和可信执行环境，应根据威胁模型选择。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-062",
+      "kind": "knowledge",
+      "title": "易错知识核验 62",
+      "front": "这条备考判断应该如何理解？",
+      "back": "尽职调查指标必须与交易、供应商或风险目标对应，不能用单一指标概括。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-063",
+      "kind": "knowledge",
+      "title": "易错知识核验 63",
+      "front": "这条备考判断应该如何理解？",
+      "back": "IT 安全审计优先级应结合暴露风险、监管义务、控制变化和历史问题。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-5"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-064",
+      "kind": "knowledge",
+      "title": "易错知识核验 64",
+      "front": "这条备考判断应该如何理解？",
+      "back": "RDP 风险包括未授权访问、凭据攻击、暴露服务和配置不当，不止一个问题。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-3"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 5,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-065",
+      "kind": "knowledge",
+      "title": "易错知识核验 65",
+      "front": "这条备考判断应该如何理解？",
+      "back": "安全政策提供管理方向；具体访问控制机制应由标准、程序和技术配置落实。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-3"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-066",
+      "kind": "knowledge",
+      "title": "易错知识核验 66",
+      "front": "这条备考判断应该如何理解？",
+      "back": "第三方软件引入要评估兼容性、来源、支持、漏洞、许可和供应链风险。",
+      "domainId": "d8",
+      "objectiveIds": [
+        "outline-8-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-067",
+      "kind": "knowledge",
+      "title": "易错知识核验 67",
+      "front": "这条备考判断应该如何理解？",
+      "back": "安全分析与安全工程职责可能重叠，题目应以组织角色定义和任务为准。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-068",
+      "kind": "knowledge",
+      "title": "易错知识核验 68",
+      "front": "这条备考判断应该如何理解？",
+      "back": "安全决策应采用风险导向方法，但具体缩写和框架名称需核对正式来源。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-069",
+      "kind": "knowledge",
+      "title": "易错知识核验 69",
+      "front": "这条备考判断应该如何理解？",
+      "back": "云迁移指标可能包括停机、数据完整性、回退和安全性，不能永远只看最短停机。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-5"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-070",
+      "kind": "knowledge",
+      "title": "易错知识核验 70",
+      "front": "这条备考判断应该如何理解？",
+      "back": "责任和审批应落在被正式授权的业务、风险或数据所有者，而非泛指所有高管。",
+      "domainId": "d2",
+      "objectiveIds": [
+        "outline-2-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-071",
+      "kind": "knowledge",
+      "title": "易错知识核验 71",
+      "front": "这条备考判断应该如何理解？",
+      "back": "网络架构的关键因素包括分段、信任边界、可用性、性能和管理能力。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-072",
+      "kind": "knowledge",
+      "title": "易错知识核验 72",
+      "front": "这条备考判断应该如何理解？",
+      "back": "Kerberos 中客户端与 AS、TGS 的消息内容不同，应按协议交换过程理解。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-073",
+      "kind": "knowledge",
+      "title": "易错知识核验 73",
+      "front": "这条备考判断应该如何理解？",
+      "back": "磁条、接触式与非接触式卡的动作和风险不同，双语题应对照英文动词。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-074",
+      "kind": "knowledge",
+      "title": "易错知识核验 74",
+      "front": "这条备考判断应该如何理解？",
+      "back": "虚拟机监控器常被描述为运行在 ring -1，而不是名为 hypervisor mode 的统一标准模式。",
+      "domainId": "d3",
+      "objectiveIds": [
+        "outline-3-5"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-075",
+      "kind": "knowledge",
+      "title": "易错知识核验 75",
+      "front": "这条备考判断应该如何理解？",
+      "back": "恢复团队职责、根因分析和经验复盘应按事件与灾难恢复流程阶段区分。",
+      "domainId": "d7",
+      "objectiveIds": [
+        "outline-7-6"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-076",
+      "kind": "knowledge",
+      "title": "易错知识核验 76",
+      "front": "这条备考判断应该如何理解？",
+      "back": "培训解决知识与行为能力问题，问责解决责任执行问题，两者不能互相替代。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-8"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-077",
+      "kind": "knowledge",
+      "title": "易错知识核验 77",
+      "front": "这条备考判断应该如何理解？",
+      "back": "认证成功不代表已获授权；默认拒绝和最小权限仍需通过授权策略落实。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-078",
+      "kind": "knowledge",
+      "title": "易错知识核验 78",
+      "front": "这条备考判断应该如何理解？",
+      "back": "上下文访问控制使用时间、位置和风险等条件；内容控制依据数据本身特征。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-4"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-079",
+      "kind": "knowledge",
+      "title": "易错知识核验 79",
+      "front": "这条备考判断应该如何理解？",
+      "back": "验证、保证、认证和认可在不同框架中含义不同，应使用题目指定体系的术语。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-080",
+      "kind": "knowledge",
+      "title": "易错知识核验 80",
+      "front": "这条备考判断应该如何理解？",
+      "back": "静态 NAT、动态地址池和端口地址转换的映射关系不同，需按配置而非口诀判断。",
+      "domainId": "d4",
+      "objectiveIds": [
+        "outline-4-1"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-081",
+      "kind": "knowledge",
+      "title": "易错知识核验 81",
+      "front": "这条备考判断应该如何理解？",
+      "back": "访问控制列表与访问控制矩阵的表达能力和实现方式不同，不宜用一对一简单概括。",
+      "domainId": "d5",
+      "objectiveIds": [
+        "outline-5-4"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-082",
+      "kind": "knowledge",
+      "title": "易错知识核验 82",
+      "front": "这条备考判断应该如何理解？",
+      "back": "用户名通常用于标识，密码或其他因素用于认证，二者职责不同。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-083",
+      "kind": "knowledge",
+      "title": "易错知识核验 83",
+      "front": "这条备考判断应该如何理解？",
+      "back": "Fuzzing 可采用黑盒、灰盒或白盒方式，不能固定归入单一测试类别。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-2"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-084",
+      "kind": "knowledge",
+      "title": "易错知识核验 84",
+      "front": "这条备考判断应该如何理解？",
+      "back": "组件接口与系统接口测试范围不同，应根据被测边界和数据流判断。",
+      "domainId": "d8",
+      "objectiveIds": [
+        "outline-8-2"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-085",
+      "kind": "knowledge",
+      "title": "易错知识核验 85",
+      "front": "这条备考判断应该如何理解？",
+      "back": "敏感数据访问应有正式授权、记录和最小权限控制，而不只是一次性口头批准。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-1"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-086",
+      "kind": "knowledge",
+      "title": "易错知识核验 86",
+      "front": "这条备考判断应该如何理解？",
+      "back": "漏洞扫描与端口扫描目标不同，但实际工具和结果可能有重叠。",
+      "domainId": "d6",
+      "objectiveIds": [
+        "outline-6-2"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-087",
+      "kind": "knowledge",
+      "title": "易错知识核验 87",
+      "front": "这条备考判断应该如何理解？",
+      "back": "人员短缺可能由人为、环境、自然和供应链事件造成，应纳入连续性场景。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-7"
+      ],
+      "verificationStatus": "disputed",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-088",
+      "kind": "knowledge",
+      "title": "易错知识核验 88",
+      "front": "这条备考判断应该如何理解？",
+      "back": "成本是风险决策的一部分；当核心目标受威胁时仍需比较风险降低、可行性和剩余风险。",
+      "domainId": "d1",
+      "objectiveIds": [
+        "outline-1-9"
+      ],
+      "verificationStatus": "pending",
+      "reviewEligible": false,
+      "correction": "该条目来自个人备考笔记，已改写为核验提示；在补充权威依据前不会进入 FSRS 复习或作为 AI 的事实前提。",
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 6,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-001",
+      "kind": "vocabulary",
+      "title": "Confinement",
+      "front": "Confinement",
+      "back": "禁闭/约束",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-002",
+      "kind": "vocabulary",
+      "title": "Data Retention",
+      "front": "Data Retention",
+      "back": "数据保留",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-003",
+      "kind": "vocabulary",
+      "title": "Ultimate",
+      "front": "Ultimate",
+      "back": "最终的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-004",
+      "kind": "vocabulary",
+      "title": "Steganography",
+      "front": "Steganography",
+      "back": "隐写术",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-005",
+      "kind": "vocabulary",
+      "title": "Proximity Card",
+      "front": "Proximity Card",
+      "back": "感应卡",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-006",
+      "kind": "vocabulary",
+      "title": "Consolidation",
+      "front": "Consolidation",
+      "back": "整合、合并",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-007",
+      "kind": "vocabulary",
+      "title": "Inherent Risk",
+      "front": "Inherent Risk",
+      "back": "固有风险",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-008",
+      "kind": "vocabulary",
+      "title": "Residual Risk",
+      "front": "Residual Risk",
+      "back": "残余风险",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-009",
+      "kind": "vocabulary",
+      "title": "Disseminated",
+      "front": "Disseminated",
+      "back": "传播、散布",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-010",
+      "kind": "vocabulary",
+      "title": "Tangible",
+      "front": "Tangible",
+      "back": "有形的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-011",
+      "kind": "vocabulary",
+      "title": "Least Likely",
+      "front": "Least Likely",
+      "back": "最不可能的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-012",
+      "kind": "vocabulary",
+      "title": "Deterrent",
+      "front": "Deterrent",
+      "back": "威慑性的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-013",
+      "kind": "vocabulary",
+      "title": "Due Diligence",
+      "front": "Due Diligence",
+      "back": "尽职调查",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-014",
+      "kind": "vocabulary",
+      "title": "Due Care",
+      "front": "Due Care",
+      "back": "应有注意",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-015",
+      "kind": "vocabulary",
+      "title": "Burden of Proof",
+      "front": "Burden of Proof",
+      "back": "举证责任",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-016",
+      "kind": "vocabulary",
+      "title": "Transposition Cipher",
+      "front": "Transposition Cipher",
+      "back": "转置密码",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-017",
+      "kind": "vocabulary",
+      "title": "Substitution Cipher",
+      "front": "Substitution Cipher",
+      "back": "替换密码",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-018",
+      "kind": "vocabulary",
+      "title": "TEMPEST",
+      "front": "TEMPEST",
+      "back": "电磁泄漏防护相关标准/技术",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-019",
+      "kind": "vocabulary",
+      "title": "Arbitrating Disputes",
+      "front": "Arbitrating Disputes",
+      "back": "仲裁争议",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-020",
+      "kind": "vocabulary",
+      "title": "Augment Controls",
+      "front": "Augment Controls",
+      "back": "增强现有控制",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-021",
+      "kind": "vocabulary",
+      "title": "Divestiture",
+      "front": "Divestiture",
+      "back": "资产剥离",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-022",
+      "kind": "vocabulary",
+      "title": "Shoulder Surfing",
+      "front": "Shoulder Surfing",
+      "back": "肩窥",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-023",
+      "kind": "vocabulary",
+      "title": "Eavesdropping",
+      "front": "Eavesdropping",
+      "back": "窃听",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-024",
+      "kind": "vocabulary",
+      "title": "Repudiation",
+      "front": "Repudiation",
+      "back": "否认",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-025",
+      "kind": "vocabulary",
+      "title": "Tampering",
+      "front": "Tampering",
+      "back": "篡改",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-026",
+      "kind": "vocabulary",
+      "title": "Elevation of Privilege",
+      "front": "Elevation of Privilege",
+      "back": "权限提升",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-027",
+      "kind": "vocabulary",
+      "title": "Promiscuous Mode",
+      "front": "Promiscuous Mode",
+      "back": "混杂模式",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-028",
+      "kind": "vocabulary",
+      "title": "Encapsulated",
+      "front": "Encapsulated",
+      "back": "被封装的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-029",
+      "kind": "vocabulary",
+      "title": "Hand Geometry",
+      "front": "Hand Geometry",
+      "back": "手形识别",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-030",
+      "kind": "vocabulary",
+      "title": "Keystroke",
+      "front": "Keystroke",
+      "back": "按键/击键",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-031",
+      "kind": "vocabulary",
+      "title": "Financial Penalty",
+      "front": "Financial Penalty",
+      "back": "经济处罚",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-032",
+      "kind": "vocabulary",
+      "title": "Negligence",
+      "front": "Negligence",
+      "back": "疏忽",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-033",
+      "kind": "vocabulary",
+      "title": "Vendor Neutral",
+      "front": "Vendor Neutral",
+      "back": "供应商中立",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-034",
+      "kind": "vocabulary",
+      "title": "Testimony",
+      "front": "Testimony",
+      "back": "证词",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-035",
+      "kind": "vocabulary",
+      "title": "Corroborative Evidence",
+      "front": "Corroborative Evidence",
+      "back": "佐证",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-036",
+      "kind": "vocabulary",
+      "title": "Intimidation",
+      "front": "Intimidation",
+      "back": "恐吓",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-037",
+      "kind": "vocabulary",
+      "title": "Inadmissible",
+      "front": "Inadmissible",
+      "back": "不可采纳的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-038",
+      "kind": "vocabulary",
+      "title": "Inadvertently",
+      "front": "Inadvertently",
+      "back": "无意地",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-039",
+      "kind": "vocabulary",
+      "title": "Circumstances",
+      "front": "Circumstances",
+      "back": "情况、环境",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-040",
+      "kind": "vocabulary",
+      "title": "Consequence",
+      "front": "Consequence",
+      "back": "后果",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-041",
+      "kind": "vocabulary",
+      "title": "Permutation",
+      "front": "Permutation",
+      "back": "排列",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-042",
+      "kind": "vocabulary",
+      "title": "Noninvasive",
+      "front": "Noninvasive",
+      "back": "非侵入性的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 7,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-043",
+      "kind": "vocabulary",
+      "title": "Thermostat",
+      "front": "Thermostat",
+      "back": "恒温器",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-044",
+      "kind": "vocabulary",
+      "title": "Mandatory",
+      "front": "Mandatory",
+      "back": "强制的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-045",
+      "kind": "vocabulary",
+      "title": "Vascular Pattern",
+      "front": "Vascular Pattern",
+      "back": "血管图案",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-046",
+      "kind": "vocabulary",
+      "title": "Gait",
+      "front": "Gait",
+      "back": "步态",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-047",
+      "kind": "vocabulary",
+      "title": "Mandatory Vacation",
+      "front": "Mandatory Vacation",
+      "back": "强制休假",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-048",
+      "kind": "vocabulary",
+      "title": "Turnstile",
+      "front": "Turnstile",
+      "back": "旋转门",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-049",
+      "kind": "vocabulary",
+      "title": "Mantrap",
+      "front": "Mantrap",
+      "back": "人员陷阱门",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-050",
+      "kind": "vocabulary",
+      "title": "Interference",
+      "front": "Interference",
+      "back": "干扰",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-051",
+      "kind": "vocabulary",
+      "title": "Paramount",
+      "front": "Paramount",
+      "back": "最重要的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-052",
+      "kind": "vocabulary",
+      "title": "Cybersquatting",
+      "front": "Cybersquatting",
+      "back": "域名抢注",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-053",
+      "kind": "vocabulary",
+      "title": "Neglecting",
+      "front": "Neglecting",
+      "back": "忽视",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-054",
+      "kind": "vocabulary",
+      "title": "Aftermath",
+      "front": "Aftermath",
+      "back": "后果/事后阶段",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-055",
+      "kind": "vocabulary",
+      "title": "Impersonating",
+      "front": "Impersonating",
+      "back": "冒充",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-056",
+      "kind": "vocabulary",
+      "title": "Depreciated Cost",
+      "front": "Depreciated Cost",
+      "back": "折旧成本",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-057",
+      "kind": "vocabulary",
+      "title": "Designating",
+      "front": "Designating",
+      "back": "指定",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-058",
+      "kind": "vocabulary",
+      "title": "Evacuating",
+      "front": "Evacuating",
+      "back": "疏散",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-059",
+      "kind": "vocabulary",
+      "title": "Meticulously",
+      "front": "Meticulously",
+      "back": "一丝不苟地",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-060",
+      "kind": "vocabulary",
+      "title": "Rigorous",
+      "front": "Rigorous",
+      "back": "严格的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-061",
+      "kind": "vocabulary",
+      "title": "Proactive",
+      "front": "Proactive",
+      "back": "主动的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-062",
+      "kind": "vocabulary",
+      "title": "Bolster",
+      "front": "Bolster",
+      "back": "增强",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-063",
+      "kind": "vocabulary",
+      "title": "Resistance",
+      "front": "Resistance",
+      "back": "抵抗力",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-064",
+      "kind": "vocabulary",
+      "title": "Pitfall",
+      "front": "Pitfall",
+      "back": "陷阱",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-065",
+      "kind": "vocabulary",
+      "title": "Surveillance",
+      "front": "Surveillance",
+      "back": "监视",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-066",
+      "kind": "vocabulary",
+      "title": "Contemplating",
+      "front": "Contemplating",
+      "back": "考虑、打算",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-067",
+      "kind": "vocabulary",
+      "title": "Misinterpreted",
+      "front": "Misinterpreted",
+      "back": "误解",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-068",
+      "kind": "vocabulary",
+      "title": "Pursuant to",
+      "front": "Pursuant to",
+      "back": "依据、依照",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-069",
+      "kind": "vocabulary",
+      "title": "Disposal",
+      "front": "Disposal",
+      "back": "处置",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-070",
+      "kind": "vocabulary",
+      "title": "Key Escrow",
+      "front": "Key Escrow",
+      "back": "密钥托管",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-071",
+      "kind": "vocabulary",
+      "title": "Decommissioned",
+      "front": "Decommissioned",
+      "back": "退役的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-072",
+      "kind": "vocabulary",
+      "title": "Disk Shredding",
+      "front": "Disk Shredding",
+      "back": "磁盘粉碎",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-073",
+      "kind": "vocabulary",
+      "title": "Degaussing",
+      "front": "Degaussing",
+      "back": "消磁",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-074",
+      "kind": "vocabulary",
+      "title": "Reciprocal",
+      "front": "Reciprocal",
+      "back": "互惠的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-075",
+      "kind": "vocabulary",
+      "title": "Spear Phishing",
+      "front": "Spear Phishing",
+      "back": "鱼叉式网络钓鱼",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-076",
+      "kind": "vocabulary",
+      "title": "Vishing",
+      "front": "Vishing",
+      "back": "语音网络钓鱼",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-077",
+      "kind": "vocabulary",
+      "title": "Spiral",
+      "front": "Spiral",
+      "back": "螺旋",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-078",
+      "kind": "vocabulary",
+      "title": "Entrapment",
+      "front": "Entrapment",
+      "back": "执法诱捕",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-079",
+      "kind": "vocabulary",
+      "title": "Enticement",
+      "front": "Enticement",
+      "back": "引诱",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-080",
+      "kind": "vocabulary",
+      "title": "Incarceration",
+      "front": "Incarceration",
+      "back": "监禁",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-081",
+      "kind": "vocabulary",
+      "title": "Patent",
+      "front": "Patent",
+      "back": "专利",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-082",
+      "kind": "vocabulary",
+      "title": "Compendium",
+      "front": "Compendium",
+      "back": "汇编",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-083",
+      "kind": "vocabulary",
+      "title": "Disclosed",
+      "front": "Disclosed",
+      "back": "披露的",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-084",
+      "kind": "vocabulary",
+      "title": "CALEA",
+      "front": "CALEA",
+      "back": "美国通信协助执法法",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    },
+    {
+      "id": "vocabulary-085",
+      "kind": "vocabulary",
+      "title": "Remorse",
+      "front": "Remorse",
+      "back": "悔恨",
+      "objectiveIds": [],
+      "verificationStatus": "verified",
+      "reviewEligible": true,
+      "sources": [
+        {
+          "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+          "page": 8,
+          "author": "放之（Kunpeng）",
+          "publishedAt": "2025-06-07"
+        }
+      ]
+    }
+  ],
+  "checklist": [
+    {
+      "id": "eligibility-experience",
+      "category": "eligibility",
+      "title": "核对经验要求",
+      "description": "确认自己满足两个或以上知识域累计五年经验，或了解学历/认证抵扣与准会员路径。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 2,
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "booking-confirmation",
+      "category": "booking",
+      "title": "确认预约信息",
+      "description": "核对考试日期、语言、地点和预约确认邮件；中文考试开放窗口可能变化。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 3,
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "booking-policy",
+      "category": "booking",
+      "title": "阅读最新考试政策",
+      "description": "在报名和赴考前打开 ISC2/Pearson VUE 官方政策页面，确认改期、迟到和考场要求。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 15,
+        "url": "https://www.isc2.org/register-for-exam",
+        "verifiedAt": "2026-07-16"
+      }
+    },
+    {
+      "id": "identity-documents",
+      "category": "identity",
+      "title": "准备官方要求的身份证件",
+      "description": "以预约确认邮件和 Pearson VUE 最新要求为准，不把个人经历中的某一种证件当作唯一要求。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07",
+        "url": "https://www.isc2.org/register-for-exam"
+      }
+    },
+    {
+      "id": "travel-route",
+      "category": "travel",
+      "title": "确认路线与到达时间",
+      "description": "提前规划交通和候场时间；路程较远时考虑在考点附近住宿。",
+      "dynamic": false,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07"
+      }
+    },
+    {
+      "id": "exam-items",
+      "category": "exam-day",
+      "title": "精简随身物品",
+      "description": "按考场规则存放手机、手表和其他电子设备，现场流程以工作人员指引为准。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07",
+        "url": "https://www.isc2.org/register-for-exam"
+      }
+    },
+    {
+      "id": "exam-commands",
+      "category": "exam-day",
+      "title": "遵守考场指引",
+      "description": "休息、离场和结束考试前先确认现场流程，不根据个人经验推断所有考点完全相同。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07",
+        "url": "https://www.isc2.org/register-for-exam"
+      }
+    },
+    {
+      "id": "sleep",
+      "category": "wellbeing",
+      "title": "保证睡眠与饮食",
+      "description": "考前减少高强度突击，保持稳定睡眠、饮食和补水。",
+      "dynamic": false,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07"
+      }
+    },
+    {
+      "id": "outline-review",
+      "category": "wellbeing",
+      "title": "最后复核考纲短板",
+      "description": "浏览尚未掌握的考纲目标，不在最后 48 小时开启新的大规模学习范围。",
+      "dynamic": false,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07"
+      }
+    },
+    {
+      "id": "bilingual-reminder",
+      "category": "exam-day",
+      "title": "准备双语核对策略",
+      "description": "翻译含糊时对照英文，但仍以题干实际含义和当前考纲为判断依据。",
+      "dynamic": false,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 2,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07"
+      }
+    },
+    {
+      "id": "arrival",
+      "category": "exam-day",
+      "title": "预留充足到场时间",
+      "description": "以预约邮件要求为下限，额外预留交通和身份核验时间。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP备考指南（放之/Kunpeng，2025-06-07）",
+        "page": 1,
+        "author": "放之（Kunpeng）",
+        "publishedAt": "2025-06-07",
+        "url": "https://www.isc2.org/register-for-exam"
+      }
+    },
+    {
+      "id": "official-refresh",
+      "category": "booking",
+      "title": "重新核实动态信息",
+      "description": "如果本页官方信息距上次核验超过 180 天，重新打开官方页面确认。",
+      "dynamic": true,
+      "source": {
+        "document": "CISSP 认证考试大纲（2024-04-15 生效）",
+        "page": 3,
+        "url": "https://www.isc2.org/certifications/cissp/cissp-certification-exam-outline",
+        "verifiedAt": "2026-07-16"
+      }
+    }
+  ]
+}

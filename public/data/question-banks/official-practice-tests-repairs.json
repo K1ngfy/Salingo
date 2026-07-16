@@ -1,0 +1,36 @@
+{
+  "bankId": "official-practice-tests",
+  "source": "src/data/imports/official-practice-tests-bilingual.csv",
+  "repairs": [
+    {
+      "sourceId": "2:100",
+      "original": "1-B; 2-C; 4-C",
+      "repaired": "1-B; 2-A; 3-C; 4-C",
+      "reason": "原匹配答案截断且第 2 项错位；英文解析列出完整映射。"
+    },
+    {
+      "sourceId": "3:31",
+      "original": "",
+      "repaired": "B",
+      "reason": "原答案为空；英文解析明确指出 Kerckhoffs’ principle。"
+    },
+    {
+      "sourceId": "5:98",
+      "original": "1-E; 3-D; 5-A",
+      "repaired": "1-E; 2-B; 3-D; 4-C; 5-A",
+      "reason": "原匹配答案缺少第 2、4 项；英文解析列出完整映射。"
+    },
+    {
+      "sourceId": "5:100",
+      "original": "1-A; 3-D; 5-C",
+      "repaired": "1-A; 2-E; 3-D; 4-B; 5-C",
+      "reason": "原匹配答案缺少第 2、4 项；英文解析列出完整映射。"
+    },
+    {
+      "sourceId": "9:125",
+      "original": "",
+      "repaired": "A-1; B-2; C-3; D-1; E-2; F-3; G-1",
+      "reason": "原答案为空；英文解析逐项说明七个因素所属类型。"
+    }
+  ]
+}
