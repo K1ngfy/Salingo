@@ -24,9 +24,9 @@ export function LearnPageClient() {
   const domainId = params.get("domain") ?? undefined;
   const sectionId = params.get("section") ?? undefined;
   const mode = params.get("mode");
-  if (mode === "practice") return <PracticeSession bankId={bankId} domainId={domainId} sectionId={sectionId} />;
+  if (mode === "practice") return <PracticeSession key={`practice-${bankId}-${domainId ?? sectionId ?? "all"}`} bankId={bankId} domainId={domainId} sectionId={sectionId} />;
   const sweep = buildSweepProgress({ bankId, bank: getQuestionBank(bankId), questions: data.questions, answers: data.answers, dailyTarget: data.prepProfile.dailyQuestionTarget });
-  if (mode === "sweep-run") return <PracticeSession bankId={bankId} sessionMode="sweep" questionIds={sweep.nextQuestionIds} />;
+  if (mode === "sweep-run") return <PracticeSession key={`sweep-${bankId}`} bankId={bankId} sessionMode="sweep" questionIds={sweep.nextQuestionIds} />;
   if (mode === "sweep") return <SweepDashboard bankId={bankId} onBankChange={(nextBankId) => { setBankId(nextBankId); const url = new URL(window.location.href); url.searchParams.set("bank", nextBankId); window.history.replaceState(null, "", url); }} loading={loadingBankId === bankId} progress={sweep} dailyTarget={data.prepProfile.dailyQuestionTarget} onDailyTargetChange={(dailyQuestionTarget) => setPrepProfile({ ...data.prepProfile, dailyQuestionTarget })} />;
   if (domainId || sectionId) return <StudyPath bankId={bankId} sectionId={sectionId ?? domainId ?? ""} questions={data.questions.filter((question) => questionBankId(question) === bankId && questionSectionId(question) === (sectionId ?? domainId))} />;
 

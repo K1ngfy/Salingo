@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, CheckCircle, Lightbulb, MapPin, Shuffle, Sparkle, XCircle } from "@phosphor-icons/react";
 import { useAppData } from "./data-provider";
@@ -31,17 +31,22 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
 }) {
   const { data, recordAnswer, setPreferences, upsertReview } = useAppData();
   const activeBankId = bankId ?? data.preferences.activeBankId;
+  const [sweepQuestionIds, setSweepQuestionIds] = useState<string[] | undefined>(() => sessionMode === "sweep" && questionIds?.length ? [...questionIds] : undefined);
+  useEffect(() => {
+    if (sessionMode === "sweep" && sweepQuestionIds === undefined && questionIds?.length) setSweepQuestionIds([...questionIds]);
+  }, [questionIds, sessionMode, sweepQuestionIds]);
+  const sessionQuestionIds = sessionMode === "sweep" ? sweepQuestionIds ?? questionIds : questionIds;
   const questions = useMemo(() => {
     const source = reviewMode
-      ? data.reviews.filter((review) => review.targetType === "question" && new Date(review.due) <= new Date() && (!questionIds || questionIds.includes(review.targetId))).map((review) => data.questions.find((q) => q.id === review.targetId)).filter((q): q is Question => Boolean(q))
-      : data.questions.filter((question) => questionBankId(question) === activeBankId && isPracticeEnabled(question) && (!domainId || question.domainId === domainId) && (!sectionId || questionSectionId(question) === sectionId) && (!questionIds || questionIds.includes(question.id)));
+      ? data.reviews.filter((review) => review.targetType === "question" && new Date(review.due) <= new Date() && (!sessionQuestionIds || sessionQuestionIds.includes(review.targetId))).map((review) => data.questions.find((q) => q.id === review.targetId)).filter((q): q is Question => Boolean(q))
+      : data.questions.filter((question) => questionBankId(question) === activeBankId && isPracticeEnabled(question) && (!domainId || question.domainId === domainId) && (!sectionId || questionSectionId(question) === sectionId) && (!sessionQuestionIds || sessionQuestionIds.includes(question.id)));
     if (reviewMode) return source.slice(0, 10);
     if (sessionMode === "sweep") {
       const byId = new Map(source.map((question) => [question.id, question]));
-      return questionIds ? questionIds.map((id) => byId.get(id)).filter((question): question is Question => Boolean(question)) : source;
+      return sessionQuestionIds ? sessionQuestionIds.map((id) => byId.get(id)).filter((question): question is Question => Boolean(question)) : source;
     }
     return diversePracticeSet(source);
-  }, [activeBankId, data.questions, data.reviews, domainId, questionIds, reviewMode, sectionId, sessionMode]);
+  }, [activeBankId, data.questions, data.reviews, domainId, reviewMode, sectionId, sessionMode, sessionQuestionIds]);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState<AnswerResponse>(() => choiceResponse([]));
   const [checked, setChecked] = useState(false);
@@ -52,6 +57,7 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
   const [aiExplanation, setAIExplanation] = useState<Explanation | null>(null);
   const [aiLoading, setAILoading] = useState(false);
   const [aiError, setAIError] = useState("");
+  const [submitError, setSubmitError] = useState("");
   const [saving, setSaving] = useState(false);
   const [mistakeType, setMistakeType] = useState<MistakeType>("概念盲区");
   const [currentReview, setCurrentReview] = useState<ReviewCardState>();
@@ -74,17 +80,17 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
     const isCorrect = isCorrectResponse(question, response);
     const previous = data.reviews.find((item) => item.targetType === "question" && item.targetId === question.id);
     const review = !isCorrect || reviewMode || previous ? scheduleReview(question.id, previous, isCorrect) : undefined;
-    setSaving(true); setAIError("");
+    setSaving(true); setSubmitError("");
     try {
       await recordAnswer({ id: crypto.randomUUID(), questionId: question.id, bankId: questionBankId(question), sectionId: questionSectionId(question), domainId: question.domainId, response, correct: isCorrect, answeredAt: new Date().toISOString(), durationSeconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000)), mode: reviewMode ? "review" : sessionMode === "sweep" ? "sweep" : "practice" }, review);
       setCurrentReview(review);
       setCorrect(isCorrect); setChecked(true); if (isCorrect) setSessionCorrect((value) => value + 1);
-    } catch (cause) { setAIError(cause instanceof Error ? cause.message : "答题记录保存失败，请重试"); }
+    } catch (cause) { setSubmitError(cause instanceof Error ? cause.message : "答题记录保存失败，请重试"); }
     finally { setSaving(false); }
   };
   const next = () => {
     if (index >= questions.length - 1) setFinished(true);
-    else { setIndex((value) => value + 1); setResponse(choiceResponse([])); setChecked(false); setCorrect(false); setMistakeType("概念盲区"); setCurrentReview(undefined); setAIExplanation(null); setAIError(""); setStartedAt(Date.now()); }
+    else { setIndex((value) => value + 1); setResponse(choiceResponse([])); setChecked(false); setCorrect(false); setMistakeType("概念盲区"); setCurrentReview(undefined); setAIExplanation(null); setAIError(""); setSubmitError(""); setStartedAt(Date.now()); }
   };
   const requestAIExplanation = async () => {
     setAILoading(true); setAIError("");
@@ -106,6 +112,7 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
       {!correct && <div className="mt-4 rounded-xl bg-white/70 p-3"><p className="text-xs font-black text-[#8a6a6a]">这次错误主要属于</p><div className="mt-2 flex flex-wrap gap-2">{(["概念盲区", "审题失误", "混淆考点"] as MistakeType[]).map((type) => <button key={type} type="button" onClick={() => { setMistakeType(type); if (currentReview) { const nextReview = { ...currentReview, mistakeType: type }; setCurrentReview(nextReview); void upsertReview(nextReview); } }} className={cn("rounded-lg px-3 py-1.5 text-xs font-black", mistakeType === type ? "bg-[#ff4b4b] text-white" : "bg-[#f3f3ef] text-[#777]")}>{type}</button>)}</div></div>}
       <div className="mt-4 flex flex-wrap items-center gap-3"><Button variant="secondary" size="sm" onClick={requestAIExplanation} disabled={aiLoading}><Sparkle size={17} weight="fill" />{aiLoading ? "AI 正在深度解析…" : aiExplanation ? "重新生成 AI 解析" : "AI 深度解析"}</Button>{aiError && <span className="text-xs font-bold text-[#c63838]">{aiError}</span>}</div>
     </motion.section>}</AnimatePresence>
+    {!checked && submitError && <p role="alert" className="mt-4 rounded-xl bg-[#fff0f0] p-3 text-sm font-bold text-[#c63838]">{submitError}</p>}
     <div className="mt-7 flex justify-end">{checked ? <Button size="lg" onClick={next}>继续<ArrowRight size={19} weight="bold" /></Button> : <Button size="lg" onClick={submit} disabled={!responseIsComplete(question, response) || saving}>{saving ? "正在保存…" : "检查答案"}</Button>}</div>
   </div>;
 }
