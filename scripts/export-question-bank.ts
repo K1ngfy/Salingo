@@ -10,7 +10,7 @@ async function main() {
     `${JSON.stringify(INITIAL_QUESTIONS, null, 2)}\n`,
     "utf8",
   );
-  console.log(`Exported ${INITIAL_QUESTIONS.length} original practice questions.`);
+  console.log(`Exported ${INITIAL_QUESTIONS.length} practice questions.`);
 }
 
 void main();

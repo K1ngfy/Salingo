@@ -47,7 +47,7 @@ export default function DashboardPage() {
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { href: "/learn", icon: Target, eyebrow: "专项闯关", title: "继续八域训练", text: `${data.questions.length} 道原创练习已就位`, color: "#58cc02", bg: "#effbe5" },
+            { href: "/learn", icon: Target, eyebrow: "专项闯关", title: "继续八域训练", text: `${data.questions.length} 道练习题已就位`, color: "#58cc02", bg: "#effbe5" },
             { href: "/review", icon: Brain, eyebrow: "FSRS 复习", title: due ? `${due} 道今日到期` : "今日已无到期题", text: due ? "优先修复即将遗忘的知识" : "答错的题会自动排入复习", color: "#ff4b4b", bg: "#fff0f0" },
             { href: "/exam", icon: Timer, eyebrow: "全真模考", title: "检验综合判断", text: "按域组卷 · 统一交卷 · 分项报告", color: "#1cb0f6", bg: "#eaf8ff" },
           ].map((item, index) => (

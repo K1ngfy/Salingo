@@ -1,0 +1,1302 @@
+[
+  {
+    "row": 102,
+    "number": "101",
+    "stem": "检测到一个 url http:// xxx. xxx. com/ product. sap? id=1 or 1 = 1",
+    "options": [
+      "sql 注入",
+      "XSS",
+      "CSRF",
+      "缓存溢出",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 103,
+    "number": "102",
+    "stem": "现在你在做供应链管理，你给所有的货柜都装上了传感器，你需要保证传感器的什\n么 CIA 属性？",
+    "options": [
+      "可用性",
+      "完整性",
+      "机密性",
+      "原发性",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 104,
+    "number": "103",
+    "stem": "业务影响分析第一步是什么？",
+    "options": [
+      "计算各业务功能的风险",
+      "识别关键业务功能",
+      "创建数据收集技术",
+      "识别业务功能的漏洞和威胁",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 105,
+    "number": "104",
+    "stem": "黑客窃取了 ceo 的网页浏览记录，威胁不给费用就公开浏览记录 ，问是哪种攻击 ？",
+    "options": [
+      "社工",
+      "窃取",
+      "跨站脚本",
+      "DOS",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 106,
+    "number": "105",
+    "stem": "业务连续性计划可以通过一些测试来进行评估。 哪种测试类型是持续进行 ,直到真\n正地搬到了异地设施处并真正配置了替换设备为止?",
+    "options": [
+      "并行测试",
+      "检查表测试",
+      "组织排练测试",
+      "模拟测试",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 107,
+    "number": "106",
+    "stem": "部署一堆 IOT 设备时，应该注意？",
+    "options": [
+      "服务器安全",
+      "IOT 设备的访问控制",
+      "IOT 设备的用户权限",
+      "为 IOT 设备打补丁",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 108,
+    "number": "107",
+    "stem": "你是一家诊所，你存储 PHI，你想要去除掉检查单上的病例编号，你需要在数据库里\n对 PHI 做什么？",
+    "options": [
+      "部分匿名化",
+      "完全匿名化",
+      "保持原文",
+      "保持数据完整性",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 109,
+    "number": "108",
+    "stem": "使用软动态令牌的好处是？",
+    "options": [
+      "成本低方便更新",
+      "更安全可靠",
+      "更便于携带",
+      "更专业",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 110,
+    "number": "109",
+    "stem": "通信网络中链路加密特点？",
+    "options": [
+      "仅加密用户信息，不加密数据包头部、尾部、地址和路由信息",
+      "数据包在每一跳都进行加解密",
+      "加密发生在应用层",
+      "秘钥分发和管理相对简单",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 111,
+    "number": "110",
+    "stem": "你的企业遭受到了垃圾邮件的攻击，你发现邮件来自于一个国外的 SMTP 服务器，你\n从哪里能找到证据，从而定位攻击者？",
+    "options": [
+      "邮件的 Header",
+      "SMTP 服务器的日志",
+      "邮件内容",
+      "邮件签名",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 112,
+    "number": "111",
+    "stem": "业务连续性管理中 ,在完成了业务影响分析之后 ,紧接着要做的是?",
+    "options": [
+      "将 BIA 的结果报告给管理层，以获得业务连续性项目资金",
+      "识别并选择恢复策略",
+      "准备测试计划 ,测试灾难恢复能力",
+      "进行风险评估与分析",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 113,
+    "number": "112",
+    "stem": "公司把设备和科研移到海外，安全官应担心什么？",
+    "options": [
+      "设备风险",
+      "物理安全",
+      "知识产权",
+      "缺少安全措施",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 114,
+    "number": "113",
+    "stem": "审计人员发现关键系统的一项有可能导致这问题的是?",
+    "options": [
+      "安全指南的文档不全面",
+      "缺乏安全基线",
+      "基于主机的入侵防御系统存在缺陷",
+      "安全补丁没有及时更新",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 115,
+    "number": "114",
+    "stem": "在应用程序的运维过程中，建立软件组件的基线依赖于",
+    "options": [
+      "安全审计规程",
+      "软件补丁规程",
+      "配置控制规程",
+      "应用监控规程",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 116,
+    "number": "115",
+    "stem": "确定保护静态数据是否有恰当的安全控制保护的第一步是?",
+    "options": [
+      "识别法规要求",
+      "执行风险评估",
+      "评审安全基线配置",
+      "评审之前的审计报告",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 117,
+    "number": "116",
+    "stem": "第三方合同以下哪项应该有最高的优先级？",
+    "options": [
+      "发生灾难后重新谈判的权利",
+      "灾难恢复处理升级的流程",
+      "合同到期后争议解决的办法",
+      "合同涉及赔偿的条款",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 118,
+    "number": "117",
+    "stem": "以下哪一项为使用联合身份和安全断言语言系统抵御重放攻击?",
+    "options": [
+      "数字证书和硬件令牌",
+      "会话时间控制和安全传输层协议 SSL",
+      "双因素验证",
+      "带特殊字符的口令",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 119,
+    "number": "118",
+    "stem": "以下哪个是 SCADA 可以控制的？",
+    "options": [
+      "可编程逻辑控制器",
+      "WLAN",
+      "ABAC",
+      "访问用户",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 120,
+    "number": "119",
+    "stem": "防止 XSS 的有效方式是",
+    "options": [
+      "白名单输入校验",
+      "输出数据校验",
+      "禁止引用跨站脚本",
+      "服务器系统更新补丁",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 121,
+    "number": "120",
+    "stem": "使用双身份验证的分布式文件系统与主机文件系统的区别？",
+    "options": [
+      "不依赖操作系统，且不可以窃听",
+      "依赖操作系统且不可以窃听",
+      "不依赖操作系统且可以窃听",
+      "依赖操作系统且可以窃听",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 122,
+    "number": "121",
+    "stem": "以下哪一项加密保护了在网络中传输的敏感数据",
+    "options": [
+      "点对点协议 PPP 保护",
+      "验证头部 AH",
+      "载荷加密 ESP",
+      "加密哈希",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 123,
+    "number": "122",
+    "stem": "关于点到点微波传输的正确的说法是？",
+    "options": [
+      "因为采用了多路复用技术,所以不容易被蓝劫侦听。",
+      "因为有加密 ,所以不容易被拦截侦听",
+      "容易被拦截侦听",
+      "是否被拦截侦听取决于信号强度",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 124,
+    "number": "123",
+    "stem": "PKI 在什么情况下对 CA 的认证产生交叉数字证书",
+    "options": [
+      "PKI 需要权威认证",
+      "当 CA 之间需要互相认证",
+      "当证书需要 CA 确认真实性和有效性",
+      "当数字证书在 CA 之间进行传输",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 125,
+    "number": "124",
+    "stem": "网络传输中最能保证传输信息的完整性和机密性的使用什么",
+    "options": [
+      "ssl",
+      "tls",
+      "ipsec",
+      "数字签名",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 126,
+    "number": "125",
+    "stem": "使用 DNS 安全扩展( DNSSEC )对记录进行签名的主要目的是?",
+    "options": [
+      "机密性",
+      "完整性",
+      "可用性",
+      "可问责",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 127,
+    "number": "126",
+    "stem": "在虹膜验证过程中, 以下哪一项用于识别和验证",
+    "options": [
+      "获得眼底血管纹理的数据和之前存储的样本数据的对比",
+      "获得的细节模版和之前储存的样本模版的比对",
+      "获得的瞳孔的尺寸大小数据和之前样本的比对",
+      "计算的哈希值和预存于数据库中的数据的比对",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 128,
+    "number": "127",
+    "stem": "SSL 是一个事实上的协议 ,用来实现在不可信的网络上安全传输。下面哪项最好的描\n述了在 SSL 连接建立流程上发生的情况?",
+    "options": [
+      "The server creates a session key and encrypts it with a public key. 服务器创建会话密 钥 ,并用公钥进行加密",
+      "The server creates a session key and encrypts it with a private key. 服务器创建会话 密钥,并用私钥进行加密",
+      "The client creates a session key and encrypts it with a private key 客户端创建会话密 钥 ,并用私钥进行加密",
+      "客户端创建会话密钥 ,并用公钥进行加密",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 129,
+    "number": "128",
+    "stem": "Which of the following occurs in a PKI environment? 下面哪项是 PKI 环境中发生的?",
+    "options": [
+      "The RA creates the certificate, and the CA signs it. RA 创建证书 , CA 签署",
+      "CA 签署证书",
+      "The RA signs the certificate. RA 签署证书",
+      "The user signs the certificate. 用户签署证书",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 130,
+    "number": "129",
+    "stem": "SDLC 在什么环境就应该开始考虑安全需求",
+    "options": [
+      "需求分析确认",
+      "代码编写",
+      "运行维护",
+      "结束废弃",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 131,
+    "number": "130",
+    "stem": "Which of the following is a critical first step in disaster recovery and contingency\nplanning?\n灾难恢复和业务连续性计划中,什么是关键的第一步？",
+    "options": [
+      "Plan testing and drills. 计划测试和演练",
+      "Complete a business impact analysis. 完成业务影响分析",
+      "Determine offsite backup facility alternatives. 决定异地可替代恢复场所",
+      "Organize and create relevant documentation. 组织和创建相关文档",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 132,
+    "number": "131",
+    "stem": "网卡设置了混合模式,但只收到自己的网络信息?",
+    "options": [
+      "防火墙禁止嗅探",
+      "网络使用交换机连接模式",
+      "网络使用集线器",
+      "当前没有通讯数据",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 133,
+    "number": "132",
+    "stem": "信息安全官准备实施一个控制来检测和阻止用户滥用，分配给他们的权限，下面哪\n个是最好的满足这个需求的措施?",
+    "options": [
+      "管理层评估确认",
+      "双因素识别和认证",
+      "在审计日志中抓取这些数据",
+      "实施一个强安全策略",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 134,
+    "number": "133",
+    "stem": "在进行业务影响分析时 ,为什么需要确定业务流程的重要性?",
+    "options": [
+      "理解组织对业务流程的依赖关系",
+      "便于对连续性策略进行测试和维护",
+      "定义在发生灾难时, 由谁来触发 BCP",
+      "为高级管理层提供决策工具",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 135,
+    "number": "134",
+    "stem": "发现交易系统的交易金额超过了预先设置的上限, 触发 SCARE 文件记录这属于哪种\n控制？",
+    "options": [
+      "预防性控制",
+      "检测性控制",
+      "纠正性控制",
+      "补偿性控制",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 136,
+    "number": "135",
+    "stem": "以下哪一项是网络入侵检测技术",
+    "options": [
+      "端口扫描",
+      "网络欺骗",
+      "统计异常",
+      "协议分析",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 137,
+    "number": "136",
+    "stem": "以下哪一项包含的是针对口令的攻击?",
+    "options": [
+      "暴力破解、动态口令、 生物特征重放",
+      "色拉米 、SYN 洪泛攻击 、死亡之 ping",
+      "字典攻击、钓鱼 、键盘记录",
+      "彩虹表、泪滴攻击、战争拨号",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 138,
+    "number": "137",
+    "stem": "BCP 业务连续性计划基于？",
+    "options": [
+      "关于灾难恢复要求事项的检测表",
+      "同行业的 BCP 业务连续性计划实践",
+      "方针和规程手册",
+      "对业务流程和规范的评审",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 139,
+    "number": "138",
+    "stem": "哪种演练不影响业务运营？",
+    "options": [
+      "桌面演练",
+      "模拟演练",
+      "并行测试",
+      "完全中断",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 140,
+    "number": "139",
+    "stem": "根据最佳实践 ,在生产环境中实施第三方软件的最佳做法是？",
+    "options": [
+      "将第三方软件托管",
+      "和供应商签订关于补丁的合同",
+      "扫描第三方的应用软件以发现漏洞",
+      "协商最终用户使用应用的培训",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 141,
+    "number": "140",
+    "stem": "组织使用了基于角色的访问控制(RBAC), 以下哪一项能防不恰当的特权聚集?",
+    "options": [
+      "动态职责分离",
+      "分级继承",
+      "BLP 安全模型",
+      "Clark- Wilson 安全模型",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 142,
+    "number": "141",
+    "stem": "Which of the following is considered best practice for a forensic investigation?\n下面哪个被认为是取证调查的最佳实践？",
+    "options": [
+      "检查收集的信息的副本",
+      "检查收集信息的原始信息",
+      "在拷贝前加密信息",
+      "加密原始信息的副本",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 143,
+    "number": "142",
+    "stem": "Which of the fol lowing is an example of an active attack? 下面哪个是主动攻击的例\n子?",
+    "options": [
+      "流量分析",
+      "伪装",
+      "窃听",
+      "肩窥",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 144,
+    "number": "143",
+    "stem": "Which of the fo valid controls against program threats? 下面哪个是针对编程威胁的\n正确控制",
+    "options": [
+      "代码重用、模块化和链接",
+      "合适的招聘实践，阶段检查，和分层结构",
+      "同行评审，测试和配置管理",
+      "分组代码检查 ,危害分析和验收测试",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 145,
+    "number": "144",
+    "stem": "( Accreditation)“鉴证 (认可) ”是什么意思?",
+    "options": [
+      "管理层在知情的状况下决定是否接收风险",
+      "请专家评估系统安全性",
+      "过程符合要求",
+      "工作绩效良好",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 146,
+    "number": "145",
+    "stem": "What MUST the software developer do when a security bug is found 当在单元测试中\n发现了一个安全漏洞时, 软件开发人员必须要做下面哪项?",
+    "options": [
+      "执行一个全面的同行评审",
+      "修补改漏洞， 并通知开发团队",
+      "details to the development team lead 将漏洞细节电子邮件发送给开发团队负责人",
+      "Record the problem using a change management tool 使用变更管理工具记录该问题",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 147,
+    "number": "146",
+    "stem": "在安全威胁较低的情况下 ,使用包过滤防火墙?",
+    "options": [
+      "更方便、更灵活、透明",
+      "配置更简单",
+      "设备更先进",
+      "功能更多",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 148,
+    "number": "147",
+    "stem": "基于角色的访问控制，以保护数据库中的数据机密性可以由以下哪项技术来加以实\n现？",
+    "options": [
+      "视图",
+      "加密",
+      "散列",
+      "屏蔽",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 149,
+    "number": "148",
+    "stem": "什么是 ARP 投毒？",
+    "options": [
+      "交换网络的泛洪",
+      "使用 DNS 死亡之 ping 的拒绝服务",
+      "将 IP 变为 MAC 的解决方案",
+      "在 ARP 表中插入一个虚假的 IP 和 MAC 地址",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 150,
+    "number": "149",
+    "stem": "以下哪类的攻击涉及到 IP 欺骗，ICMP ECHO 和网站反弹？",
+    "options": [
+      "IP 欺骗攻击",
+      "Smurf 攻击",
+      "SYN 攻击",
+      "Teardrop 攻击",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 151,
+    "number": "150",
+    "stem": "什么加密算法将为储存于 USB 盘上的数据提供强大保护？",
+    "options": [
+      "TLS",
+      "SHA1",
+      "AES",
+      "DES",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 152,
+    "number": "151",
+    "stem": "Marthem 的公司正在考虑从供应商处购买基于网页的电子邮件服务， 这是什么类型\n的云计算模型？",
+    "options": [
+      "SaaS",
+      "IaaS",
+      "CaaS",
+      "PaaS",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 153,
+    "number": "152",
+    "stem": "TCP/IP 模型的应用层对应 OSI 模型的应用层和？",
+    "options": [
+      "会话层、表现层",
+      "传输层 、会话层",
+      "表现层、数据链路层",
+      "",
+      "表现层 、传输层"
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 154,
+    "number": "153",
+    "stem": "Mark’ s company is involved in a civil case. What evidentiary standard is he likely to\nneed to meet?\n马克的公司卷入了一起民事案件。他可能需要满足什么证据标准？",
+    "options": [
+      "The real evidence standard 真实证据标准",
+      "Beyond a reasonable doubt 排除合理怀疑",
+      "Preponderance of evidence 优势证据",
+      "The documentary evidence standard 书证标准",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 155,
+    "number": "154",
+    "stem": "WPA2 的计数器模式密码块链接消息认证模式协议 (CCMP) 是基于哪种通用加密方\n案？",
+    "options": [
+      "DES",
+      "3DES",
+      "AES",
+      "TLS",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 156,
+    "number": "155",
+    "stem": "CC 中的安全要求属于：",
+    "options": [
+      "ST",
+      "PP",
+      "TOE",
+      "厂商要求",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 157,
+    "number": "156",
+    "stem": "在 CMMI 的第二阶段是哪个阶段？",
+    "options": [
+      "不可预测",
+      "可重复",
+      "可定义",
+      "可管理",
+      "可优化"
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 158,
+    "number": "157",
+    "stem": "在医院里面，护士随意存放病患的病历，可能有什么问题？",
+    "options": [
+      "违反 PCI- DSS",
+      "违反安全港",
+      "违反 HIPAA",
+      "涉嫌违法",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 159,
+    "number": "158",
+    "stem": "某机构需要设计安全控制来只允许对高级数据的写，以及限制对低级数据的写入，\n该机构需要采用什么安全模型？",
+    "options": [
+      "BLP",
+      "BIBA",
+      "Clark- Wilson",
+      "中国墙",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 160,
+    "number": "159",
+    "stem": "哪一个能供提供最有效的实时的容错机制：",
+    "options": [
+      "备份",
+      "独立的运行相同的服务",
+      "回滚",
+      "冷站",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 161,
+    "number": "160",
+    "stem": "某公司遭遇洪水攻击最好的技术性缓解措施是。",
+    "options": [
+      "多链路",
+      "BGP 路由黑洞",
+      "弹性计算",
+      "加大带宽",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 162,
+    "number": "161",
+    "stem": "由于不断提高的计算机性能，对加密密钥的暴力攻击也在不断增加。以下哪一项通\n常被认为是对暴力密码攻击的很好保护？",
+    "options": [
+      "什么也不能抵御暴力密钥攻击；",
+      "对暴力密钥攻击免疫的算法；",
+      "采用良好的密钥生成器；",
+      "采用会话密钥",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 163,
+    "number": "162",
+    "stem": "Gary 正在分析一个安全事故，在他的调查期间，他发现有一个用户否认他曾做的事。\n根据 STRIDE 模型，此时发生了什么类型的威胁？",
+    "options": [
+      "否认",
+      "信息泄露",
+      "篡改",
+      "特权提升",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 164,
+    "number": "163",
+    "stem": "服务器接交换机的端口 1，笔记本接交换机的端口 23。 问笔记本怎样能截获服务器\n的信息。",
+    "options": [
+      "端口捕捉 (spanning)",
+      "端口复制 (copying)",
+      "端口绑定 (binding)",
+      "端口汇聚 (trunk)",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 165,
+    "number": "164",
+    "stem": "Renee is speaking to her board of directors about their responsibilities to review\ncyberse- curity controls. What rule requires that senior executives take personal\nresponsibility for information security matters?\nRenee 正在与她的董事会讨论他们审查网络安全控制的责任。什么规则要求高级管理人员\n对信息安全事务承担个人责任？",
+    "options": [
+      "Due diligence rule 尽职调查规则",
+      "Personal liability rule 个人责任规则",
+      "Prudent man rule 审慎原则",
+      "Due process rule 正当程序规则",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 166,
+    "number": "165",
+    "stem": "Which one of the following principles imposes a standard of care upon an individual\nthat is broad and equivalent to what one would expect from a reasonable person under\nthe circumstances?\n以下哪一项原则对个人施加了一种宽泛的、等同于人们在这种情况下对一个有理智的人的\n期望的谨慎标准？",
+    "options": [
+      "Due diligence 尽职调查",
+      "Separation of duties 职责分离",
+      "Due care 适度关注",
+      "Least privilege 最小特权",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 167,
+    "number": "166",
+    "stem": "Kelly believes that an employee engaged in the unauthorized use of computing\nresources for a side business.After consulting with management, she decides to\nlaunch an administrative investigation. What is the burden of proof that she must meet\nin this investigation?\nKelly 认为，一名员工未经授权将计算资源用于副业。在与管理层协商后，她决定启动行政\n调查 。她在这次调查中必须满足的举证责任是什么？",
+    "options": [
+      "Preponderance of the evidence 证据的优势",
+      "Beyond a reasonable doubt 排除合理怀疑",
+      "Beyond the shadow of a doubt 超越怀疑的阴影",
+      "There is no standard 没有标准",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 168,
+    "number": "167",
+    "stem": "Keenan Systems recently developed a new manufacturing process for\nmicroprocessors. The company wants to license the technology to other companies for\nuse but wants to prevent unauthorized use of the technology. What type of intellectual\nproperty protection is best suited for this situation?\nKeenan Systems 最近开发了一种新的微处理器制造工艺。该公司希望将该技术许可给其他\n公司使用， 但希望防止未经授权使用该技术。什么样的知识产权保护最适合这种情况？",
+    "options": [
+      "Patent 专利",
+      "Trade secret 商业秘密",
+      "Copyright 版权",
+      "Trademark 商标",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 169,
+    "number": "168",
+    "stem": "Which one of the following actions might be taken as part of a business continuity\nplan?\n作为业务连续性计划的一部分， 可以采取以下哪一项行动？",
+    "options": [
+      "Restoring from backup tapes 从备份磁带恢复",
+      "Implementing RAID 实施 RAID",
+      "Relocating to a cold site 搬迁到冷站点",
+      "Restarting business operations 重启业务运营",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 170,
+    "number": "169",
+    "stem": "When developing a business impact analysis, the team should first create a list of\nassets. What should happen next?\n在开发业务影响分析时，团队应首先创建资产清单。接下来应该发生什么？",
+    "options": [
+      "Identify vulnerabilities in each asset. 识别每项资产中的漏洞。",
+      "Determine the risks facing the asset. 确定资产面临的风险。",
+      "Develop a value for each asset.为每项资产制定一个价值。",
+      "Identify threats facing each asset. 识别每项资产面临的威胁。",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 171,
+    "number": "170",
+    "stem": "The Acme Widgets Company is putting new controls in place for its accounting\ndepartment. Management is concerned that a rogue accountant may be able to create\na new false vendor and then issue checks to that vendor as payment for services\nthat were never rendered.What security control can best help prevent this situation?\nAcme Widgets 公司正在为其会计部门实施新的控制措施。 管理层担心流氓会计师可能会\n创建一个新的虚假供应商，然后向该供应商开具支票作为从未提供的服务的付款。什么安\n全控制可以最好地帮助防止这种情况？",
+    "options": [
+      "Mandatory vacation 强制休假",
+      "Separation of duties 职责分离",
+      "Defense in depth 纵深防御",
+      "Job rotation 轮岗",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 172,
+    "number": "171",
+    "stem": "Robert is responsible for securing systems used to process credit card\ninformation.What security control framework should guide his actions?\nRobert 负责保护用于处理信用卡信息的系统。什么样的安全控制框架应该指导他的行动？",
+    "options": [
+      "HIPAA",
+      "PCI DSS",
+      "SOX",
+      "GLBA",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 173,
+    "number": "172",
+    "stem": "Which one of the following individuals is normally responsible for fulfilling the\noperational data protection responsibilities delegated by senior management, such\nas validating data integrity, testing backups, and managing security policies?\n以下哪一位人员通常负责履行高级管理层委派的操作数据保护职责， 例如验证数据完整性、\n测试备份和管理安全策略？",
+    "options": [
+      "Data custodian 数据保管人",
+      "Data owner 数据拥有者 （分级、授权、知情同意、废弃）",
+      "User 用户 业务处理（删改查）",
+      "Auditor 审核员 合规性评审",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 174,
+    "number": "173",
+    "stem": "Tom enables an application firewall provided by his cloud infrastructure as a service\nprovider that is designed to block many types of application attacks.\nWhen viewed from a risk management perspective,what metric is Tom attempting to\nlower by implementing this countermeasure?\nTom 启用了 由他的云基础设施作为服务提供商提供的应用程序防火墙，旨在阻止多种类\n型的应用程序攻击。从风险管理的角度来看， Tom 试图通过实施此对策来降低什么指\n标？",
+    "options": [
+      "Impact 影响",
+      "RPO",
+      "MTO",
+      "Likelihood 可能性",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 175,
+    "number": "174",
+    "stem": "You are the CISO for a major hospital system and are preparing to sign a contract\nwith a software as a service ( SaaS) email vendor and want to perform a control assessment\nto ensure that its business continuity planning measures are reasonable. What type of audit\nmight you request to meet this goal?\n您是一家大型医院系统的 CISO， 正准备与软件即服务 ( SaaS) 电子邮件供应商签订合同，\n并希望执行控制评估以确保其业务连续性规划措施合理。您可能会要求哪种类型的审计来\n实现这一目标？",
+    "options": [
+      "SOC 1",
+      "FISMA",
+      "PCI DSS",
+      "SOC 2",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 176,
+    "number": "175",
+    "stem": "日志要存储 3 个月，问怎么存储？",
+    "options": [
+      "3 个月全部在线存储",
+      "最近 1 个星期的在线存储，其他时间的近线存储。",
+      "3 个月全部离线存储",
+      "最近 1 个星期的在线存储，其他时间的离线存储。",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 177,
+    "number": "176",
+    "stem": "一个组织如何防止偶然的人闯入，选择最佳的预防措施？",
+    "options": [
+      "3~4 英尺高围栏，配合旋转门",
+      "6~7 英尺高的栅栏，上面有铁钉",
+      "8 英尺高的栅栏上面带刺和铁丝网",
+      "一面墙上面有隔离带 解析 3 ~4 英尺的围栏可吓阻无意穿越者。 6 ~ 7 英尺高的围栏难以攀爬 ，可吓阻大多数人侵者 ，但对于坚定的入侵者无效。 8 英尺以上的围栏 ，外加三层铁丝网甚至可吓阻坚定的入侵者。",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 178,
+    "number": "177",
+    "stem": "An accounting employee at Doolittle Industries was recently arrested for participation\nin an embezzlement scheme.The employee transferred money to a personal account and\nthen shifted funds around between other accounts every day to disguise the fraud for\nmonths.\nDoolittle Industries 的一名会计员工最近因参与贪污计划而被捕。该员工将钱转入个人账户，\n然后每天在其他账户之间转移资金，以掩盖欺诈行为长达数月。\nWhich one of the following controls might have best allowed the earlier detection\nof this fraud?\n以下哪一项控制措施可能最有助于及早发现这种欺诈？",
+    "options": [
+      "Separation of duties 职责分离",
+      "Least privilege 最小特权",
+      "Defense in depth 纵深防御",
+      "Mandatory vacation 强制休假",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 179,
+    "number": "178",
+    "stem": "Who should receive initial business continuity plan training in an organization?\n谁应该在组织中接受初始业务连续性计划培训？",
+    "options": [
+      "Senior executives 高级管理人员",
+      "Those with specific business continuity roles 具有特定业务连续性角色的人员",
+      "Everyone in the organization 组织中的每个人",
+      "First responders 第一响应者",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 180,
+    "number": "179",
+    "stem": "一台电话连接到一台交换机上，拨号时先连接到总接话员，然后由总接话员手动连\n到对端的电话线路上，问这是什么类型的网络结构？",
+    "options": [
+      "星型",
+      "总线型",
+      "树型",
+      "网状型",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 181,
+    "number": "180",
+    "stem": "WPA2 使用下面哪个协议扩展了认证方式？",
+    "options": [
+      "TLS",
+      "EAP",
+      "IPSec",
+      "SSH",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 182,
+    "number": "181",
+    "stem": "两家企业之间存在纠纷，准备起诉，属于什么？",
+    "options": [
+      "刑事",
+      "民事",
+      "行政",
+      "冲突",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 183,
+    "number": "182",
+    "stem": "Becka 最近与备用数据处理设施签署了一份合同，该合同将在发生灾难时为她的公\n司提供空间。该设施包括暖通空调、电源和通信电路，但没有硬件。Becka 使用什么类型\n的设施？",
+    "options": [
+      "Cold site 冷站",
+      "Warm site 温站",
+      "Hot site 热站",
+      "Mobile site 移动站",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 184,
+    "number": "183",
+    "stem": "Hannah 的组织正在实施一种依赖 SAML 的新用户身份验证方法 。她希望防止对该\n流量的窃听 ，并确保 SAML 流量不会被攻击者伪造。她应该怎么做才能抵御这两种类型\n的攻击？",
+    "options": [
+      "使用 SAML 的安全模式提供安全认证。",
+      "使用强大的密码套件实现 TLS， 这将防止这两种类型的攻击。",
+      "使用强大的密码套件实现 TLS 并使用数字签名。",
+      "使用强大的密码套件和消息散列实现 TLS。 解析：TLS 提供消息机密性和完整性，可以防止窃听。当与提供完整性和身份验证的数字 签名配对时，伪造的断言也可以被击败。SAML 没有安全模式，需要时依靠 TLS 和数字签 名来确保安全。没有签名的消息散列将有助于防止修改消息，但不一定提供身份验证。",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 185,
+    "number": "184",
+    "stem": "Brad 希望聘请第三方审计师来评估他的公司将与之签订合同的供应商。如果 Brad\n想要评估供应商的安全策略和控制以及这些控制随着时间的推移实施的有效性，他应该要\n求审计员执行什么 SOC 级别和类型？",
+    "options": [
+      "SOC 1，类型 2",
+      "SOC 2，类型 1",
+      "SOC 1，类型 1",
+      "SOC 2，类型 2",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 186,
+    "number": "185",
+    "stem": "RFID 是通过什么提供确认身份的功能：",
+    "options": [
+      "通过无线连接传递资产的 MAC 地址",
+      "通过无线连接传递资产的唯一序列号",
+      "通过有线方式提供资产 ID",
+      "通过条形码可以提供资产 ID",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 187,
+    "number": "186",
+    "stem": "有状态的防火墙比无状态防火墙的优点：",
+    "options": [
+      "有状态的防火墙检查 TCP 和 UDP 的标记",
+      "有状态防火墙检查会话的上下文内容",
+      "有状态防火墙不必分析 TCP 或者 UDP 端 口",
+      "有状态防火墙比无状态防火墙更快捷",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 188,
+    "number": "187",
+    "stem": "员工被允许早上 9 点到下午 3 点访问数据，问用什么样的访问控制策略：",
+    "options": [
+      "DAC",
+      "基于角色的访问控制",
+      "MAC",
+      "基于规则的访问控制",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 189,
+    "number": "188",
+    "stem": "用户已经经过了身份验证，攻击者向用户发送了恶意攻击，从而造成用户信任站点\n收到损失。这是以下那种攻击方式？",
+    "options": [
+      "XSS",
+      "CSRF",
+      "暴力攻击",
+      "DDOS",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 190,
+    "number": "189",
+    "stem": "当笔记本电脑被第三方检查，默认最可能发生了什么？",
+    "options": [
+      "硬盘被复制",
+      "硬盘被盗",
+      "MAC 地址被盗",
+      "IP 地址被盗答案",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 191,
+    "number": "190",
+    "stem": "针对机房环境的风险应对措施， 哪个是纠正控制？",
+    "options": [
+      "保安抓走小偷",
+      "灯光吓走小偷",
+      "报警声吓走小偷",
+      "CCTV 回放",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 192,
+    "number": "191",
+    "stem": "物理安全设计，最好的原则？",
+    "options": [
+      "CPTED",
+      "成本最低",
+      "最安全考虑",
+      "方便救援",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 193,
+    "number": "192",
+    "stem": "如果实施内容管理系统 (CMS) ，会发生以下哪一项？",
+    "options": [
+      "开发人员将无法再访问生产系统",
+      "投入生产的应用程序将是安全的",
+      "修补系统将更快完成",
+      "测试和生产系统将运行相同的代码 解析：内容管理系统后台管理实现方便、易用、人性化的操作方式，创新采用书签式管理 的 Web 界面，切换方便，节省使用者和浏览者的时间。所见即所得的编辑功能，可以在内 容管 理系统里直接进行文字的排版处理， 还可以在线对图片进行简单处理。系统支持插入 Flash、音频、视频、超链接、特殊字符等等。 内容管理系统使用基于角色的用户管理，通过添加不同权限的用户，可以将一个网站的管 理权限分配给不同的用户。通过建立具有不同管理权限的用户组，可以将用户分成多种级 别： 超级管理员、栏目管理员、文档录入员、审核员等一份内容从最初录入到最后发布到 网站上， 中间可以经过编辑初审、修改，管理员审批等，保证发布内容的质量。 WordPress 组织结构层次中包含五个角色。从最小特权到最多权限的角色分别是订阅者、 撰稿人、作者、编辑者和管理员。每个更高级别的角色都包含较低级别角色的所有权限。 订阅者可修改其用户配置文件中页面外观的某些元素。撰稿人可创建、编辑和删除他们自 己未发布的帖子。作者可创建、编辑和发布帖子，还可编辑和删除自己发布的帖子，并上 传文件。编辑可创建、编辑和删除任何帖子，还可管理网站页面，包括编辑和删除页面。 管理员可在网站上执行任何操作，包括管理基础主题、插件和用户。",
+      ""
+    ],
+    "answer": "D"
+  },
+  {
+    "row": 194,
+    "number": "193",
+    "stem": "在使用第三方基于云的应用程序和目录解决方案时， 以下哪种方法最有效地管理用\n户帐户？",
+    "options": [
+      "云目录",
+      "目录同步",
+      "保证框架",
+      "轻量级目录访问协议 ( LDAP) 解析： 云目录平台是为中小企业管理和保护针对云服务器基础设施等访问打造的解决方案。 基于 SaaS 的托管目录服务通过 LDAP 协议集中用户管理，提供单点登录 ( SSO) 、 网络 准入控制、 多 因素认证 (MFA) 等功能。对于企业已有账号体系的使用和管理这一老大 难问题， 管理员可以利用云目录平台搭建本地用户源、企业社交账号源的桥梁， 将云目 录服务快速连接到企业 AD 或 LDAP 用户源、钉钉、企业微信、飞书等",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 195,
+    "number": "194",
+    "stem": "组织有很多冗余和不可用的日志，为了避免其占满空间，应如何处理？",
+    "options": [
+      "删除重复",
+      "压缩",
+      "加密",
+      "HASH",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 196,
+    "number": "195",
+    "stem": "在考虑业务连续性 ( BC) 和灾难恢复 ( DR) 培训计划的有效性时，最重要的因素是\n什么？",
+    "options": [
+      "管理支持",
+      "考虑组织需求",
+      "用于交付的技术",
+      "目标观众",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 197,
+    "number": "196",
+    "stem": "VLAN 的好处是什么？",
+    "options": [
+      "VLAN 可以提高交换机的效率",
+      "VLAN 可以增加更多的设备接入",
+      "VLAN 可以隔离交换机流量，大大提升了安全性",
+      "VLAN 可以隔离网段，必须通过三层路由转发",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 198,
+    "number": "197",
+    "stem": "如果选择静态的连接方式到一个终端，使用哪个技术是安全的？",
+    "options": [
+      "443",
+      "22",
+      "80",
+      "21 解析：22 端口是 SSH 协议应用，SSH 为建立在应用层基础上的安全协议。SSH 是较可靠， 为远程登录会话和其他网络服务提供安全性的协议。利用 SSH 协议可以有效防止远程 管理过程中的信息泄露问题。SSH 最初是 UNIX 系统上的一个程序，后来又迅速扩展到其 他操作平台。",
+      ""
+    ],
+    "answer": "B"
+  },
+  {
+    "row": 199,
+    "number": "198",
+    "stem": "问保护一个人的个人隐私数据，如何最优化的减少攻击面？",
+    "options": [
+      "数据匿名化",
+      "数据加密",
+      "减少数据收集",
+      "不使用数据",
+      ""
+    ],
+    "answer": "C"
+  },
+  {
+    "row": 200,
+    "number": "199",
+    "stem": "谁负责给代码签名？",
+    "options": [
+      "开发团队",
+      "质量保证",
+      "评估机构",
+      "程序员",
+      ""
+    ],
+    "answer": "A"
+  },
+  {
+    "row": 201,
+    "number": "200",
+    "stem": "从安全性出发，数据中心应该怎么选址？",
+    "options": [
+      "交通便利，有公路或者高速直通",
+      "采光好的",
+      "大楼入口多的",
+      "不起眼的地方",
+      ""
+    ],
+    "answer": "D"
+  }
+]

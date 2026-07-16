@@ -6,7 +6,7 @@ import { dateKey } from "./utils";
 
 export const DATABASE_NAME = "salingo";
 export const LEGACY_STORAGE_KEY = "salingo:data:v1";
-export const SEED_DATA_VERSION = 1;
+export const SEED_DATA_VERSION = 2;
 
 export const DEFAULT_AI_SETTINGS: AISettings = {
   baseUrl: process.env.NEXT_PUBLIC_AI_BASE_URL ?? "",

@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { INITIAL_QUESTIONS } from "@/data/full-bank";
 import type { AnswerRecord, AppData, ExamRecord, ReviewCardState } from "./types";
 import {
   LEGACY_STORAGE_KEY,
@@ -44,12 +45,12 @@ function sampleReview(): ReviewCardState {
 }
 
 describe("IndexedDB initialization", () => {
-  it("seeds exactly 800 questions and is idempotent", async () => {
+  it("seeds the complete question bank and is idempotent", async () => {
     const database = createDb();
     const storage = new MemoryStorage();
     await initializeDatabase(database, storage);
     await initializeDatabase(database, storage);
-    expect(await database.questions.count()).toBe(800);
+    expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length);
   });
 
   it("migrates a complete legacy snapshot and removes it only after commit", async () => {
@@ -73,7 +74,7 @@ describe("IndexedDB initialization", () => {
     const result = await initializeDatabase(database, storage);
     expect(result.warning).toContain("格式无效");
     expect(storage.getItem(LEGACY_STORAGE_KEY)).toBe("{invalid");
-    expect(await database.questions.count()).toBe(800);
+    expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length);
   });
 
   it("does not remove legacy data when the initialization transaction fails", async () => {
@@ -97,7 +98,7 @@ describe("IndexedDB initialization", () => {
     await initializeDatabase(database, new MemoryStorage());
     expect((await database.questions.get(first.id))?.stem).toContain("用户保留");
     expect(await database.questions.get(second.id)).toBeDefined();
-    expect(await database.questions.count()).toBe(800);
+    expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length);
   });
 });
 
@@ -127,7 +128,7 @@ describe("IndexedDB transactions and backups", () => {
     const existing = (await database.questions.toArray())[0];
     const imported = { ...existing, id: "imported-new-question", source: "imported" as const };
     expect(await addQuestions(database, [existing, imported])).toBe(1);
-    expect(await database.questions.count()).toBe(801);
+    expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length + 1);
   });
 
   it("records an exam and its review set together", async () => {
@@ -149,7 +150,7 @@ describe("IndexedDB transactions and backups", () => {
     await expect(importBackup(database, JSON.stringify({ version: 1 }))).rejects.toBeDefined();
     await resetDatabase(database);
     const reset = await readAppData(database);
-    expect(reset.questions).toHaveLength(800);
+    expect(reset.questions).toHaveLength(INITIAL_QUESTIONS.length);
     expect(reset.answers).toHaveLength(0);
     expect(reset.reviews).toHaveLength(0);
   });

@@ -6,7 +6,7 @@
 
 - [x] `npm audit`：0 个已知漏洞。
 - [x] `npm run typecheck`：严格 TypeScript 检查通过。
-- [x] `npm run check:bank`：800 道题、800 个唯一 ID、八域各 100 道、结构与答案引用有效。
+- [x] `npm run check:bank`：1,077 道题、1,077 个唯一 ID、八域覆盖、结构与答案引用有效。
 - [x] `npm run build`：Next.js 15 生产构建与 `output: "export"` 静态导出通过。
 
 ## 页面与交互

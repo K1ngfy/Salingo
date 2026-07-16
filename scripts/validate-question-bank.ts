@@ -6,7 +6,7 @@ async function main() {
   const text = await readFile(resolve(process.cwd(), "public/data/questions.json"), "utf8");
   const questions = questionArraySchema.parse(JSON.parse(text));
   const ids = new Set(questions.map((question) => question.id));
-  if (questions.length < 800) throw new Error(`Expected at least 800 questions, received ${questions.length}.`);
+  if (questions.length < 1077) throw new Error(`Expected at least 1077 questions, received ${questions.length}.`);
   if (ids.size !== questions.length) throw new Error("Question IDs must be unique.");
   for (const domainId of ["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"] as const) {
     const domainQuestions = questions.filter((question) => question.domainId === domainId);

@@ -1,5 +1,6 @@
 import { SEED_QUESTIONS } from "./questions";
 import { EXTENDED_QUESTIONS } from "./questions-extended";
+import { CISSP2508_QUESTIONS } from "./cissp2508";
 import type { Question } from "@/lib/types";
 
 const CONTEXTS = [
@@ -33,7 +34,9 @@ function rotateQuestion(seed: Question, variant: number): Question {
 
 const BLUEPRINTS = [...SEED_QUESTIONS, ...EXTENDED_QUESTIONS];
 
-/** 80 个原创知识蓝本 × 10 个组织情境与选项排列 = 800 道本地练习。 */
-export const INITIAL_QUESTIONS: Question[] = BLUEPRINTS.flatMap((seed) =>
+/** 800 道原创变式题，加上用户提供的 277 道 CISSP2508 模拟题。 */
+const ORIGINAL_QUESTIONS: Question[] = BLUEPRINTS.flatMap((seed) =>
   CONTEXTS.map((_, variant) => rotateQuestion(seed, variant)),
 );
+
+export const INITIAL_QUESTIONS: Question[] = [...ORIGINAL_QUESTIONS, ...CISSP2508_QUESTIONS];
