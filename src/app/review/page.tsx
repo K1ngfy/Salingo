@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import type { DomainId, MistakeType } from "@/lib/types";
 
 export default function ReviewPage() {
-  const { data, setReviews } = useAppData();
+  const { data, upsertReview } = useAppData();
   const [started, setStarted] = useState(false);
   const [domain, setDomain] = useState<DomainId | "all">("all");
   const [mistake, setMistake] = useState<MistakeType | "all">("all");
@@ -20,7 +20,10 @@ export default function ReviewPage() {
     return (domain === "all" || question?.domainId === domain) && (mistake === "all" || item.mistakeType === mistake);
   });
   if (started) return <PracticeSession reviewMode questionIds={filtered.map((item) => item.questionId)} />;
-  const toggleFavorite = (id: string) => setReviews(data.reviews.map((item) => item.questionId === id ? { ...item, favorite: !item.favorite } : item));
+  const toggleFavorite = async (id: string) => {
+    const review = data.reviews.find((item) => item.questionId === id);
+    if (review) await upsertReview({ ...review, favorite: !review.favorite });
+  };
 
   return <div className="grid gap-8 xl:grid-cols-[1fr_21rem]">
     <section>

@@ -35,7 +35,7 @@ function diversePracticeSet(source: Question[]) {
 }
 
 export function PracticeSession({ domainId, reviewMode = false, questionIds }: { domainId?: string; reviewMode?: boolean; questionIds?: string[] }) {
-  const { data, addAnswer, setReviews } = useAppData();
+  const { data, recordAnswer } = useAppData();
   const questions = useMemo(() => {
     const source = reviewMode
       ? data.reviews.filter((review) => new Date(review.due) <= new Date() && (!questionIds || questionIds.includes(review.questionId))).map((review) => data.questions.find((q) => q.id === review.questionId)).filter((q): q is Question => Boolean(q))
@@ -52,6 +52,7 @@ export function PracticeSession({ domainId, reviewMode = false, questionIds }: {
   const [aiExplanation, setAIExplanation] = useState<Explanation | null>(null);
   const [aiLoading, setAILoading] = useState(false);
   const [aiError, setAIError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const question = questions[index];
   if (!question && !finished) {
@@ -69,17 +70,21 @@ export function PracticeSession({ domainId, reviewMode = false, questionIds }: {
     if (question.type === "single") setSelected([answer]);
     else setSelected((current) => current.includes(answer) ? current.filter((item) => item !== answer) : [...current, answer]);
   };
-  const submit = () => {
+  const submit = async () => {
     if (!selected.length) return;
     const isCorrect = sameAnswers(selected, question.correctAnswers);
-    setCorrect(isCorrect);
-    setChecked(true);
-    if (isCorrect) setSessionCorrect((value) => value + 1);
-    addAnswer({ id: crypto.randomUUID(), questionId: question.id, domainId: question.domainId, selectedAnswers: selected, correct: isCorrect, answeredAt: new Date().toISOString(), durationSeconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000)), mode: reviewMode ? "review" : "practice" });
     const previous = data.reviews.find((item) => item.questionId === question.id);
-    if (!isCorrect || reviewMode || previous) {
-      const next = scheduleReview(question.id, previous, isCorrect);
-      setReviews([...data.reviews.filter((item) => item.questionId !== question.id), next]);
+    const review = !isCorrect || reviewMode || previous ? scheduleReview(question.id, previous, isCorrect) : undefined;
+    setSaving(true); setAIError("");
+    try {
+      await recordAnswer({ id: crypto.randomUUID(), questionId: question.id, domainId: question.domainId, selectedAnswers: selected, correct: isCorrect, answeredAt: new Date().toISOString(), durationSeconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000)), mode: reviewMode ? "review" : "practice" }, review);
+      setCorrect(isCorrect);
+      setChecked(true);
+      if (isCorrect) setSessionCorrect((value) => value + 1);
+    } catch (cause) {
+      setAIError(cause instanceof Error ? cause.message : "答题记录保存失败，请重试");
+    } finally {
+      setSaving(false);
     }
   };
   const next = () => {
@@ -121,7 +126,7 @@ export function PracticeSession({ domainId, reviewMode = false, questionIds }: {
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-3"><Button variant="secondary" size="sm" onClick={requestAIExplanation} disabled={aiLoading}><Sparkle size={17} weight="fill" />{aiLoading ? "AI 正在深度解析…" : aiExplanation ? "重新生成 AI 解析" : "AI 深度解析"}</Button>{aiExplanation && <span className="text-xs font-black text-[#168fc7]">当前显示 AI 解析</span>}{aiError && <span className="text-xs font-bold text-[#c63838]">{aiError}</span>}</div>
       </motion.section>}</AnimatePresence>
-      <div className="mt-7 flex justify-end">{checked ? <Button size="lg" onClick={next}>继续<ArrowRight size={19} weight="bold" /></Button> : <Button size="lg" onClick={submit} disabled={!selected.length}>检查答案</Button>}</div>
+      <div className="mt-7 flex justify-end">{checked ? <Button size="lg" onClick={next}>继续<ArrowRight size={19} weight="bold" /></Button> : <Button size="lg" onClick={submit} disabled={!selected.length || saving}>{saving ? "正在保存…" : "检查答案"}</Button>}</div>
       <style jsx global>{`@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 50%{transform:translateX(8px)} 75%{transform:translateX(-4px)} }`}</style>
     </div>
   );

@@ -26,7 +26,7 @@ const navigation = [
 
 function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { data } = useAppData();
+  const { data, storageStatus, storageError } = useAppData();
   const due = data.reviews.filter((item) => new Date(item.due) <= new Date()).length;
   const streak = data.streakDates.length;
 
@@ -65,6 +65,8 @@ function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
+
+      {storageError && <div role="alert" className={cn("mx-auto mt-4 max-w-[1332px] rounded-xl px-4 py-3 text-sm font-bold", storageStatus === "volatile" ? "bg-[#fff0f0] text-[#b83232]" : "bg-[#fff7e5] text-[#89672c]")}>{storageError}</div>}
 
       <main id="main-content" className="mx-auto w-full max-w-[1380px] px-4 pb-28 pt-7 sm:px-6 sm:pt-9 lg:pb-12">{children}</main>
 

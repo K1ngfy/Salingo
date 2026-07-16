@@ -43,7 +43,7 @@ function chooseQuestions(pool: Question[], count: number) {
 }
 
 export default function ExamPage() {
-  const { data, addExam, setReviews } = useAppData();
+  const { data, completeExam } = useAppData();
   const [stage, setStage] = useState<Stage>("setup");
   const [count, setCount] = useState(50);
   const [minutes, setMinutes] = useState(60);
@@ -56,10 +56,12 @@ export default function ExamPage() {
   const [paused, setPaused] = useState(false);
   const [startedAt, setStartedAt] = useState("");
   const [result, setResult] = useState<ExamRecord | null>(null);
-  const finishExamRef = useRef<() => void>(() => undefined);
+  const [finishing, setFinishing] = useState(false);
+  const [finishError, setFinishError] = useState("");
+  const finishExamRef = useRef<() => Promise<void>>(async () => undefined);
 
-  const finishExam = () => {
-    if (!questions.length || stage !== "running") return;
+  const finishExam = async () => {
+    if (!questions.length || stage !== "running" || finishing) return;
     let correct = 0;
     const domainTotals: Partial<Record<DomainId, number>> = {};
     const domainCorrect: Partial<Record<DomainId, number>> = {};
@@ -77,17 +79,24 @@ export default function ExamPage() {
         if (oldIndex >= 0) nextReviews[oldIndex] = scheduled; else nextReviews.push(scheduled);
       }
     });
-    setReviews(nextReviews);
     const domainScores = Object.fromEntries(Object.entries(domainTotals).map(([id, total]) => [id, percent(domainCorrect[id as DomainId] ?? 0, total ?? 0)])) as Partial<Record<DomainId, number>>;
     const exam: ExamRecord = { id: crypto.randomUUID(), startedAt, finishedAt: new Date().toISOString(), durationSeconds: minutes * 60 - remaining, questionIds: questions.map((q) => q.id), answers, score: percent(correct, questions.length), domainScores };
-    addExam(exam); setResult(exam); setStage("report"); setPaused(false);
+    setFinishing(true); setFinishError("");
+    try {
+      await completeExam(exam, nextReviews);
+      setResult(exam); setStage("report"); setPaused(false);
+    } catch (cause) {
+      setFinishError(cause instanceof Error ? cause.message : "模考记录保存失败，请重试");
+    } finally {
+      setFinishing(false);
+    }
   };
   finishExamRef.current = finishExam;
 
   useEffect(() => {
     if (stage !== "running" || paused) return;
     const id = window.setInterval(() => setRemaining((value) => {
-      if (value <= 1) { window.clearInterval(id); window.setTimeout(() => finishExamRef.current(), 0); return 0; }
+      if (value <= 1) { window.clearInterval(id); window.setTimeout(() => { void finishExamRef.current(); }, 0); return 0; }
       return value - 1;
     }), 1000);
     return () => window.clearInterval(id);
@@ -114,9 +123,10 @@ export default function ExamPage() {
         <div className="flex flex-wrap gap-2"><span className="rounded-lg bg-[#eef8fd] px-2.5 py-1 text-xs font-black text-[#168fc7]">D{getDomain(question.domainId).number} · {getDomain(question.domainId).shortName}</span><span className="rounded-lg bg-[#f3f3ef] px-2.5 py-1 text-xs font-black text-[#777]">{question.type === "multiple" ? "多选题" : "单选题"}</span></div>
         <h1 className="balance mt-5 text-xl font-black leading-[1.5] sm:text-2xl">{question.stem}</h1>
         <div className="mt-7 space-y-3">{question.options.map((option) => <button key={option.id} onClick={() => select(option.id)} className={cn("flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left font-bold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100", selected.includes(option.id) ? "border-[#1cb0f6] bg-[#e8f7ff] text-[#137eae] shadow-[0_3px_0_#1cb0f6]" : "border-[#deded8] shadow-[0_3px_0_#deded8] hover:bg-[#f8f8f5]")}><span className="grid size-9 shrink-0 place-items-center rounded-xl border-2 border-current/20">{selected.includes(option.id) ? <Check size={18} weight="bold" /> : option.id}</span>{option.text}</button>)}</div>
-        <div className="mt-8 flex items-center justify-between"><button onClick={() => setFlagged((current) => current.includes(question.id) ? current.filter((id) => id !== question.id) : [...current, question.id])} className={cn("flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-black", flagged.includes(question.id) ? "bg-[#fff5dc] text-[#d38200]" : "text-[#999] hover:bg-[#f3f3ef]")}><Flag size={19} weight={flagged.includes(question.id) ? "fill" : "bold"} />标记</button><div className="flex gap-2"><Button variant="secondary" onClick={() => setIndex((value) => Math.max(0, value - 1))} disabled={index === 0}>上一题</Button>{index < questions.length - 1 ? <Button variant="blue" onClick={() => setIndex((value) => value + 1)}>下一题<ArrowRight size={18} weight="bold" /></Button> : <Button onClick={finishExam}>交卷</Button>}</div></div>
+        {finishError && <p className="mt-5 rounded-xl bg-[#fff0f0] p-3 text-sm font-bold text-[#c63838]">{finishError}</p>}
+        <div className="mt-8 flex items-center justify-between"><button onClick={() => setFlagged((current) => current.includes(question.id) ? current.filter((id) => id !== question.id) : [...current, question.id])} className={cn("flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-black", flagged.includes(question.id) ? "bg-[#fff5dc] text-[#d38200]" : "text-[#999] hover:bg-[#f3f3ef]")}><Flag size={19} weight={flagged.includes(question.id) ? "fill" : "bold"} />标记</button><div className="flex gap-2"><Button variant="secondary" onClick={() => setIndex((value) => Math.max(0, value - 1))} disabled={index === 0 || finishing}>上一题</Button>{index < questions.length - 1 ? <Button variant="blue" onClick={() => setIndex((value) => value + 1)} disabled={finishing}>下一题<ArrowRight size={18} weight="bold" /></Button> : <Button onClick={finishExam} disabled={finishing}>{finishing ? "正在保存…" : "交卷"}</Button>}</div></div>
       </section>
-      <aside className="space-y-4"><div className="rounded-[1.5rem] border-2 border-[#e8e8e3] bg-white p-4"><div className="flex items-center justify-between"><h2 className="font-black">答题卡</h2><span className="text-xs font-bold text-[#999]">{unanswered} 未答</span></div><div className="mt-4 grid grid-cols-5 gap-2">{questions.map((q, i) => <button key={q.id} onClick={() => setIndex(i)} className={cn("grid aspect-square place-items-center rounded-lg text-xs font-black", i === index ? "bg-[#1cb0f6] text-white" : flagged.includes(q.id) ? "bg-[#fff1c9] text-[#bf7600]" : answers[q.id]?.length ? "bg-[#e9f8dc] text-[#58a700]" : "bg-[#f1f1ed] text-[#888]")}>{i + 1}</button>)}</div></div><div className="rounded-[1.5rem] bg-[#fff7e5] p-4"><p className="text-sm font-bold leading-6 text-[#8c6b2f]">考试中不显示答案或解析。交卷后统一批改，所有错题自动进入复习队列。</p><Button variant="secondary" className="mt-4 w-full" onClick={finishExam}>提前交卷</Button></div></aside>
+      <aside className="space-y-4"><div className="rounded-[1.5rem] border-2 border-[#e8e8e3] bg-white p-4"><div className="flex items-center justify-between"><h2 className="font-black">答题卡</h2><span className="text-xs font-bold text-[#999]">{unanswered} 未答</span></div><div className="mt-4 grid grid-cols-5 gap-2">{questions.map((q, i) => <button key={q.id} onClick={() => setIndex(i)} className={cn("grid aspect-square place-items-center rounded-lg text-xs font-black", i === index ? "bg-[#1cb0f6] text-white" : flagged.includes(q.id) ? "bg-[#fff1c9] text-[#bf7600]" : answers[q.id]?.length ? "bg-[#e9f8dc] text-[#58a700]" : "bg-[#f1f1ed] text-[#888]")}>{i + 1}</button>)}</div></div><div className="rounded-[1.5rem] bg-[#fff7e5] p-4"><p className="text-sm font-bold leading-6 text-[#8c6b2f]">考试中不显示答案或解析。交卷后统一批改，所有错题自动进入复习队列。</p><Button variant="secondary" className="mt-4 w-full" onClick={finishExam} disabled={finishing}>{finishing ? "正在保存…" : "提前交卷"}</Button></div></aside>
     </div>
   </div>;
 }
