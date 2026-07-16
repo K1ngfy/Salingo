@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -k -n WEB,AI -c green,cyan \"next dev -p 43127\" \"node scripts/ai-proxy.mjs\"",
-    "build": "next build",
+    "build": "node scripts/build-sites.mjs",
     "generate:bank": "tsx scripts/export-question-bank.ts",
     "check:bank": "tsx scripts/validate-question-bank.ts",
     "check": "npm run lint && npm run typecheck && npm run test && npm run check:bank && npm run build",

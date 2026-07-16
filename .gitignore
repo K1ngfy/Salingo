@@ -1,6 +1,7 @@
 node_modules
 .next
 out
+dist
 .playwright-cli/
 output/playwright/
 *.tsbuildinfo
