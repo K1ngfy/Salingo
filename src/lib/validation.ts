@@ -52,8 +52,53 @@ const matchingQuestionSchema = z.object({
   correctMatches: z.record(z.string(), z.string()),
 });
 
-export const questionSchema = z.discriminatedUnion("type", [choiceQuestionSchema, matchingQuestionSchema]);
-export const questionArraySchema = z.array(questionSchema);
+export const questionSchema = z.discriminatedUnion("type", [choiceQuestionSchema, matchingQuestionSchema]).superRefine((question, context) => {
+  const optionIds = question.options.map((option) => option.id);
+  const optionIdSet = new Set(optionIds);
+  if (optionIdSet.size !== optionIds.length) {
+    context.addIssue({ code: "custom", path: ["options"], message: "选项 ID 不能重复" });
+  }
+
+  if (question.type === "matching") {
+    const promptIds = question.matchingPrompts.map((prompt) => prompt.id);
+    if (new Set(promptIds).size !== promptIds.length) {
+      context.addIssue({ code: "custom", path: ["matchingPrompts"], message: "匹配项 ID 不能重复" });
+    }
+    for (const promptId of promptIds) {
+      if (!question.correctMatches[promptId]) {
+        context.addIssue({ code: "custom", path: ["correctMatches", promptId], message: "每个匹配项都必须有答案" });
+      }
+    }
+    for (const [promptId, optionId] of Object.entries(question.correctMatches)) {
+      if (!promptIds.includes(promptId)) {
+        context.addIssue({ code: "custom", path: ["correctMatches", promptId], message: "答案包含不存在的匹配项" });
+      }
+      if (!optionIdSet.has(optionId)) {
+        context.addIssue({ code: "custom", path: ["correctMatches", promptId], message: "匹配答案必须引用现有选项" });
+      }
+    }
+    return;
+  }
+
+  if (new Set(question.correctAnswers).size !== question.correctAnswers.length) {
+    context.addIssue({ code: "custom", path: ["correctAnswers"], message: "正确答案不能重复" });
+  }
+  if (question.type === "single" && question.correctAnswers.length !== 1) {
+    context.addIssue({ code: "custom", path: ["correctAnswers"], message: "单选题必须且只能有一个正确答案" });
+  }
+  question.correctAnswers.forEach((optionId, index) => {
+    if (!optionIdSet.has(optionId)) {
+      context.addIssue({ code: "custom", path: ["correctAnswers", index], message: "正确答案必须引用现有选项" });
+    }
+  });
+});
+export const questionArraySchema = z.array(questionSchema).superRefine((questions, context) => {
+  const seen = new Set<string>();
+  questions.forEach((question, index) => {
+    if (seen.has(question.id)) context.addIssue({ code: "custom", path: [index, "id"], message: "题目 ID 不能重复" });
+    seen.add(question.id);
+  });
+});
 
 export const answerResponseSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("choice"), selectedAnswers: z.array(z.string()) }),
@@ -95,7 +140,6 @@ export const examRecordSchema = z.object({
   id: z.string().min(1),
   bankId: bankIdSchema,
   startedAt: z.string(),
-  favoriteCardIds: z.array(z.string()).default([]),
   finishedAt: z.string(),
   durationSeconds: z.number().nonnegative(),
   questionIds: z.array(z.string()),

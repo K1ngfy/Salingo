@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { INITIAL_QUESTIONS } from "@/data/full-bank";
-import { appDataSchema } from "./validation";
+import { appDataSchema, questionArraySchema, questionSchema } from "./validation";
 
 describe("AppData backup migration", () => {
   it("migrates version 1 choice answers, exams and preferences to version 3", () => {
@@ -32,5 +32,18 @@ describe("AppData backup migration", () => {
     });
     expect(parsed.reviews[0]).toMatchObject({ id: "question:q1", targetType: "question", targetId: "q1", reps: 3, mistakeType: "审题失误", favorite: true });
     expect(parsed.preferences.questionAssistEnabled).toBe(true);
+  });
+
+  it("rejects semantically invalid choice answers", () => {
+    const question = INITIAL_QUESTIONS.find((item) => item.type === "single")!;
+    expect(questionSchema.safeParse({ ...question, correctAnswers: ["missing-option"] }).success).toBe(false);
+    expect(questionSchema.safeParse({ ...question, correctAnswers: question.options.slice(0, 2).map((option) => option.id) }).success).toBe(false);
+    expect(questionSchema.safeParse({ ...question, options: [question.options[0], question.options[0]] }).success).toBe(false);
+  });
+
+  it("rejects duplicate question IDs and invalid persisted AI settings", () => {
+    const question = INITIAL_QUESTIONS[0];
+    expect(questionArraySchema.safeParse([question, { ...question }]).success).toBe(false);
+    expect(appDataSchema.safeParse({ ...appDataSchema.parse({ version: 1, questions: [], answers: [], reviews: [], exams: [], streakDates: [], ai: { baseUrl: "", apiKey: "", model: "gpt-5-mini" } }), ai: { baseUrl: "", apiKey: "", model: "" } }).success).toBe(false);
   });
 });

@@ -13,13 +13,9 @@ import { explainQuestion } from "@/lib/ai";
 import { scheduleReview } from "@/lib/fsrs";
 import { getQuestionBank, isPracticeEnabled, questionBankId, questionSectionId } from "@/lib/question-banks";
 import { choiceResponse, correctResponse, isCorrectResponse, questionContent, responseIsComplete, responseLabel } from "@/lib/question-utils";
+import { sampleWithoutReplacement } from "@/lib/random";
 import { cn } from "@/lib/utils";
 import type { AnswerResponse, BankId, Explanation, MistakeType, Question, ReviewCardState } from "@/lib/types";
-
-function diversePracticeSet(source: Question[]) {
-  const shuffled = [...source].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 10);
-}
 
 export function PracticeSession({ bankId, domainId, sectionId, reviewMode = false, questionIds, sessionMode = "practice" }: {
   bankId?: BankId;
@@ -31,22 +27,32 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
 }) {
   const { data, recordAnswer, setPreferences, upsertReview } = useAppData();
   const activeBankId = bankId ?? data.preferences.activeBankId;
-  const [sweepQuestionIds, setSweepQuestionIds] = useState<string[] | undefined>(() => sessionMode === "sweep" && questionIds?.length ? [...questionIds] : undefined);
-  useEffect(() => {
-    if (sessionMode === "sweep" && sweepQuestionIds === undefined && questionIds?.length) setSweepQuestionIds([...questionIds]);
-  }, [questionIds, sessionMode, sweepQuestionIds]);
-  const sessionQuestionIds = sessionMode === "sweep" ? sweepQuestionIds ?? questionIds : questionIds;
-  const questions = useMemo(() => {
-    const source = reviewMode
-      ? data.reviews.filter((review) => review.targetType === "question" && new Date(review.due) <= new Date() && (!sessionQuestionIds || sessionQuestionIds.includes(review.targetId))).map((review) => data.questions.find((q) => q.id === review.targetId)).filter((q): q is Question => Boolean(q))
-      : data.questions.filter((question) => questionBankId(question) === activeBankId && isPracticeEnabled(question) && (!domainId || question.domainId === domainId) && (!sectionId || questionSectionId(question) === sectionId) && (!sessionQuestionIds || sessionQuestionIds.includes(question.id)));
-    if (reviewMode) return source.slice(0, 10);
+  const candidateQuestions = useMemo(() => reviewMode
+    ? data.reviews
+      .filter((review) => review.targetType === "question" && new Date(review.due) <= new Date() && (!questionIds || questionIds.includes(review.targetId)))
+      .map((review) => data.questions.find((question) => question.id === review.targetId))
+      .filter((question): question is Question => Boolean(question))
+    : data.questions.filter((question) => questionBankId(question) === activeBankId
+      && isPracticeEnabled(question)
+      && (!domainId || question.domainId === domainId)
+      && (!sectionId || questionSectionId(question) === sectionId)
+      && (!questionIds || questionIds.includes(question.id))), [activeBankId, data.questions, data.reviews, domainId, questionIds, reviewMode, sectionId]);
+  const proposedQuestionIds = useMemo(() => {
     if (sessionMode === "sweep") {
-      const byId = new Map(source.map((question) => [question.id, question]));
-      return sessionQuestionIds ? sessionQuestionIds.map((id) => byId.get(id)).filter((question): question is Question => Boolean(question)) : source;
+      const available = new Set(candidateQuestions.map((question) => question.id));
+      return questionIds ? questionIds.filter((id) => available.has(id)) : candidateQuestions.map((question) => question.id);
     }
-    return diversePracticeSet(source);
-  }, [activeBankId, data.questions, data.reviews, domainId, reviewMode, sectionId, sessionMode, sessionQuestionIds]);
+    if (reviewMode) return candidateQuestions.slice(0, 10).map((question) => question.id);
+    return sampleWithoutReplacement(candidateQuestions, 10).map((question) => question.id);
+  }, [candidateQuestions, questionIds, reviewMode, sessionMode]);
+  const [frozenQuestionIds, setFrozenQuestionIds] = useState<string[]>();
+  useEffect(() => {
+    if (frozenQuestionIds === undefined && proposedQuestionIds.length > 0) setFrozenQuestionIds(proposedQuestionIds);
+  }, [frozenQuestionIds, proposedQuestionIds]);
+  const questions = useMemo(() => {
+    const byId = new Map(data.questions.map((question) => [question.id, question]));
+    return (frozenQuestionIds ?? proposedQuestionIds).map((id) => byId.get(id)).filter((question): question is Question => Boolean(question));
+  }, [data.questions, frozenQuestionIds, proposedQuestionIds]);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState<AnswerResponse>(() => choiceResponse([]));
   const [checked, setChecked] = useState(false);

@@ -6,8 +6,8 @@ dotenv.config({ path: ".env", override: false, quiet: true });
 
 const HOST = "127.0.0.1";
 const PORT = Number(process.env.SALINGO_AI_PROXY_PORT || 43128);
-const envBaseUrl = process.env.AI_BASE_URL || process.env.NEXT_PUBLIC_AI_BASE_URL || "";
-const envApiKey = process.env.AI_API_KEY || process.env.NEXT_PUBLIC_AI_API_KEY || "";
+const envBaseUrl = process.env.AI_BASE_URL || "";
+const envApiKey = process.env.AI_API_KEY || "";
 
 function isAllowedOrigin(origin) {
   return !origin || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);

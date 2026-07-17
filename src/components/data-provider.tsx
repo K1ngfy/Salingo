@@ -24,9 +24,9 @@ import {
   savePreferences,
   upsertReview as upsertReviewInDb,
 } from "@/lib/db";
-import { appDataSchema, questionArraySchema } from "@/lib/validation";
-import { dateKey } from "@/lib/utils";
-import { getQuestionBank, questionBankId } from "@/lib/question-banks";
+import { aiSettingsSchema, appDataSchema, questionArraySchema } from "@/lib/validation";
+import { dateKey, downloadJsonFile } from "@/lib/utils";
+import { getQuestionBank, normalizeSeedQuestion, questionBankId } from "@/lib/question-banks";
 import type { AISettings, AnswerRecord, AppData, BankId, ChecklistProgress, ExamRecord, OutlineProgress, PrepProfile, Question, ReviewCardState, UserPreferences } from "@/lib/types";
 
 type StorageStatus = "loading" | "ready" | "volatile";
@@ -54,15 +54,6 @@ interface DataContextValue {
 }
 
 const DataContext = createContext<DataContextValue | null>(null);
-
-function downloadJson(data: AppData) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `salingo-backup-${new Date().toISOString().slice(0, 10)}.json`;
-  link.click();
-  URL.revokeObjectURL(link.href);
-}
 
 export function DataProvider({ children }: { children: ReactNode }) {
   const [storageStatus, setStorageStatus] = useState<StorageStatus>("loading");
@@ -124,7 +115,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const completeExam = useCallback(async (exam: ExamRecord, reviews: ReviewCardState[]) => {
     assertInitialized();
     if (storageStatus === "volatile") {
-      setMemoryData((current) => ({ ...current, exams: [...current.exams, exam], reviews }));
+      setMemoryData((current) => {
+        const nextReviews = new Map(current.reviews.map((review) => [review.id, review]));
+        reviews.forEach((review) => nextReviews.set(review.id, review));
+        const streakDate = dateKey(new Date(exam.finishedAt));
+        return {
+          ...current,
+          exams: [...current.exams, exam],
+          reviews: [...nextReviews.values()],
+          streakDates: current.streakDates.includes(streakDate) ? current.streakDates : [...current.streakDates, streakDate],
+        };
+      });
       return;
     }
     try { await completeExamInDb(db, exam, reviews); } catch (cause) { fail(cause); }
@@ -143,7 +144,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     assertInitialized();
     if (storageStatus === "volatile") {
       const ids = new Set(memoryData.questions.map((question) => question.id));
-      const missing = questions.filter((question) => !ids.has(question.id));
+      const missing = [...new Map(questions.map((question) => {
+        const value = normalizeSeedQuestion(question);
+        return [value.id, value] as const;
+      })).values()].filter((question) => !ids.has(question.id));
       setMemoryData((current) => ({ ...current, questions: [...current.questions, ...missing] }));
       return missing.length;
     }
@@ -152,11 +156,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
 
   const setAI = useCallback(async (ai: AISettings) => {
     assertInitialized();
+    const validated = aiSettingsSchema.parse({ baseUrl: ai.baseUrl.trim(), apiKey: ai.apiKey.trim(), model: ai.model.trim() });
     if (storageStatus === "volatile") {
-      setMemoryData((current) => ({ ...current, ai }));
+      setMemoryData((current) => ({ ...current, ai: validated }));
       return;
     }
-    try { await saveAISettings(db, ai); } catch (cause) { fail(cause); }
+    try { await saveAISettings(db, validated); } catch (cause) { fail(cause); }
   }, [assertInitialized, fail, storageStatus]);
 
   const setPreferences = useCallback(async (preferences: UserPreferences) => {
@@ -198,7 +203,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
       if (!response.ok) throw new Error(`题库文件加载失败（${response.status}）`);
       const questions = questionArraySchema.parse(await response.json());
       if (storageStatus === "volatile") {
-        setMemoryData((current) => ({ ...current, questions: [...current.questions, ...questions] }));
+        setMemoryData((current) => {
+          const merged = new Map(current.questions.map((question) => [question.id, question]));
+          questions.map(normalizeSeedQuestion).forEach((question) => merged.set(question.id, question));
+          return { ...current, questions: [...merged.values()] };
+        });
       } else await installQuestionBank(db, bank.id, bank.version, questions);
     } catch (cause) {
       fail(cause);
@@ -216,7 +225,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
     try { window.localStorage.removeItem(LEGACY_STORAGE_KEY); } catch { /* storage unavailable */ }
   }, [assertInitialized, fail, storageStatus]);
 
-  const exportData = useCallback(async () => { downloadJson(data); }, [data]);
+  const exportData = useCallback(async () => {
+    downloadJsonFile(data, `salingo-backup-${new Date().toISOString().slice(0, 10)}.json`);
+  }, [data]);
 
   const importData = useCallback(async (text: string): Promise<ImportResult> => {
     try {
