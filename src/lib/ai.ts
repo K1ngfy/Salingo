@@ -10,7 +10,8 @@ function chatEndpoint(url: string) {
 
 const configuredProxyUrl = process.env.NEXT_PUBLIC_AI_PROXY_URL?.replace(/\/+$/, "");
 const developmentProxyUrl = process.env.NODE_ENV === "development" ? "http://127.0.0.1:43128" : "";
-export const aiProxyUrl = configuredProxyUrl || developmentProxyUrl;
+export const aiProxyUrl = configuredProxyUrl || developmentProxyUrl || "/api/ai";
+export const aiProxyMode = configuredProxyUrl ? "custom" : developmentProxyUrl ? "local" : "hosted";
 
 type ChatBody = {
   model: string;
@@ -33,8 +34,6 @@ async function requestCompletion(settings: AISettings, body: ChatBody) {
 }
 
 async function chatCompletion(settings: AISettings, body: ChatBody) {
-  if (!aiProxyUrl && !settings.baseUrl.trim()) throw new Error("请先填写 AI 接口地址");
-  if (!aiProxyUrl && !settings.apiKey.trim()) throw new Error("请先填写 API Key");
   try {
     let response = await requestCompletion(settings, body);
     if ((response.status === 400 || response.status === 422) && body.response_format) {
@@ -42,9 +41,9 @@ async function chatCompletion(settings: AISettings, body: ChatBody) {
     }
     return response;
   } catch {
-    throw new Error(aiProxyUrl
+    throw new Error(aiProxyMode === "local"
       ? "无法连接本地 AI 代理，请用 npm run dev 启动完整开发环境"
-      : "浏览器无法连接 AI 接口；该提供商可能未开放 CORS，请配置统一 AI 代理");
+      : "无法连接同源 AI 代理，请检查网络或 Sites 托管环境配置");
   }
 }
 
