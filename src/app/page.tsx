@@ -25,7 +25,7 @@ export default function DashboardPage() {
   const correct = data.answers.filter((item) => item.correct).length;
   const due = data.reviews.filter((item) => new Date(item.due) <= new Date()).length;
   const streak = calculateStreak(data.streakDates);
-  const activeDays = new Set(data.answers.map((item) => dateKey(new Date(item.answeredAt)))).size;
+  const activeDays = data.streakDates.length;
   const todayPlan = buildTodayPlan({ profile: data.prepProfile, answers: data.answers, reviews: data.reviews, objectives: PREP_CONTENT.objectives, outlineProgress: data.outlineProgress });
 
   return (
@@ -51,7 +51,7 @@ export default function DashboardPage() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {[
             { href: "/learn", icon: Target, eyebrow: "专项闯关", title: "继续八域训练", text: `${data.questions.length} 道练习题已就位`, color: "#58cc02", bg: "#effbe5" },
-            { href: "/review", icon: Brain, eyebrow: "FSRS 复习", title: due ? `${due} 道今日到期` : "今日已无到期题", text: due ? "优先修复即将遗忘的知识" : "答错的题会自动排入复习", color: "#ff4b4b", bg: "#fff0f0" },
+            { href: "/review", icon: Brain, eyebrow: "FSRS 复习", title: due ? `${due} 项今日到期` : "今日已无到期项", text: due ? "优先修复即将遗忘的知识" : "答错的题会自动排入复习", color: "#ff4b4b", bg: "#fff0f0" },
             { href: "/exam", icon: Timer, eyebrow: "全真模考", title: "检验综合判断", text: "按域组卷 · 统一交卷 · 分项报告", color: "#1cb0f6", bg: "#eaf8ff" },
             { href: "/prep", icon: MapTrifold, eyebrow: "备考中心", title: `${todayPlan.dueReviews + todayPlan.questionTarget} 项今日任务`, text: todayPlan.objective ? `${todayPlan.objective.number} ${todayPlan.objective.title}` : "考纲目标已经全部掌握", color: "#874eb0", bg: "#f3eaff" },
           ].map((item, index) => (

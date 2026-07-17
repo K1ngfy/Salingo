@@ -14,7 +14,11 @@ export default function SettingsPage() {
   const [confirmReset, setConfirmReset] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   useEffect(() => { if (hydrated) setSettings(data.ai); }, [data.ai, hydrated]);
-  const save = async () => { try { await setAI(settings); setNotice("AI 接口配置已保存到此浏览器"); } catch { setNotice("AI 接口配置保存失败，请重试"); } };
+  const save = async () => {
+    if (!settings.model.trim()) { setNotice("模型名称不能为空"); return; }
+    try { await setAI(settings); setNotice("AI 接口配置已保存到此浏览器"); }
+    catch { setNotice("AI 接口配置保存失败，请检查填写内容后重试"); }
+  };
   const importBackup = async (file?: File) => { if (!file) return; const result = await importData(await file.text()); setNotice(result.message); if (fileRef.current) fileRef.current.value = ""; };
   return <div className="mx-auto max-w-3xl"><p className="text-sm font-black text-[#777]">SETTINGS</p><h1 className="mt-2 text-3xl font-black tracking-[-0.035em] sm:text-4xl">设置与本地数据</h1><p className="mt-2 font-semibold text-[#777]">所有设置和学习记录仅保存在当前浏览器，不会上传到 SALINGO 服务器。</p>
     {notice && <p className="mt-5 rounded-xl bg-[#edfadd] p-3 text-sm font-bold text-[#4c8c17]">{notice}</p>}

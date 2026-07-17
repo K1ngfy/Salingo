@@ -67,6 +67,10 @@ export function getQuestionBank(id?: string) {
   return QUESTION_BANKS.find((bank) => bank.id === id) ?? QUESTION_BANKS[0];
 }
 
+export function isBankId(value: string | null | undefined): value is BankId {
+  return QUESTION_BANKS.some((bank) => bank.id === value);
+}
+
 export function questionBankId(question: Question): BankId {
   return question.bankId ?? ORIGINAL_BANK_ID;
 }

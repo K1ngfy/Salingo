@@ -11,9 +11,9 @@ export const LEGACY_STORAGE_KEY = "salingo:data:v1";
 export const SEED_DATA_VERSION = 3;
 
 export const DEFAULT_AI_SETTINGS: AISettings = {
-  baseUrl: process.env.NEXT_PUBLIC_AI_BASE_URL ?? "",
-  apiKey: process.env.NEXT_PUBLIC_AI_API_KEY ?? "",
-  model: process.env.NEXT_PUBLIC_AI_MODEL ?? "gpt-5-mini",
+  baseUrl: process.env.NEXT_PUBLIC_AI_BASE_URL?.trim() ?? "",
+  apiKey: "",
+  model: process.env.NEXT_PUBLIC_AI_MODEL?.trim() || "gpt-5-mini",
 };
 
 interface StreakRow { date: string }
@@ -230,9 +230,10 @@ export async function recordAnswer(database: SalingoDatabase, answer: AnswerReco
 }
 
 export async function completeExam(database: SalingoDatabase, exam: ExamRecord, reviews: ReviewCardState[]) {
-  await database.transaction("rw", database.exams, database.reviewTargets, async () => {
+  await database.transaction("rw", database.exams, database.reviewTargets, database.streaks, async () => {
     await database.exams.add(exam);
     await database.reviewTargets.bulkPut(reviews);
+    await database.streaks.put({ date: dateKey(new Date(exam.finishedAt)) });
   });
 }
 
@@ -242,7 +243,10 @@ export async function upsertReview(database: SalingoDatabase, review: ReviewCard
 
 export async function addQuestions(database: SalingoDatabase, questions: Question[]) {
   return database.transaction("rw", database.questions, async () => {
-    const normalized = questions.map(normalizeSeedQuestion);
+    const normalized = [...new Map(questions.map((question) => {
+      const value = normalizeSeedQuestion(question);
+      return [value.id, value] as const;
+    })).values()];
     const existing = await database.questions.bulkGet(normalized.map((question) => question.id));
     const missing = normalized.filter((_, index) => !existing[index]);
     if (missing.length) await database.questions.bulkAdd(missing);

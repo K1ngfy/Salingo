@@ -150,6 +150,14 @@ describe("IndexedDB transactions and backups", () => {
     expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length + 1);
   });
 
+  it("skips duplicate IDs within the same question import", async () => {
+    const database = createDb();
+    await initializeDatabase(database, new MemoryStorage());
+    const imported = { ...(await database.questions.toArray())[0], id: "duplicate-import-id", source: "imported" as const };
+    expect(await addQuestions(database, [imported, { ...imported }])).toBe(1);
+    expect(await database.questions.where("id").equals(imported.id).count()).toBe(1);
+  });
+
   it("installs a versioned bank idempotently", async () => {
     const database = createDb();
     await initializeDatabase(database, new MemoryStorage());
@@ -163,11 +171,14 @@ describe("IndexedDB transactions and backups", () => {
   it("records an exam and its review set together", async () => {
     const database = createDb();
     await initializeDatabase(database, new MemoryStorage());
+    const prepReview: ReviewCardState = { ...sampleReview(), id: "prep-card:card-1", targetType: "prep-card", targetId: "card-1" };
+    await database.reviewTargets.put(prepReview);
     const exam: ExamRecord = { id: "exam-1", bankId: "salingo-original", startedAt: "2026-07-15T10:00:00.000Z", finishedAt: "2026-07-15T11:00:00.000Z", durationSeconds: 3600, questionIds: ["d1-care-001"], answers: { "d1-care-001": { kind: "choice", selectedAnswers: ["A"] } }, score: 0, domainScores: { d1: 0 }, sectionScores: { d1: 0 } };
     await completeExam(database, exam, [sampleReview()]);
     const snapshot = await readAppData(database);
     expect(snapshot.exams).toEqual([exam]);
-    expect(snapshot.reviews).toEqual([sampleReview()]);
+    expect(snapshot.reviews).toEqual(expect.arrayContaining([prepReview, sampleReview()]));
+    expect(snapshot.streakDates).toEqual(["2026-07-15"]);
   });
 
   it("imports version 1 backups, rejects invalid input, and resets to seeds", async () => {
