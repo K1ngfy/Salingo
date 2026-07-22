@@ -6,7 +6,7 @@ export type ReviewTargetType = "question" | "prep-card";
 export type OutlineProgressStatus = "not-started" | "learning" | "mastered";
 export type PrepCardKind = "strategy" | "knowledge" | "vocabulary";
 export type VerificationStatus = "verified" | "disputed" | "outdated" | "pending";
-export type BankId = "salingo-original" | "official-practice-tests";
+export type BankId = "salingo-original" | "cissp2508-essentials" | "official-practice-tests";
 export type ContentLanguage = "zh" | "en" | "bilingual";
 
 export interface Domain {

@@ -22,6 +22,13 @@ export interface AnswerRepair {
   reason: string;
 }
 
+export interface ScenarioRepair {
+  sourceId: string;
+  optionId: string;
+  targetQuestionNumbers: string[];
+  reason: string;
+}
+
 const ANSWER_REPAIRS: Record<string, { answer: string; reason: string }> = {
   "3:31": { answer: "B", reason: "原答案为空；英文解析明确指出 Kerckhoffs’ principle。" },
   "2:100": { answer: "1-B; 2-A; 3-C; 4-C", reason: "原匹配答案截断且第 2 项错位；英文解析列出完整映射。" },
@@ -70,6 +77,84 @@ export function parseCsv(text: string): SourceRow[] {
 function parseOptions(text: string) {
   const record = JSON.parse(text) as Record<string, string>;
   return Object.entries(record).map(([id, value]) => ({ id, text: value.trim() }));
+}
+
+const ENGLISH_CONTEXT_LEADS = [
+  "The following diagram shows",
+  "Using the following table",
+  "Ben’s organization is adopting",
+  "Use your knowledge of Kerberos",
+];
+
+const CHINESE_CONTEXT_LEADS = [
+  "下图显示",
+  "对于问题",
+  "使用下表",
+  "Ben 的组织正在",
+  "使用您对 Kerberos",
+];
+
+function earliestContextLead(text: string, leads: string[]) {
+  return leads.reduce((earliest, lead) => {
+    const index = text.indexOf(lead);
+    return index > 0 && (earliest < 0 || index < earliest) ? index : earliest;
+  }, -1);
+}
+
+function repairScenarioSpillovers(sourceRows: SourceRow[]) {
+  const rows = sourceRows.map((row) => ({ ...row }));
+  const repairs: ScenarioRepair[] = [];
+
+  for (const row of rows) {
+    const optionsEn = JSON.parse(row.options_en) as Record<string, string>;
+    const optionsZh = JSON.parse(row.options_zh) as Record<string, string>;
+
+    for (const [optionId, englishOption] of Object.entries(optionsEn)) {
+      const range = englishOption.match(/(?:For|answer) questions?\s+(\d+)\s*[–-]\s*(\d+)/i);
+      if (!range) continue;
+
+      const contextStartEn = earliestContextLead(englishOption, ENGLISH_CONTEXT_LEADS);
+      const rangeStartEn = range.index ?? -1;
+      const splitEn = contextStartEn >= 0 && contextStartEn < rangeStartEn ? contextStartEn : rangeStartEn;
+      const contextStartZh = earliestContextLead(optionsZh[optionId] ?? "", [
+        ...CHINESE_CONTEXT_LEADS,
+        `第 ${range[1]}-${range[2]} 题`,
+        `第 ${range[1]}–${range[2]} 题`,
+      ]);
+      if (splitEn <= 0 || contextStartZh <= 0) {
+        throw new Error(`Could not split bilingual scenario spillover for ${row.chapter_number}:${row.question_number} option ${optionId}.`);
+      }
+
+      const contextEn = englishOption.slice(splitEn).trim();
+      const contextZh = optionsZh[optionId].slice(contextStartZh).trim();
+      optionsEn[optionId] = englishOption.slice(0, splitEn).trim();
+      optionsZh[optionId] = optionsZh[optionId].slice(0, contextStartZh).trim();
+
+      const targetQuestionNumbers: string[] = [];
+      for (let questionNumber = Number(range[1]); questionNumber <= Number(range[2]); questionNumber += 1) {
+        const target = rows.find((candidate) => (
+          candidate.chapter_number === row.chapter_number
+          && Number(candidate.question_number) === questionNumber
+        ));
+        if (!target) throw new Error(`Missing scenario target ${row.chapter_number}:${questionNumber}.`);
+        target.question_en = `${contextEn}\n\n${target.question_en.trim()}`;
+        target.question_zh = `${contextZh}\n\n${target.question_zh.trim()}`;
+        targetQuestionNumbers.push(target.question_number);
+      }
+
+      repairs.push({
+        sourceId: `${row.chapter_number}:${row.question_number}`,
+        optionId,
+        targetQuestionNumbers,
+        reason: "共用场景被误并入前一题选项；已还原选项并将场景补入范围内每道题的双语题干。",
+      });
+    }
+
+    row.options_en = JSON.stringify(optionsEn);
+    row.options_zh = JSON.stringify(optionsZh);
+  }
+
+  return { rows, repairs };
 }
 
 function cleanTrailingLabel(text: string) {
@@ -175,7 +260,8 @@ function matchingQuestion(row: SourceRow, answer: string, optionsZh: Array<{ id:
 
 export function convertOfficialPracticeTests(rows: SourceRow[]) {
   const repairs: AnswerRepair[] = [];
-  const questions: Question[] = rows.map((row) => {
+  const scenarioResult = repairScenarioSpillovers(rows);
+  const questions: Question[] = scenarioResult.rows.map((row) => {
     const sourceId = `${row.chapter_number}:${row.question_number}`;
     const repair = ANSWER_REPAIRS[sourceId];
     const answer = repair?.answer ?? row.answer_key_en.trim();
@@ -197,5 +283,5 @@ export function convertOfficialPracticeTests(rows: SourceRow[]) {
     };
     return question;
   });
-  return { questions, repairs };
+  return { questions, repairs, scenarioRepairs: scenarioResult.repairs };
 }

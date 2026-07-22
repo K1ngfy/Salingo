@@ -17,6 +17,7 @@ const OFFICIAL_SECTION_NAMES = [
 ] as const;
 
 export const ORIGINAL_BANK_ID: BankId = "salingo-original";
+export const ESSENTIALS_BANK_ID: BankId = "cissp2508-essentials";
 export const OFFICIAL_BANK_ID: BankId = "official-practice-tests";
 
 export const QUESTION_BANKS: QuestionBank[] = [
@@ -25,16 +26,34 @@ export const QUESTION_BANKS: QuestionBank[] = [
     name: "Salingo 原创题库",
     english: "Salingo Original Bank",
     description: "按现行 CISSP 八域考纲编写的原创练习与变式题。",
-    questionCount: 1077,
-    enabledQuestionCount: 1077,
-    version: 3,
+    questionCount: 800,
+    enabledQuestionCount: 800,
+    version: 4,
     sections: Array.from({ length: 8 }, (_, index) => ({
       id: `d${index + 1}`,
       number: index + 1,
       name: OFFICIAL_SECTION_NAMES[index][0],
       english: OFFICIAL_SECTION_NAMES[index][1],
       domainId: `d${index + 1}` as DomainId,
-      questionCount: [150, 108, 126, 140, 152, 131, 116, 154][index],
+      questionCount: 100,
+    })),
+  },
+  {
+    id: ESSENTIALS_BANK_ID,
+    name: "精华版题库",
+    english: "CISSP Essentials Bank",
+    description: "用户提供的 CISSP2508 模拟题，共 277 道精选练习。",
+    questionCount: 277,
+    enabledQuestionCount: 277,
+    version: 1,
+    dataUrl: "/data/question-banks/cissp2508-essentials.json",
+    sections: Array.from({ length: 8 }, (_, index) => ({
+      id: `d${index + 1}`,
+      number: index + 1,
+      name: OFFICIAL_SECTION_NAMES[index][0],
+      english: OFFICIAL_SECTION_NAMES[index][1],
+      domainId: `d${index + 1}` as DomainId,
+      questionCount: [50, 8, 26, 40, 52, 31, 16, 54][index],
     })),
   },
   {

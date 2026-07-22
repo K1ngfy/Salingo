@@ -3,12 +3,12 @@ import { INITIAL_QUESTIONS } from "@/data/full-bank";
 import type { AISettings, AnswerRecord, AppData, ChecklistProgress, ExamRecord, OutlineProgress, PrepProfile, Question, ReviewCardState, UserPreferences } from "./types";
 import { appDataSchema } from "./validation";
 import { dateKey } from "./utils";
-import { DEFAULT_PREFERENCES, ORIGINAL_BANK_ID, normalizeSeedQuestion, questionBankId, questionSectionId } from "./question-banks";
+import { DEFAULT_PREFERENCES, ESSENTIALS_BANK_ID, ORIGINAL_BANK_ID, normalizeSeedQuestion, questionBankId, questionSectionId } from "./question-banks";
 import { DEFAULT_PREP_PROFILE } from "./prep";
 
 export const DATABASE_NAME = "salingo";
 export const LEGACY_STORAGE_KEY = "salingo:data:v1";
-export const SEED_DATA_VERSION = 3;
+export const SEED_DATA_VERSION = 4;
 
 export const DEFAULT_AI_SETTINGS: AISettings = {
   baseUrl: process.env.NEXT_PUBLIC_AI_BASE_URL?.trim() ?? "",
@@ -93,6 +93,30 @@ export class SalingoDatabase extends Dexie {
       if (preferences) preferences.value = { ...DEFAULT_PREFERENCES, ...(preferences.value as UserPreferences) };
       if (preferences) await transaction.table("settings").put(preferences);
     });
+    this.version(4).stores({
+      questions: "id, bankId, sectionId, domainId, difficulty, source, createdAt, *tags, [bankId+sectionId]",
+      answers: "id, questionId, bankId, sectionId, domainId, answeredAt, mode, [bankId+answeredAt]",
+      reviews: "questionId, due, mistakeType",
+      reviewTargets: "id, targetType, targetId, due, mistakeType, [targetType+due]",
+      exams: "id, bankId, startedAt, finishedAt",
+      streaks: "date",
+      settings: "key",
+      metadata: "key",
+      outlineProgress: "objectiveId, status, updatedAt",
+      checklistProgress: "itemId, completed, updatedAt",
+    }).upgrade(async (transaction) => {
+      await transaction.table("questions").where("id").startsWith("cissp2508-").modify((question: Question) => {
+        question.bankId = ESSENTIALS_BANK_ID;
+        question.sectionId = question.domainId ?? "unclassified";
+      });
+      await transaction.table("answers").where("questionId").startsWith("cissp2508-").modify((answer: AnswerRecord) => {
+        answer.bankId = ESSENTIALS_BANK_ID;
+        answer.sectionId = answer.domainId ?? "unclassified";
+      });
+      const essentialsExams = (await transaction.table("exams").toArray() as ExamRecord[])
+        .filter((exam) => exam.questionIds.length > 0 && exam.questionIds.every((id) => id.startsWith("cissp2508-")));
+      if (essentialsExams.length) await transaction.table("exams").bulkPut(essentialsExams.map((exam) => ({ ...exam, bankId: ESSENTIALS_BANK_ID })));
+    });
   }
 }
 
@@ -115,8 +139,17 @@ export function initialAppData(): AppData {
 }
 
 export function mergeSeedQuestions(data: AppData): AppData {
-  const ids = new Set(data.questions.map((question) => question.id));
-  return { ...data, questions: [...data.questions, ...INITIAL_QUESTIONS.filter((question) => !ids.has(question.id))] };
+  const questions = data.questions.map((question) => question.id.startsWith("cissp2508-")
+    ? { ...question, bankId: ESSENTIALS_BANK_ID, sectionId: question.domainId ?? "unclassified" }
+    : question);
+  const answers = data.answers.map((answer) => answer.questionId.startsWith("cissp2508-")
+    ? { ...answer, bankId: ESSENTIALS_BANK_ID, sectionId: answer.domainId ?? "unclassified" }
+    : answer);
+  const exams = data.exams.map((exam) => exam.questionIds.length > 0 && exam.questionIds.every((id) => id.startsWith("cissp2508-"))
+    ? { ...exam, bankId: ESSENTIALS_BANK_ID }
+    : exam);
+  const ids = new Set(questions.map((question) => question.id));
+  return { ...data, questions: [...questions, ...INITIAL_QUESTIONS.filter((question) => !ids.has(question.id))], answers, exams };
 }
 
 export function parseLegacyData(raw: string | null): AppData | undefined {

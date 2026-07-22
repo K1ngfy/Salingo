@@ -3,6 +3,8 @@ import rawRows2 from "./cissp2508-raw-2.json";
 import rawRows3 from "./cissp2508-raw-3.json";
 import type { DomainId, Question } from "@/lib/types";
 
+export const CISSP2508_BANK_ID = "cissp2508-essentials" as const;
+
 const rawRows = [...rawRows1, ...rawRows2, ...rawRows3];
 
 const DOMAIN_LABELS: Record<DomainId, string> = {
@@ -61,6 +63,8 @@ export const CISSP2508_QUESTIONS: Question[] = rawRows.map((row) => {
   const answerSummary = correctAnswers.map((id) => `${id}. ${options.find((option) => option.id === id)?.text ?? ""}`).join("；");
   return {
     id: `cissp2508-${row.number.padStart(3, "0")}`,
+    bankId: CISSP2508_BANK_ID,
+    sectionId: domainId,
     domainId,
     type,
     difficulty: type === "multiple" ? "高难" : "进阶",
@@ -82,6 +86,7 @@ export const CISSP2508_QUESTIONS: Question[] = rawRows.map((row) => {
     },
     source: "imported",
     outlineVersion: "2024-current",
+    sourceReference: "CISSP2508模拟题_含答案.csv",
     createdAt: "2026-07-16T00:00:00.000Z",
   };
 });

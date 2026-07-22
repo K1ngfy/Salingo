@@ -119,6 +119,36 @@ describe("IndexedDB initialization", () => {
     expect(review).toMatchObject({ targetType: "question", targetId: "legacy-q", reps: 2, mistakeType: "审题失误", favorite: true });
     expect((await database.settings.get("preferences"))?.value).toMatchObject({ questionAssistEnabled: true });
   });
+
+  it("moves existing CISSP2508 questions and progress into the essentials bank", async () => {
+    const name = `salingo-v3-upgrade-${crypto.randomUUID()}`;
+    const legacy = new Dexie(name);
+    legacy.version(3).stores({
+      questions: "id, bankId, sectionId, domainId, difficulty, source, createdAt, *tags, [bankId+sectionId]",
+      answers: "id, questionId, bankId, sectionId, domainId, answeredAt, mode, [bankId+answeredAt]",
+      reviews: "questionId, due, mistakeType",
+      reviewTargets: "id, targetType, targetId, due, mistakeType, [targetType+due]",
+      exams: "id, bankId, startedAt, finishedAt",
+      streaks: "date",
+      settings: "key",
+      metadata: "key",
+      outlineProgress: "objectiveId, status, updatedAt",
+      checklistProgress: "itemId, completed, updatedAt",
+    });
+    await legacy.open();
+    const legacyQuestion = { ...INITIAL_QUESTIONS[0], id: "cissp2508-001", bankId: "salingo-original", sectionId: "d1", source: "imported" };
+    await legacy.table("questions").put(legacyQuestion);
+    await legacy.table("answers").put({ ...sampleAnswer(), questionId: legacyQuestion.id });
+    await legacy.table("exams").put({ id: "essentials-exam", bankId: "salingo-original", startedAt: "2026-07-15T10:00:00.000Z", finishedAt: "2026-07-15T11:00:00.000Z", durationSeconds: 3600, questionIds: [legacyQuestion.id], answers: {}, score: 0, domainScores: {}, sectionScores: { d1: 0 } });
+    legacy.close();
+
+    const database = new SalingoDatabase(name);
+    databases.push(database);
+    await database.open();
+    expect((await database.questions.get(legacyQuestion.id))?.bankId).toBe("cissp2508-essentials");
+    expect((await database.answers.get("answer-1"))?.bankId).toBe("cissp2508-essentials");
+    expect((await database.exams.get("essentials-exam"))?.bankId).toBe("cissp2508-essentials");
+  });
 });
 
 describe("IndexedDB transactions and backups", () => {

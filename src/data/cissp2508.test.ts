@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { questionArraySchema } from "@/lib/validation";
-import { CISSP2508_QUESTIONS } from "./cissp2508";
+import { CISSP2508_BANK_ID, CISSP2508_QUESTIONS } from "./cissp2508";
 
 describe("CISSP2508 imported question bank", () => {
   it("converts all 277 source rows into valid unique questions", () => {
@@ -8,6 +8,9 @@ describe("CISSP2508 imported question bank", () => {
     expect(new Set(CISSP2508_QUESTIONS.map((question) => question.id)).size).toBe(277);
     expect(CISSP2508_QUESTIONS.filter((question) => question.type === "multiple")).toHaveLength(1);
     expect(CISSP2508_QUESTIONS.filter((question) => question.options.length === 5)).toHaveLength(2);
+    expect(CISSP2508_QUESTIONS.every((question) => question.bankId === CISSP2508_BANK_ID)).toBe(true);
+    expect(CISSP2508_QUESTIONS.every((question) => question.sectionId === question.domainId)).toBe(true);
+    expect(CISSP2508_QUESTIONS.every((question) => question.sourceReference === "CISSP2508模拟题_含答案.csv")).toBe(true);
   });
 
   it("covers every CISSP domain through explicit automatic classification", () => {

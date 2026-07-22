@@ -3,7 +3,7 @@ import { DEFAULT_PREFERENCES, ORIGINAL_BANK_ID, normalizeSeedQuestion } from "./
 import type { AppData } from "./types";
 
 const domainIdSchema = z.enum(["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"]);
-const bankIdSchema = z.enum(["salingo-original", "official-practice-tests"]);
+const bankIdSchema = z.enum(["salingo-original", "cissp2508-essentials", "official-practice-tests"]);
 const optionSchema = z.object({ id: z.string().min(1), text: z.string().min(1) });
 
 export const explanationSchema = z.object({
