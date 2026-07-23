@@ -1,0 +1,111 @@
+"use client";
+
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
+import {
+  clearCommunityProfile,
+  db,
+  getCommunityHistorySynced,
+  getCommunityProfile,
+  saveCommunityProfile,
+  setCommunityHistorySynced,
+} from "@/lib/db";
+import {
+  buildDayHistory,
+  buildTodayEntry,
+  createProfile as createProfileApi,
+  restoreProfile as restoreProfileApi,
+  syncProgress,
+  todaySignature,
+} from "@/lib/community";
+import { useAppData } from "./data-provider";
+import type { AnswerRecord, CommunityProfile } from "@/lib/types";
+
+interface CommunityContextValue {
+  profile?: CommunityProfile;
+  ready: boolean;
+  syncing: boolean;
+  syncError?: string;
+  createProfile: (nickname: string) => Promise<CommunityProfile>;
+  restoreProfile: (recoveryCode: string) => Promise<CommunityProfile>;
+  signOut: () => Promise<void>;
+}
+
+const CommunityContext = createContext<CommunityContextValue | null>(null);
+const SYNC_DEBOUNCE_MS = 4000;
+
+export function CommunityProvider({ children }: { children: ReactNode }) {
+  const { data, hydrated } = useAppData();
+  const [syncing, setSyncing] = useState(false);
+  const [syncError, setSyncError] = useState<string>();
+
+  const profileRow = useLiveQuery(async () => {
+    try { return { value: await getCommunityProfile(db) }; } catch { return { value: undefined }; }
+  }, []);
+  const profile = profileRow?.value;
+  const ready = profileRow !== undefined;
+
+  // Keep the latest answers in a ref so the debounced sync never captures a stale list.
+  const answersRef = useRef<AnswerRecord[]>(data.answers);
+  answersRef.current = data.answers;
+
+  const runSync = useCallback(async (target: CommunityProfile) => {
+    const syncedFor = await getCommunityHistorySynced(db).catch(() => undefined);
+    const full = syncedFor !== target.userId;
+    const today = buildTodayEntry(answersRef.current);
+    const days = full ? buildDayHistory(answersRef.current) : today ? [today] : [];
+    if (!days.length) {
+      if (full) await setCommunityHistorySynced(db, target.userId).catch(() => {});
+      return;
+    }
+    setSyncing(true);
+    try {
+      await syncProgress(target, days);
+      if (full) await setCommunityHistorySynced(db, target.userId).catch(() => {});
+      setSyncError(undefined);
+    } catch (error) {
+      setSyncError(error instanceof Error ? error.message : "排行榜同步失败");
+    } finally {
+      setSyncing(false);
+    }
+  }, []);
+
+  // Debounced background sync whenever today's local totals change.
+  const signature = useMemo(() => todaySignature(data.answers), [data.answers]);
+  useEffect(() => {
+    if (!hydrated || !profile) return;
+    const timer = window.setTimeout(() => { void runSync(profile); }, SYNC_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [hydrated, profile, signature, runSync]);
+
+  const createProfile = useCallback(async (nickname: string) => {
+    const created = await createProfileApi(nickname);
+    await saveCommunityProfile(db, created);
+    void runSync(created);
+    return created;
+  }, [runSync]);
+
+  const restoreProfile = useCallback(async (recoveryCode: string) => {
+    const restored = await restoreProfileApi(recoveryCode);
+    await saveCommunityProfile(db, restored);
+    void runSync(restored);
+    return restored;
+  }, [runSync]);
+
+  const signOut = useCallback(async () => {
+    await clearCommunityProfile(db);
+    setSyncError(undefined);
+  }, []);
+
+  const value = useMemo(
+    () => ({ profile, ready, syncing, syncError, createProfile, restoreProfile, signOut }),
+    [profile, ready, syncing, syncError, createProfile, restoreProfile, signOut],
+  );
+  return <CommunityContext.Provider value={value}>{children}</CommunityContext.Provider>;
+}
+
+export function useCommunity() {
+  const context = useContext(CommunityContext);
+  if (!context) throw new Error("useCommunity must be used inside CommunityProvider");
+  return context;
+}

@@ -13,3 +13,4 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(resolve(dist, "server"), { recursive: true });
 await cp(out, resolve(dist, "client"), { recursive: true });
 await cp(resolve(root, "scripts", "sites-worker.mjs"), resolve(dist, "server", "index.js"));
+await cp(resolve(root, "scripts", "community-core.mjs"), resolve(dist, "server", "community-core.mjs"));

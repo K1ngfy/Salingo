@@ -1,3 +1,5 @@
+import { handleCommunityRequest } from "./community-core.mjs";
+
 const AI_ROUTE = "/api/ai/chat/completions";
 const AI_HEALTH_ROUTE = "/api/ai/health";
 const MAX_BODY_BYTES = 1_500_000;
@@ -126,6 +128,7 @@ const worker = {
   async fetch(request, env) {
     const pathname = new URL(request.url).pathname;
     if (pathname.startsWith("/api/ai/")) return handleAIRequest(request, env);
+    if (pathname.startsWith("/api/community/")) return handleCommunityRequest(request, env);
     return serveAssets(request, env);
   },
 };
