@@ -26,6 +26,7 @@ function isSameOrigin(request) {
 }
 
 function d1Config(env) {
+  if (env.DB && typeof env.DB.prepare === "function") return { binding: env.DB };
   const accountId = (env.CF_ACCOUNT_ID || "").trim();
   const databaseId = (env.CF_D1_DATABASE_ID || "").trim();
   const apiToken = (env.CF_D1_API_TOKEN || "").trim();
@@ -33,6 +34,11 @@ function d1Config(env) {
 }
 
 async function d1Query(config, sql, params = []) {
+  if (config.binding) {
+    const statement = config.binding.prepare(sql);
+    const result = await (params.length ? statement.bind(...params) : statement).all();
+    return result?.results ?? [];
+  }
   const endpoint = `https://api.cloudflare.com/client/v4/accounts/${config.accountId}/d1/database/${config.databaseId}/query`;
   const response = await fetch(endpoint, {
     method: "POST",

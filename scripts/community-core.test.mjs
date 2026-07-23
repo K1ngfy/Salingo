@@ -53,6 +53,19 @@ describe("community backend", () => {
     expect(response.status).toBe(503);
   });
 
+  it("uses the native Sites D1 binding when available", async () => {
+    const all = vi.fn(async () => ({ results: [
+      { public_id: "native", nickname: "原生用户", current_streak: 5, longest_streak: 8, today_count: 2, today_date: "2026-07-23", total_answered: 42, last_active_date: "2026-07-23" },
+    ] }));
+    const bind = vi.fn(() => ({ all }));
+    const prepare = vi.fn(() => ({ bind, all }));
+    const response = await handleCommunityRequest(get("leaderboard?type=streak"), { DB: { prepare } });
+    expect(response.status).toBe(200);
+    expect((await response.json()).entries[0]).toMatchObject({ publicId: "native", currentStreak: 5 });
+    expect(prepare).toHaveBeenCalledOnce();
+    expect(bind).not.toHaveBeenCalled();
+  });
+
   it("creates a profile and returns a recovery code", async () => {
     stubD1((sql) => (sql.startsWith("SELECT 1") ? [] : []));
     const response = await handleCommunityRequest(post("profile", { nickname: "阿力" }), CONFIG);
