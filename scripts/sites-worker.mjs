@@ -99,8 +99,14 @@ export async function handleAIRequest(request, env) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(completionRequest),
-      signal: AbortSignal.timeout(120_000),
+      signal: AbortSignal.timeout(45_000),
     });
+    if (!upstream.ok) {
+      console.warn("AI upstream request failed", {
+        status: upstream.status,
+        requestId: upstream.headers.get("x-request-id") || undefined,
+      });
+    }
     return new Response(upstream.body, {
       status: upstream.status,
       headers: {

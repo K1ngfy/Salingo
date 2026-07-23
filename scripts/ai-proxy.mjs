@@ -73,7 +73,7 @@ const server = createServer(async (request, response) => {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify(completionRequest),
-      signal: AbortSignal.timeout(120_000),
+      signal: AbortSignal.timeout(45_000),
     });
     const responseBody = await upstream.text();
     response.writeHead(upstream.status, {

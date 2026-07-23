@@ -15,12 +15,67 @@ export const aiProxyMode = configuredProxyUrl ? "custom" : developmentProxyUrl ?
 
 type ChatBody = {
   model: string;
-  temperature: number;
+  temperature?: number;
+  reasoning_effort?: "minimal" | "low";
+  max_completion_tokens?: number;
   response_format?: { type: "json_object" };
   messages: Array<{ role: string; content: string }>;
 };
 
-async function requestCompletion(settings: AISettings, body: ChatBody) {
+const AI_REQUEST_TIMEOUT_MS = 40_000;
+const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
+
+function modelName(model: string) {
+  return model.trim().split("/").pop()?.toLowerCase() ?? "";
+}
+
+function isReasoningModel(model: string) {
+  return /^(gpt-5|o\d)/.test(modelName(model));
+}
+
+function fastReasoningEffort(model: string): ChatBody["reasoning_effort"] {
+  return /^gpt-5(?:-(?:mini|nano))?(?:-\d{4}-\d{2}-\d{2})?$/.test(modelName(model)) ? "minimal" : "low";
+}
+
+function optimizeRequestBody(body: ChatBody) {
+  if (!isReasoningModel(body.model)) return body;
+  const { temperature: _temperature, ...compatible } = body;
+  void _temperature;
+  return {
+    ...compatible,
+    reasoning_effort: body.reasoning_effort ?? fastReasoningEffort(body.model),
+  };
+}
+
+function withoutOptionalHints(body: ChatBody) {
+  const {
+    reasoning_effort: _reasoningEffort,
+    max_completion_tokens: _maxCompletionTokens,
+    ...compatible
+  } = body;
+  void _reasoningEffort;
+  void _maxCompletionTokens;
+  return compatible;
+}
+
+function waitBeforeRetry(response: Response, signal: AbortSignal) {
+  const header = response.headers.get("Retry-After");
+  const seconds = header ? Number(header) : Number.NaN;
+  const delay = Number.isFinite(seconds) ? Math.min(Math.max(seconds * 1_000, 0), 1_500) : 350;
+  return new Promise<void>((resolve, reject) => {
+    const aborted = () => {
+      globalThis.clearTimeout(timer);
+      reject(signal.reason);
+    };
+    const timer = globalThis.setTimeout(() => {
+      signal.removeEventListener("abort", aborted);
+      resolve();
+    }, delay);
+    signal.addEventListener("abort", aborted, { once: true });
+  });
+}
+
+async function requestCompletion(settings: AISettings, body: ChatBody, signal: AbortSignal) {
   const target = aiProxyUrl ? `${aiProxyUrl}/chat/completions` : chatEndpoint(settings.baseUrl);
   return fetch(target, {
     method: "POST",
@@ -30,20 +85,45 @@ async function requestCompletion(settings: AISettings, body: ChatBody) {
     body: JSON.stringify(aiProxyUrl
       ? { provider: { baseUrl: settings.baseUrl.trim(), apiKey: settings.apiKey.trim() }, request: body }
       : body),
+    signal,
   });
 }
 
-async function chatCompletion(settings: AISettings, body: ChatBody) {
+async function requestWithRetry(settings: AISettings, body: ChatBody, signal: AbortSignal) {
+  let response = await requestCompletion(settings, body, signal);
+  if (RETRYABLE_STATUSES.has(response.status)) {
+    await response.body?.cancel().catch(() => undefined);
+    await waitBeforeRetry(response, signal);
+    response = await requestCompletion(settings, body, signal);
+  }
+  return response;
+}
+
+async function chatCompletion(settings: AISettings, requestedBody: ChatBody) {
+  const controller = new AbortController();
+  const timeout = globalThis.setTimeout(() => controller.abort(new DOMException("AI request timed out", "TimeoutError")), AI_REQUEST_TIMEOUT_MS);
   try {
-    let response = await requestCompletion(settings, body);
+    const body = optimizeRequestBody(requestedBody);
+    let response = await requestWithRetry(settings, body, controller.signal);
+    if ((response.status === 400 || response.status === 422) && (body.reasoning_effort || body.max_completion_tokens)) {
+      await response.body?.cancel().catch(() => undefined);
+      response = await requestWithRetry(settings, withoutOptionalHints(body), controller.signal);
+    }
     if ((response.status === 400 || response.status === 422) && body.response_format) {
-      response = await requestCompletion(settings, { ...body, response_format: undefined });
+      await response.body?.cancel().catch(() => undefined);
+      response = await requestWithRetry(settings, { ...withoutOptionalHints(body), response_format: undefined }, controller.signal);
     }
     return response;
-  } catch {
+  } catch (cause) {
+    if (controller.signal.aborted) {
+      throw new Error("AI 解析超过 40 秒，已自动停止；原始解析仍可正常使用，请稍后重试");
+    }
+    void cause;
     throw new Error(aiProxyMode === "local"
       ? "无法连接本地 AI 代理，请用 npm run dev 启动完整开发环境"
       : "无法连接同源 AI 代理，请检查网络或 Sites 托管环境配置");
+  } finally {
+    globalThis.clearTimeout(timeout);
   }
 }
 
@@ -117,10 +197,12 @@ export async function explainQuestion(settings: AISettings, question: Question, 
   const response = await chatCompletion(settings, {
     model: settings.model,
     temperature: 0.25,
+    reasoning_effort: fastReasoningEffort(settings.model),
+    max_completion_tokens: 1_400,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: "你是严谨的 CISSP 中文导师，只输出有效 JSON，不声称接触过真实考试题，也不臆造缺失的图形。" },
-      { role: "user", content: `依据当前生效的 ISC² CISSP Exam Outline 深度解析以下${provenance}。如果题目知识与当前考纲或实践可能不一致，必须明确指出。${question.requiresFigure ? "原始图形缺失，只能依据现有文字分析，并明确说明限制。" : ""}\n题型：${typeLabel}\n题目：${question.stem}\n${promptItems}\n用户作答：${responseLabel(answer) || "未作答"}\n正确答案：${responseLabel(correctResponse(question))}。只输出 ${JSON.stringify({ logic: "核心作答逻辑", optionAnalysis: optionShape, knowledgePoint: "知识域与细分考点", plainLanguage: "企业场景通俗解读" })}。` },
+      { role: "user", content: `依据当前生效的 ISC² CISSP Exam Outline 解析以下${provenance}。如果题目知识与当前考纲或实践可能不一致，必须明确指出。${question.requiresFigure ? "原始图形缺失，只能依据现有文字分析，并明确说明限制。" : ""}\n题型：${typeLabel}\n题目：${question.stem}\n${promptItems}\n用户作答：${responseLabel(answer) || "未作答"}\n正确答案：${responseLabel(correctResponse(question))}。保持简明：logic、knowledgePoint、plainLanguage 各不超过 120 个汉字，每个选项说明不超过 90 个汉字。只输出 ${JSON.stringify({ logic: "核心作答逻辑", optionAnalysis: optionShape, knowledgePoint: "知识域与细分考点", plainLanguage: "企业场景通俗解读" })}。` },
     ],
   });
   if (!response.ok) throw await responseError(response, "AI 解析失败");
@@ -134,6 +216,7 @@ export async function explainPrepCard(settings: AISettings, card: PrepCard) {
   const response = await chatCompletion(settings, {
     model: settings.model,
     temperature: 0.2,
+    max_completion_tokens: 700,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: "你是严谨的 CISSP 中文导师。必须区分 ISC2 官方考纲与个人经验，只输出有效 JSON。" },
