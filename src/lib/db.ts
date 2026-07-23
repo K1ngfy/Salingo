@@ -262,6 +262,15 @@ export async function recordAnswer(database: SalingoDatabase, answer: AnswerReco
   });
 }
 
+// Merge study dates pulled from the community backend into the local streak table so
+// the streak/active-days view is consistent across devices sharing one account.
+export async function mergeStreakDates(database: SalingoDatabase, dates: string[]): Promise<number> {
+  const existing = new Set((await database.streaks.toArray()).map((row) => row.date));
+  const missing = dates.filter((date) => !existing.has(date));
+  if (missing.length) await database.streaks.bulkPut(missing.map((date) => ({ date })));
+  return missing.length;
+}
+
 export async function completeExam(database: SalingoDatabase, exam: ExamRecord, reviews: ReviewCardState[]) {
   await database.transaction("rw", database.exams, database.reviewTargets, database.streaks, async () => {
     await database.exams.add(exam);
