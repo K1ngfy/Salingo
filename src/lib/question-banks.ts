@@ -45,7 +45,7 @@ export const QUESTION_BANKS: QuestionBank[] = [
     description: "用户提供的 CISSP2508 模拟题，共 277 道精选练习。",
     questionCount: 277,
     enabledQuestionCount: 277,
-    version: 1,
+    version: 2,
     dataUrl: "/data/question-banks/cissp2508-essentials.json",
     sections: Array.from({ length: 8 }, (_, index) => ({
       id: `d${index + 1}`,

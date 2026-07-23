@@ -6,6 +6,7 @@
     "dev": "concurrently -k -n WEB,AI -c green,cyan \"next dev -p 43127\" \"node scripts/ai-proxy.mjs\"",
     "build": "node scripts/build-sites.mjs",
     "generate:bank": "tsx scripts/export-question-bank.ts",
+    "generate:essentials-explanations": "tsx scripts/generate-cissp2508-ai-explanations.ts",
     "generate:prep": "tsx scripts/generate-prep-content.ts",
     "check:bank": "tsx scripts/validate-question-bank.ts",
     "check:prep": "tsx scripts/validate-prep-content.ts",

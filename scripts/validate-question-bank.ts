@@ -27,6 +27,18 @@ async function main() {
   });
   if (essentials.some((question) => question.bankId !== "cissp2508-essentials")) throw new Error("Every essentials question must use the essentials bank ID.");
   if (essentials.some((question) => question.sourceReference !== "CISSP2508模拟题_含答案.csv")) throw new Error("Every essentials question must preserve CSV provenance.");
+  for (const question of essentials) {
+    const explanation = question.explanation;
+    if (explanation.logic.length < 70 || explanation.knowledgePoint.length < 20 || explanation.plainLanguage.length < 45) {
+      throw new Error(`${question.id} has an incomplete pre-generated AI explanation.`);
+    }
+    if (!/Domain\s*[1-8]/i.test(explanation.knowledgePoint)) throw new Error(`${question.id} is missing a standard CISSP domain in its explanation.`);
+    if (Object.keys(explanation.optionAnalysis).join() !== question.options.map((option) => option.id).join()) throw new Error(`${question.id} has incomplete option analysis.`);
+    if (Object.values(explanation.optionAnalysis).some((value) => value.length < 25)) throw new Error(`${question.id} has shallow option analysis.`);
+    if (/可使用 AI 深度解析|原始题库(?:将|未将)|逐项说明|进一步核对其适用条件|进一步分析该选项/.test(JSON.stringify(explanation))) {
+      throw new Error(`${question.id} still contains placeholder explanation text.`);
+    }
+  }
 
   const official = await readQuestions("public/data/question-banks/official-practice-tests.json");
   const officialIds = new Set(official.map((question) => question.id));

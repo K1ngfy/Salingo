@@ -1,11 +1,13 @@
 import rawRows1 from "./cissp2508-raw-1.json";
 import rawRows2 from "./cissp2508-raw-2.json";
 import rawRows3 from "./cissp2508-raw-3.json";
-import type { DomainId, Question } from "@/lib/types";
+import generatedExplanations from "./cissp2508-ai-explanations.json";
+import type { DomainId, Explanation, Question } from "@/lib/types";
 
 export const CISSP2508_BANK_ID = "cissp2508-essentials" as const;
 
 const rawRows = [...rawRows1, ...rawRows2, ...rawRows3];
+const AI_EXPLANATIONS = (generatedExplanations as { explanations: Record<string, Explanation> }).explanations;
 
 const DOMAIN_LABELS: Record<DomainId, string> = {
   d1: "安全与风险管理",
@@ -54,15 +56,15 @@ export const CISSP2508_QUESTIONS: Question[] = rawRows.map((row) => {
   const stem = sourceStem.length < 10 ? `${sourceStem}请选择最佳答案。` : sourceStem;
   const optionParts = row.options.map(splitEmbeddedExplanation).filter((part) => part.option);
   const optionTexts = optionParts.map((part) => part.option);
-  const sourceExplanation = optionParts.map((part) => part.explanation).filter(Boolean).join(" ");
   const correctAnswers: string[] = row.answer.match(/[A-E]/g) ?? [];
   const type = correctAnswers.length > 1 ? "multiple" as const : "single" as const;
   const domainId = inferCisspDomain(`${stem} ${optionTexts.join(" ")}`);
   const options = optionTexts.map((text, index) => ({ id: String.fromCharCode(65 + index), text }));
-  const answerLabel = correctAnswers.join("、");
-  const answerSummary = correctAnswers.map((id) => `${id}. ${options.find((option) => option.id === id)?.text ?? ""}`).join("；");
+  const id = `cissp2508-${row.number.padStart(3, "0")}`;
+  const explanation = AI_EXPLANATIONS[id];
+  if (!explanation) throw new Error(`Missing pre-generated AI explanation for ${id}.`);
   return {
-    id: `cissp2508-${row.number.padStart(3, "0")}`,
+    id,
     bankId: CISSP2508_BANK_ID,
     sectionId: domainId,
     domainId,
@@ -72,18 +74,7 @@ export const CISSP2508_QUESTIONS: Question[] = rawRows.map((row) => {
     stem,
     options,
     correctAnswers,
-    explanation: {
-      logic: sourceExplanation
-        ? `原始题库给出的正确答案为 ${answerLabel}（${answerSummary}）。源文件附带说明：${sourceExplanation}`
-        : `原始题库给出的正确答案为 ${answerLabel}（${answerSummary}）。请先识别题干中的“最佳、首先、最有效”等限定词，再按 ${DOMAIN_LABELS[domainId]} 的管理与技术原则比较选项。`,
-      optionAnalysis: Object.fromEntries(options.map((option) => [option.id, correctAnswers.includes(option.id)
-        ? `原始题库将 ${option.id} 标记为正确答案；可使用 AI 深度解析进一步核对其适用条件。`
-        : `原始题库未将 ${option.id} 标记为正确答案；可使用 AI 深度解析进一步分析该选项的干扰点。`])),
-      knowledgePoint: `Domain ${domainId.slice(1)} · ${DOMAIN_LABELS[domainId]}（根据题干关键词自动归类）`,
-      plainLanguage: sourceExplanation
-        ? "此题来自用户提供的模拟题库，系统保留了源文件随题附带的说明；可使用 AI 深度解析获得统一四段式解析。"
-        : "此题来自用户提供的答案型模拟题库，原文件未附解析；系统保留原答案并明确标注自动归类结果。",
-    },
+    explanation,
     source: "imported",
     outlineVersion: "2024-current",
     sourceReference: "CISSP2508模拟题_含答案.csv",

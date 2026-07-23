@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
   LEGACY_STORAGE_KEY,
@@ -60,6 +60,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [storageError, setStorageError] = useState<string>();
   const [memoryData, setMemoryData] = useState<AppData>(() => initialAppData());
   const [loadingBankId, setLoadingBankId] = useState<BankId>();
+  const autoLoadedBankRef = useRef<BankId | undefined>(undefined);
 
   useEffect(() => {
     let active = true;
@@ -215,6 +216,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setLoadingBankId(undefined);
     }
   }, [assertInitialized, data.questions, fail, storageStatus]);
+
+  useEffect(() => {
+    const activeBankId = data.preferences.activeBankId;
+    if (!hydrated || autoLoadedBankRef.current === activeBankId) return;
+    autoLoadedBankRef.current = activeBankId;
+    void ensureBankLoaded(activeBankId).catch(() => {
+      if (autoLoadedBankRef.current === activeBankId) autoLoadedBankRef.current = undefined;
+    });
+  }, [data.preferences.activeBankId, ensureBankLoaded, hydrated]);
 
   const reset = useCallback(async () => {
     assertInitialized();
