@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export type ThemeMode = "system" | "light" | "dark";
 
 const STORAGE_KEY = "salingo:theme";
+const THEME_CHANGE_EVENT = "salingo:theme-change";
 
 export function readThemeMode(): ThemeMode {
   if (typeof window === "undefined") return "system";
@@ -27,18 +28,37 @@ function systemPrefersDark(): boolean {
   return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
+function resolveThemeMode(mode: ThemeMode): "light" | "dark" {
+  return mode === "system" ? (systemPrefersDark() ? "dark" : "light") : mode;
+}
+
 /** Manages the persisted light/dark/system preference and applies it to <html>. */
 export function useTheme() {
   const [mode, setMode] = useState<ThemeMode>("system");
+  const [resolved, setResolved] = useState<"light" | "dark">("light");
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setMode(readThemeMode());
-    setReady(true);
+    const sync = () => {
+      const next = readThemeMode();
+      applyThemeMode(next);
+      setMode(next);
+      setResolved(resolveThemeMode(next));
+      setReady(true);
+    };
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener(THEME_CHANGE_EVENT, sync);
+    media.addEventListener("change", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener(THEME_CHANGE_EVENT, sync);
+      media.removeEventListener("change", sync);
+    };
   }, []);
 
   const setTheme = (next: ThemeMode) => {
-    setMode(next);
     try {
       if (next === "system") window.localStorage.removeItem(STORAGE_KEY);
       else window.localStorage.setItem(STORAGE_KEY, next);
@@ -46,36 +66,14 @@ export function useTheme() {
       /* ignore */
     }
     applyThemeMode(next);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
-
-  const resolved: "light" | "dark" = mode === "system" ? (systemPrefersDark() ? "dark" : "light") : mode;
 
   return { mode, resolved, ready, setTheme };
 }
 
 /** Effective dark-mode boolean that reacts to both the attribute and the OS setting. */
 export function useIsDark(): boolean {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    const compute = () => {
-      const attr = document.documentElement.getAttribute("data-theme");
-      if (attr === "dark") return true;
-      if (attr === "light") return false;
-      return systemPrefersDark();
-    };
-    const update = () => setDark(compute());
-    update();
-
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    media.addEventListener("change", update);
-    const observer = new MutationObserver(update);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => {
-      media.removeEventListener("change", update);
-      observer.disconnect();
-    };
-  }, []);
-
-  return dark;
+  const { ready, resolved } = useTheme();
+  return ready && resolved === "dark";
 }
