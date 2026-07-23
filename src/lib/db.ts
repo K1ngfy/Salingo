@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from "dexie";
 import { INITIAL_QUESTIONS } from "@/data/full-bank";
-import type { AISettings, AnswerRecord, AppData, ChecklistProgress, ExamRecord, OutlineProgress, PrepProfile, Question, ReviewCardState, UserPreferences } from "./types";
+import type { AISettings, AnswerRecord, AppData, ChecklistProgress, CommunityProfile, ExamRecord, OutlineProgress, PrepProfile, Question, ReviewCardState, UserPreferences } from "./types";
 import { appDataSchema } from "./validation";
 import { dateKey } from "./utils";
 import { DEFAULT_PREFERENCES, ESSENTIALS_BANK_ID, ORIGINAL_BANK_ID, normalizeSeedQuestion, questionBankId, questionSectionId } from "./question-banks";
@@ -17,7 +17,7 @@ export const DEFAULT_AI_SETTINGS: AISettings = {
 };
 
 interface StreakRow { date: string }
-interface SettingRow { key: "ai" | "preferences" | "prepProfile"; value: AISettings | UserPreferences | PrepProfile }
+interface SettingRow { key: "ai" | "preferences" | "prepProfile" | "community"; value: AISettings | UserPreferences | PrepProfile | CommunityProfile }
 interface MetadataRow { key: string; value: string | number | boolean }
 interface LegacyReviewRow extends Omit<ReviewCardState, "id" | "targetType" | "targetId"> { questionId: string }
 
@@ -336,6 +336,35 @@ export async function resetDatabase(database = db) {
       { key: "legacyMigrated", value: true },
     ]);
   });
+}
+
+const COMMUNITY_HISTORY_KEY = "community:historySyncedFor";
+
+export async function getCommunityProfile(database = db): Promise<CommunityProfile | undefined> {
+  const row = await database.settings.get("community");
+  return row?.value as CommunityProfile | undefined;
+}
+
+export async function saveCommunityProfile(database: SalingoDatabase, profile: CommunityProfile) {
+  await database.settings.put({ key: "community", value: profile });
+}
+
+export async function clearCommunityProfile(database: SalingoDatabase) {
+  await database.transaction("rw", database.settings, database.metadata, async () => {
+    await database.settings.delete("community");
+    await database.metadata.delete(COMMUNITY_HISTORY_KEY);
+  });
+}
+
+// Tracks which account's full local history has already been pushed from this device,
+// so regular syncs only need to send today's totals.
+export async function getCommunityHistorySynced(database = db): Promise<string | undefined> {
+  const row = await database.metadata.get(COMMUNITY_HISTORY_KEY);
+  return typeof row?.value === "string" ? row.value : undefined;
+}
+
+export async function setCommunityHistorySynced(database: SalingoDatabase, userId: string) {
+  await database.metadata.put({ key: COMMUNITY_HISTORY_KEY, value: userId });
 }
 
 export async function importBackup(database: SalingoDatabase, text: string) {

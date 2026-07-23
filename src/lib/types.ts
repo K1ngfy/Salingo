@@ -219,6 +219,13 @@ export interface QuestionBank {
   sections: QuestionBankSection[];
 }
 
+export interface CommunityProfile {
+  userId: string;
+  publicId: string;
+  nickname: string;
+  recoveryCode: string;
+}
+
 export interface AppData {
   version: 3;
   questions: Question[];

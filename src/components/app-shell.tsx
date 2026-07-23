@@ -12,8 +12,10 @@ import {
   MapTrifold,
   Notebook,
   Timer,
+  Trophy,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { CommunityProvider } from "./community-provider";
 import { DataProvider, useAppData } from "./data-provider";
 
 const navigation = [
@@ -24,6 +26,7 @@ const navigation = [
   { href: "/prep", label: "备考", icon: MapTrifold },
   { href: "/library", label: "题库", icon: Books },
   { href: "/stats", label: "统计", icon: ChartBar },
+  { href: "/leaderboard", label: "排行榜", icon: Trophy },
 ];
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -58,10 +61,10 @@ function Shell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <div className="flex items-center gap-1 rounded-xl px-2 py-2 text-[#ff9600]" title="累计学习天数">
+            <Link href="/leaderboard" className="flex items-center gap-1 rounded-xl px-2 py-2 text-[#ff9600] transition hover:bg-[#fff3e0] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-100" title="累计学习天数 · 查看排行榜" aria-label="累计学习天数，前往排行榜">
               <Fire size={22} weight="fill" />
               <span className="font-black tabular-nums">{streak}</span>
-            </div>
+            </Link>
             <Link href="/settings" aria-label="设置" className={cn("grid size-10 place-items-center rounded-xl text-[#888] transition hover:bg-[#f0f0eb] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100", pathname === "/settings" && "bg-[#e8f5fc] text-[#168fc7]") }>
               <GearSix size={23} weight="bold" />
             </Link>
@@ -86,5 +89,5 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  return <DataProvider><Shell>{children}</Shell></DataProvider>;
+  return <DataProvider><CommunityProvider><Shell>{children}</Shell></CommunityProvider></DataProvider>;
 }
