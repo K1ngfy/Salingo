@@ -18,8 +18,16 @@ type ChatBody = {
   temperature?: number;
   reasoning_effort?: "minimal" | "low";
   max_completion_tokens?: number;
+  max_tokens?: number;
+  thinking?: { type: "disabled" };
+  reasoning_split?: boolean;
   response_format?: { type: "json_object" };
   messages: Array<{ role: string; content: string }>;
+};
+
+type CompletionOptions = {
+  lowLatency?: boolean;
+  maxOutputTokens?: number;
 };
 
 const AI_REQUEST_TIMEOUT_MS = 40_000;
@@ -37,25 +45,71 @@ function fastReasoningEffort(model: string): ChatBody["reasoning_effort"] {
   return /^gpt-5(?:-(?:mini|nano))?(?:-\d{4}-\d{2}-\d{2})?$/.test(modelName(model)) ? "minimal" : "low";
 }
 
-function optimizeRequestBody(body: ChatBody) {
-  if (!isReasoningModel(body.model)) return body;
-  const { temperature: _temperature, ...compatible } = body;
-  void _temperature;
-  return {
-    ...compatible,
-    reasoning_effort: body.reasoning_effort ?? fastReasoningEffort(body.model),
-  };
+function providerFamily(settings: AISettings, model: string) {
+  const identity = `${settings.baseUrl} ${model}`.toLowerCase();
+  if (/minimax|minimaxi\.com/.test(identity)) return "minimax";
+  if (/(?:^|[\s/])glm-|bigmodel\.cn|z\.ai/.test(identity)) return "zhipu";
+  if (/sensechat|sensenova|sensecore/.test(identity)) return "sensetime";
+  if (/api\.openai\.com/.test(identity) || isReasoningModel(model)) return "openai";
+  return "generic";
+}
+
+function optimizeRequestBody(settings: AISettings, body: ChatBody, options: CompletionOptions) {
+  if (!options.lowLatency) return body;
+  const maxOutputTokens = options.maxOutputTokens;
+  switch (providerFamily(settings, body.model)) {
+    case "minimax":
+      return {
+        ...body,
+        reasoning_split: true,
+        ...(maxOutputTokens ? { max_completion_tokens: Math.min(maxOutputTokens, 2_048) } : {}),
+      };
+    case "zhipu":
+      return {
+        ...body,
+        thinking: { type: "disabled" as const },
+        ...(maxOutputTokens ? { max_tokens: maxOutputTokens } : {}),
+      };
+    case "sensetime":
+      return {
+        ...body,
+        reasoning_effort: "low" as const,
+        ...(maxOutputTokens ? { max_completion_tokens: maxOutputTokens } : {}),
+      };
+    case "openai": {
+      if (!isReasoningModel(body.model)) return body;
+      const { temperature: _temperature, ...compatible } = body;
+      void _temperature;
+      return {
+        ...compatible,
+        reasoning_effort: fastReasoningEffort(body.model),
+        ...(maxOutputTokens ? { max_completion_tokens: maxOutputTokens } : {}),
+      };
+    }
+    default:
+      return body;
+  }
 }
 
 function withoutOptionalHints(body: ChatBody) {
   const {
     reasoning_effort: _reasoningEffort,
     max_completion_tokens: _maxCompletionTokens,
+    max_tokens: _maxTokens,
+    thinking: _thinking,
+    reasoning_split: _reasoningSplit,
     ...compatible
   } = body;
   void _reasoningEffort;
   void _maxCompletionTokens;
+  void _maxTokens;
+  void _thinking;
+  void _reasoningSplit;
   return compatible;
+}
+
+function hasOptionalHints(body: ChatBody) {
+  return Boolean(body.reasoning_effort || body.max_completion_tokens || body.max_tokens || body.thinking || body.reasoning_split);
 }
 
 function waitBeforeRetry(response: Response, signal: AbortSignal) {
@@ -99,13 +153,13 @@ async function requestWithRetry(settings: AISettings, body: ChatBody, signal: Ab
   return response;
 }
 
-async function chatCompletion(settings: AISettings, requestedBody: ChatBody) {
+async function chatCompletion(settings: AISettings, requestedBody: ChatBody, options: CompletionOptions = {}) {
   const controller = new AbortController();
   const timeout = globalThis.setTimeout(() => controller.abort(new DOMException("AI request timed out", "TimeoutError")), AI_REQUEST_TIMEOUT_MS);
   try {
-    const body = optimizeRequestBody(requestedBody);
+    const body = optimizeRequestBody(settings, requestedBody, options);
     let response = await requestWithRetry(settings, body, controller.signal);
-    if ((response.status === 400 || response.status === 422) && (body.reasoning_effort || body.max_completion_tokens)) {
+    if ((response.status === 400 || response.status === 422) && hasOptionalHints(body)) {
       await response.body?.cancel().catch(() => undefined);
       response = await requestWithRetry(settings, withoutOptionalHints(body), controller.signal);
     }
@@ -170,7 +224,8 @@ async function responseError(response: Response, prefix: string) {
 }
 
 function parseJsonContent(content: string) {
-  return JSON.parse(content.replace(/^```(?:json)?\s*|\s*```$/gi, "")) as Record<string, unknown>;
+  const withoutThinking = content.replace(/^\s*(?:<think>[\s\S]*?<\/think>\s*)+/i, "");
+  return JSON.parse(withoutThinking.replace(/^```(?:json)?\s*|\s*```$/gi, "")) as Record<string, unknown>;
 }
 
 export async function generateQuestion(settings: AISettings, input: { domainId: DomainId; difficulty: Difficulty; tag: string }): Promise<Question> {
@@ -179,7 +234,7 @@ export async function generateQuestion(settings: AISettings, input: { domainId: 
 知识域：Domain ${domain.number} ${domain.name}；难度：${input.difficulty}；考点：${input.tag || "由你从该域选择"}。
 强调管理者先评估风险、业务目标和流程，再选技术；不要声称是真题，不要复制 Boson、Sybex/OSG 或任何考试原题。
 只输出 JSON，不使用 Markdown。结构必须为：{"type":"single|multiple","tags":["标签"],"stem":"题干","options":[{"id":"A","text":"..."},{"id":"B","text":"..."},{"id":"C","text":"..."},{"id":"D","text":"..."}],"correctAnswers":["A"],"explanation":{"logic":"核心作答逻辑","optionAnalysis":{"A":"逐项说明","B":"...","C":"...","D":"..."},"knowledgePoint":"考点定位","plainLanguage":"通俗企业场景解读"}}`;
-  const response = await chatCompletion(settings, { model: settings.model, temperature: 0.7, response_format: { type: "json_object" }, messages: [{ role: "system", content: "你只输出有效 JSON。" }, { role: "user", content: prompt }] });
+  const response = await chatCompletion(settings, { model: settings.model, temperature: 0.7, response_format: { type: "json_object" }, messages: [{ role: "system", content: "你只输出有效 JSON。" }, { role: "user", content: prompt }] }, { lowLatency: true, maxOutputTokens: 1_600 });
   if (!response.ok) throw await responseError(response, "AI 出题失败");
   const content = extractContent(await response.json());
   if (!content) throw new Error("AI 没有返回题目内容");
@@ -197,14 +252,12 @@ export async function explainQuestion(settings: AISettings, question: Question, 
   const response = await chatCompletion(settings, {
     model: settings.model,
     temperature: 0.25,
-    reasoning_effort: fastReasoningEffort(settings.model),
-    max_completion_tokens: 1_400,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: "你是严谨的 CISSP 中文导师，只输出有效 JSON，不声称接触过真实考试题，也不臆造缺失的图形。" },
       { role: "user", content: `依据当前生效的 ISC² CISSP Exam Outline 解析以下${provenance}。如果题目知识与当前考纲或实践可能不一致，必须明确指出。${question.requiresFigure ? "原始图形缺失，只能依据现有文字分析，并明确说明限制。" : ""}\n题型：${typeLabel}\n题目：${question.stem}\n${promptItems}\n用户作答：${responseLabel(answer) || "未作答"}\n正确答案：${responseLabel(correctResponse(question))}。保持简明：logic、knowledgePoint、plainLanguage 各不超过 120 个汉字，每个选项说明不超过 90 个汉字。只输出 ${JSON.stringify({ logic: "核心作答逻辑", optionAnalysis: optionShape, knowledgePoint: "知识域与细分考点", plainLanguage: "企业场景通俗解读" })}。` },
     ],
-  });
+  }, { lowLatency: true, maxOutputTokens: 1_400 });
   if (!response.ok) throw await responseError(response, "AI 解析失败");
   const content = extractContent(await response.json());
   if (!content) throw new Error("AI 没有返回解析，已保留内置解析");
@@ -216,13 +269,12 @@ export async function explainPrepCard(settings: AISettings, card: PrepCard) {
   const response = await chatCompletion(settings, {
     model: settings.model,
     temperature: 0.2,
-    max_completion_tokens: 700,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: "你是严谨的 CISSP 中文导师。必须区分 ISC2 官方考纲与个人经验，只输出有效 JSON。" },
       { role: "user", content: `请解释以下${provenance}。状态：${card.verificationStatus}。内容：${card.front}\n参考说明：${card.back}\n${card.correction ?? ""}\n不得把个人笔记包装为 ISC2 官方结论；如果可能过时、有争议或缺少权威依据，必须明确说明。只输出 {"explanation":"简明解释","caution":"来源与时效提示"}。` },
     ],
-  });
+  }, { lowLatency: true, maxOutputTokens: 700 });
   if (!response.ok) throw await responseError(response, "AI 讲解失败");
   const content = extractContent(await response.json());
   if (!content) throw new Error("AI 没有返回讲解");

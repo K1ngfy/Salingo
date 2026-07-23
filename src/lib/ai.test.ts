@@ -3,7 +3,7 @@ import { explainQuestion } from "./ai";
 import { choiceResponse } from "./question-utils";
 import type { AISettings, Question } from "./types";
 
-const settings: AISettings = {
+const openAISettings: AISettings = {
   baseUrl: "",
   apiKey: "",
   model: "gpt-5-mini",
@@ -56,7 +56,7 @@ describe("AI question explanations", () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(completion), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    await explainQuestion(settings, question, choiceResponse(["A"]));
+    await explainQuestion(openAISettings, question, choiceResponse(["A"]));
 
     const request = JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).request;
     expect(request).toMatchObject({
@@ -67,17 +67,98 @@ describe("AI question explanations", () => {
     expect(request).not.toHaveProperty("temperature");
   });
 
-  it("falls back when a compatible provider rejects reasoning hints", async () => {
+  it("disables GLM thinking for low-latency explanations", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(completion), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await explainQuestion({
+      baseUrl: "https://open.bigmodel.cn/api/paas/v4",
+      apiKey: "test-key",
+      model: "glm-4.5-flash",
+    }, question, choiceResponse(["A"]));
+
+    const request = JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).request;
+    expect(request).toMatchObject({
+      thinking: { type: "disabled" },
+      max_tokens: 1_400,
+    });
+    expect(request).not.toHaveProperty("reasoning_effort");
+    expect(request).not.toHaveProperty("max_completion_tokens");
+  });
+
+  it("uses MiniMax reasoning separation and accepts think-tag responses", async () => {
+    const minimaxCompletion = structuredClone(completion);
+    minimaxCompletion.choices[0].message.content = `<think>这里是模型思考过程</think>\n\n${minimaxCompletion.choices[0].message.content}`;
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(minimaxCompletion), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(explainQuestion({
+      baseUrl: "https://api.minimaxi.com/v1",
+      apiKey: "test-key",
+      model: "MiniMax-M2.7-highspeed",
+    }, question, choiceResponse(["A"]))).resolves.toMatchObject({
+      knowledgePoint: "D1 风险管理",
+    });
+
+    const request = JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).request;
+    expect(request).toMatchObject({
+      reasoning_split: true,
+      max_completion_tokens: 1_400,
+    });
+  });
+
+  it("uses SenseNova's documented low reasoning effort", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(completion), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await explainQuestion({
+      baseUrl: "https://api.sensenova.cn/compatible-mode/v2",
+      apiKey: "test-key",
+      model: "SenseChat-5",
+    }, question, choiceResponse(["A"]));
+
+    const request = JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).request;
+    expect(request).toMatchObject({
+      reasoning_effort: "low",
+      max_completion_tokens: 1_400,
+    });
+  });
+
+  it("does not send vendor-specific hints to an unknown compatible model", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(completion), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await explainQuestion({
+      baseUrl: "https://ai.example.com/v1",
+      apiKey: "test-key",
+      model: "custom-chat-model",
+    }, question, choiceResponse(["A"]));
+
+    const request = JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).request;
+    expect(request).not.toHaveProperty("thinking");
+    expect(request).not.toHaveProperty("reasoning_split");
+    expect(request).not.toHaveProperty("reasoning_effort");
+    expect(request).not.toHaveProperty("max_completion_tokens");
+    expect(request).not.toHaveProperty("max_tokens");
+  });
+
+  it("falls back when a compatible provider rejects vendor hints", async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify({ error: "unsupported parameter" }), { status: 400 }))
       .mockResolvedValueOnce(new Response(JSON.stringify(completion), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    await expect(explainQuestion(settings, question, choiceResponse(["A"]))).resolves.toMatchObject({
+    await expect(explainQuestion({
+      baseUrl: "https://open.bigmodel.cn/api/paas/v4",
+      apiKey: "test-key",
+      model: "glm-4-flash",
+    }, question, choiceResponse(["A"]))).resolves.toMatchObject({
       knowledgePoint: "D1 风险管理",
     });
 
     const fallback = JSON.parse(String(fetchMock.mock.calls[1][1]?.body)).request;
+    expect(fallback).not.toHaveProperty("thinking");
+    expect(fallback).not.toHaveProperty("max_tokens");
     expect(fallback).not.toHaveProperty("reasoning_effort");
     expect(fallback).not.toHaveProperty("max_completion_tokens");
     expect(fallback.response_format).toEqual({ type: "json_object" });
@@ -89,7 +170,7 @@ describe("AI question explanations", () => {
       .mockResolvedValueOnce(new Response(JSON.stringify(completion), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    await expect(explainQuestion(settings, question, choiceResponse(["A"]))).resolves.toBeTruthy();
+    await expect(explainQuestion(openAISettings, question, choiceResponse(["A"]))).resolves.toBeTruthy();
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });
