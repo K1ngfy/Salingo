@@ -11,8 +11,25 @@ export const metadata: Metadata = {
   applicationName: "SALINGO 赛邻国",
 };
 
-export const viewport: Viewport = { themeColor: "#fcfcf8", colorScheme: "light" };
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fcfcf8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
+  ],
+};
+
+const noFlashScript = `(function(){try{var t=localStorage.getItem('salingo:theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="zh-CN" data-scroll-behavior="smooth"><body className={nunito.variable}><AppShell>{children}</AppShell></body></html>;
+  return (
+    <html lang="zh-CN" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
+      </head>
+      <body className={nunito.variable}>
+        <AppShell>{children}</AppShell>
+      </body>
+    </html>
+  );
 }
