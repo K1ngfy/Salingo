@@ -1,9 +1,152 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --background: #fcfcf8;
-  --foreground: #3c3c3c;
+  color-scheme: light dark;
+  --background: light-dark(#fcfcf8, #0b0b0d);
+  --foreground: light-dark(#3c3c3c, #ececeb);
+  --surface: light-dark(#ffffff, #17181c);
+  --selection-bg: light-dark(#c8f29f, #2f4d16);
+  --selection-fg: light-dark(#315b12, #d6f4bb);
+  --skip-bg: light-dark(#3c3c3c, #ececeb);
+  --skip-fg: light-dark(#ffffff, #0b0b0d);
+  --c-137eae: light-dark(#137eae, #278abb);
+  --c-14b8a6: light-dark(#14b8a6, #14b8a6);
+  --c-1679a7: light-dark(#1679a7, #2e8ab9);
+  --c-168fc7: light-dark(#168fc7, #168fc7);
+  --c-1cb0f6: light-dark(#1cb0f6, #1cb0f6);
+  --c-252f22: light-dark(#252f22, #d4d8d3);
+  --c-263323: light-dark(#263323, #d2d6d1);
+  --c-29b8fa: light-dark(#29b8fa, #29b8fa);
+  --c-2b70c9: light-dark(#2b70c9, #3b80da);
+  --c-3c3c3c: light-dark(#3c3c3c, #ececeb);
+  --c-438c0d: light-dark(#438c0d, #4c951d);
+  --c-46a302: light-dark(#46a302, #46a302);
+  --c-4b4b4b: light-dark(#4b4b4b, #dcdcda);
+  --c-4c8c17: light-dark(#4c8c17, #539422);
+  --c-555: light-dark(#555, #c1c1c1);
+  --c-55747f: light-dark(#55747f, #afb7ba);
+  --c-58a700: light-dark(#58a700, #58a700);
+  --c-58cc02: light-dark(#58cc02, #58cc02);
+  --c-61d807: light-dark(#61d807, #61d807);
+  --c-666: light-dark(#666, #b9b9b9);
+  --c-667780: light-dark(#667780, #afb3b6);
+  --c-6d8061: light-dark(#6d8061, #748768);
+  --c-777: light-dark(#777, #b1b1b1);
+  --c-777770: light-dark(#777770, #b2b2b0);
+  --c-778086: light-dark(#778086, #acaeb0);
+  --c-7a858a: light-dark(#7a858a, #aaacae);
+  --c-7d45a2: light-dark(#7d45a2, #9b63c2);
+  --c-7d7055: light-dark(#7d7055, #b7b3ac);
+  --c-816b3f: light-dark(#816b3f, #937d51);
+  --c-874eb0: light-dark(#874eb0, #9b62c6);
+  --c-888: light-dark(#888, #aaaaaa);
+  --c-89672c: light-dark(#89672c, #9d7a3f);
+  --c-8a681d: light-dark(#8a681d, #9d7a33);
+  --c-8a6a6a: light-dark(#8a6a6a, #bab1b0);
+  --c-8c7a57: light-dark(#8c7a57, #907e5b);
+  --c-916815: light-dark(#916815, #a2782b);
+  --c-92928c: light-dark(#92928c, #a6a6a4);
+  --c-999: light-dark(#999, #a2a2a2);
+  --c-9a6800: light-dark(#9a6800, #a8751c);
+  --c-9a9a94: light-dark(#9a9a94, #a2a2a1);
+  --c-9b6262: light-dark(#9b6262, #a86e6e);
+  --c-9b6a12: light-dark(#9b6a12, #a77523);
+  --c-9b6b43: light-dark(#9b6b43, #a5744c);
+  --c-a47878: light-dark(#a47878, #a47878);
+  --c-a58a5a: light-dark(#a58a5a, #a58a5a);
+  --c-a73b3b: light-dark(#a73b3b, #c75855);
+  --c-a9d48f: light-dark(#a9d48f, #a8d38e);
+  --c-aaa: light-dark(#aaa, #9b9b9b);
+  --c-acdff5: light-dark(#acdff5, #9acde3);
+  --c-b83232: light-dark(#b83232, #d34c48);
+  --c-b8dca0: light-dark(#b8dca0, #add196);
+  --c-b9e5fa: light-dark(#b9e5fa, #a0cce0);
+  --c-bbb: light-dark(#bbb, #949494);
+  --c-c27700: light-dark(#c27700, #c27700);
+  --c-c53636: light-dark(#c53636, #d74744);
+  --c-c57700: light-dark(#c57700, #c57700);
+  --c-c63838: light-dark(#c63838, #d64845);
+  --c-cad5c4: light-dark(#cad5c4, #233319);
+  --c-cce9b4: light-dark(#cce9b4, #b3cf9b);
+  --c-cdd6c8: light-dark(#cdd6c8, #233319);
+  --c-ce82ff: light-dark(#ce82ff, #ce82ff);
+  --c-cfe7bd: light-dark(#cfe7bd, #b6cda4);
+  --c-cfe9b8: light-dark(#cfe9b8, #b5ce9e);
+  --c-d38200: light-dark(#d38200, #d38200);
+  --c-d7d7d0: light-dark(#d7d7d0, #3a3a40);
+  --c-d83a3a: light-dark(#d83a3a, #dd3f3e);
+  --c-d93b3b: light-dark(#d93b3b, #dd3f3e);
+  --c-daf7f2: light-dark(#daf7f2, #001d19);
+  --c-dcdcd6: light-dark(#dcdcd6, #33333a);
+  --c-deded8: light-dark(#deded8, #34343a);
+  --c-dfe4d9: light-dark(#dfe4d9, #1f2a0d);
+  --c-dff4ff: light-dark(#dff4ff, #001928);
+  --c-e0edff: light-dark(#e0edff, #0a1b31);
+  --c-e33d3d: light-dark(#e33d3d, #e33d3d);
+  --c-e5e5e5: light-dark(#e5e5e5, #2a2a2e);
+  --c-e7e7e1: light-dark(#e7e7e1, #2a2a2e);
+  --c-e7f8d8: light-dark(#e7f8d8, #bacbac);
+  --c-e8e8e3: light-dark(#e8e8e3, #2a2a2e);
+  --c-e8f5fc: light-dark(#e8f5fc, #001725);
+  --c-e8f7d8: light-dark(#e8f7d8, #0e1901);
+  --c-e8f7ff: light-dark(#e8f7ff, #001523);
+  --c-e9e9e4: light-dark(#e9e9e4, #26262a);
+  --c-e9f8dc: light-dark(#e9f8dc, #0c1801);
+  --c-eaf8ff: light-dark(#eaf8ff, #001422);
+  --c-ecece7: light-dark(#ecece7, #26262a);
+  --c-ecece8: light-dark(#ecece8, #26262a);
+  --c-edede9: light-dark(#edede9, #26262a);
+  --c-edfadd: light-dark(#edfadd, #0c1500);
+  --c-eee: light-dark(#eee, #26262a);
+  --c-eeeeea: light-dark(#eeeeea, #26262a);
+  --c-eef8fd: light-dark(#eef8fd, #00131e);
+  --c-eefbdc: light-dark(#eefbdc, #0b1400);
+  --c-effbe5: light-dark(#effbe5, #081400);
+  --c-f0f0eb: light-dark(#f0f0eb, #1c1c20);
+  --c-f0f0ec: light-dark(#f0f0ec, #1c1c20);
+  --c-f1f1ed: light-dark(#f1f1ed, #161619);
+  --c-f1fbe8: light-dark(#f1fbe8, #081300);
+  --c-f2e9ff: light-dark(#f2e9ff, #1e122b);
+  --c-f2f2ee: light-dark(#f2f2ee, #141414);
+  --c-f3eaff: light-dark(#f3eaff, #1d112a);
+  --c-f3eee8: light-dark(#f3eee8, #181716);
+  --c-f3f3ef: light-dark(#f3f3ef, #161619);
+  --c-f4e7ff: light-dark(#f4e7ff, #20122a);
+  --c-f4f4f0: light-dark(#f4f4f0, #121211);
+  --c-f4f4f4: light-dark(#f4f4f4, #161619);
+  --c-f4fbe9: light-dark(#f4fbe9, #0a1100);
+  --c-f5eadf: light-dark(#f5eadf, #291500);
+  --c-f5f5f1: light-dark(#f5f5f1, #141417);
+  --c-f6f6f2: light-dark(#f6f6f2, #10100f);
+  --c-f7f7f2: light-dark(#f7f7f2, #0f0f0e);
+  --c-f7f7f3: light-dark(#f7f7f3, #0f0f0e);
+  --c-f7f7f7: light-dark(#f7f7f7, #0f0f0f);
+  --c-f7f9f1: light-dark(#f7f9f1, #0e0e0d);
+  --c-fcfcf8: light-dark(#fcfcf8, #0b0b0d);
+  --c-ff4b4b: light-dark(#ff4b4b, #ff4b4b);
+  --c-ff5c5c: light-dark(#ff5c5c, #ff5c5c);
+  --c-ff9600: light-dark(#ff9600, #ff9600);
+  --c-ffb020: light-dark(#ffb020, #ffb020);
+  --c-ffe2e2: light-dark(#ffe2e2, #301214);
+  --c-fff0a8: light-dark(#fff0a8, #d4c57f);
+  --c-fff0d4: light-dark(#fff0d4, #1f1100);
+  --c-fff0f0: light-dark(#fff0f0, #240709);
+  --c-fff1c9: light-dark(#fff1c9, #d1c39d);
+  --c-fff2b8: light-dark(#fff2b8, #d2c58c);
+  --c-fff2d4: light-dark(#fff2d4, #1c1100);
+  --c-fff2dc: light-dark(#fff2dc, #1d0f00);
+  --c-fff3e0: light-dark(#fff3e0, #1d0e00);
+  --c-fff4d8: light-dark(#fff4d8, #1a0f00);
+  --c-fff5dc: light-dark(#fff5dc, #190e00);
+  --c-fff6df: light-dark(#fff6df, #180d00);
+  --c-fff7df: light-dark(#fff7df, #170d00);
+  --c-fff7e5: light-dark(#fff7e5, #170c00);
+  --c-fff8df: light-dark(#fff8df, #150d00);
 }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -16,7 +159,7 @@ body {
 }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
-::selection { background: #c8f29f; color: #315b12; }
+::selection { background: var(--selection-bg); color: var(--selection-fg); }
 
 .skip-link {
   position: fixed;
@@ -24,8 +167,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   top: -5rem;
   z-index: 100;
   border-radius: 0.75rem;
-  background: #3c3c3c;
-  color: white;
+  background: var(--skip-bg);
+  color: var(--skip-fg);
   padding: 0.75rem 1rem;
   font-weight: 800;
   transition: top 150ms ease;

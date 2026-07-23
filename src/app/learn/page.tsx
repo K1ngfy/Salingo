@@ -4,5 +4,5 @@ import { LearnPageClient } from "./page-client";
 export const metadata = { title: "专项闯关与题库通刷" };
 
 export default function LearnPage() {
-  return <Suspense fallback={<div className="h-64 animate-pulse rounded-[2rem] bg-[#f0f0ec]" />}><LearnPageClient /></Suspense>;
+  return <Suspense fallback={<div className="h-64 animate-pulse rounded-[2rem] bg-[var(--c-f0f0ec)]" />}><LearnPageClient /></Suspense>;
 }
