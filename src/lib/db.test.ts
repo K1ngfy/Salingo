@@ -214,9 +214,11 @@ describe("IndexedDB transactions and backups", () => {
   it("imports version 1 backups, rejects invalid input, and resets to seeds", async () => {
     const database = createDb();
     await initializeDatabase(database, new MemoryStorage());
-    const backup: AppData = { ...initialAppData(), answers: [sampleAnswer()], reviews: [sampleReview()] };
+    const backup: AppData = { ...initialAppData(), answers: [sampleAnswer()], reviews: [sampleReview()], ai: { baseUrl: "https://example.test/v1", apiKey: "must-not-import", model: "test-model" } };
     await importBackup(database, JSON.stringify(backup));
-    expect((await readAppData(database)).answers).toHaveLength(1);
+    const restored = await readAppData(database);
+    expect(restored.answers).toHaveLength(1);
+    expect(restored.ai).toEqual({ ...backup.ai, apiKey: "" });
     await expect(importBackup(database, JSON.stringify({ version: 1 }))).rejects.toBeDefined();
     await resetDatabase(database);
     const reset = await readAppData(database);

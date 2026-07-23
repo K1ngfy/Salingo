@@ -5,6 +5,7 @@ import { appDataSchema } from "./validation";
 import { dateKey } from "./utils";
 import { DEFAULT_PREFERENCES, ESSENTIALS_BANK_ID, ORIGINAL_BANK_ID, normalizeSeedQuestion, questionBankId, questionSectionId } from "./question-banks";
 import { DEFAULT_PREP_PROFILE } from "./prep";
+import { withoutStoredAIKey } from "./ai-security";
 
 export const DATABASE_NAME = "salingo";
 export const LEGACY_STORAGE_KEY = "salingo:data:v1";
@@ -368,7 +369,7 @@ export async function setCommunityHistorySynced(database: SalingoDatabase, userI
 }
 
 export async function importBackup(database: SalingoDatabase, text: string) {
-  const parsed = appDataSchema.parse(JSON.parse(text));
+  const parsed = withoutStoredAIKey(appDataSchema.parse(JSON.parse(text)));
   const data = mergeSeedQuestions(parsed);
   await database.transaction("rw", database.tables, async () => {
     await replaceBusinessData(database, data);

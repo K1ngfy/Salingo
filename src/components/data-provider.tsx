@@ -26,6 +26,7 @@ import {
 } from "@/lib/db";
 import { aiSettingsSchema, appDataSchema, questionArraySchema } from "@/lib/validation";
 import { dateKey, downloadJsonFile } from "@/lib/utils";
+import { withoutStoredAIKey } from "@/lib/ai-security";
 import { getQuestionBank, normalizeSeedQuestion, questionBankId } from "@/lib/question-banks";
 import type { AISettings, AnswerRecord, AppData, BankId, ChecklistProgress, ExamRecord, OutlineProgress, PrepProfile, Question, ReviewCardState, UserPreferences } from "@/lib/types";
 
@@ -236,17 +237,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, [assertInitialized, fail, storageStatus]);
 
   const exportData = useCallback(async () => {
-    downloadJsonFile(data, `salingo-backup-${new Date().toISOString().slice(0, 10)}.json`);
+    downloadJsonFile(withoutStoredAIKey(data), `salingo-backup-${new Date().toISOString().slice(0, 10)}.json`);
   }, [data]);
 
   const importData = useCallback(async (text: string): Promise<ImportResult> => {
     try {
       assertInitialized();
+      const parsed = appDataSchema.parse(JSON.parse(text));
+      const includedApiKey = Boolean(parsed.ai.apiKey);
+      const safeData = withoutStoredAIKey(parsed);
       if (storageStatus === "volatile") {
-        const parsed = appDataSchema.parse(JSON.parse(text));
-        setMemoryData(mergeSeedQuestions(parsed));
-      } else await importBackup(db, text);
-      return { ok: true, message: "数据已导入" };
+        setMemoryData(mergeSeedQuestions(safeData));
+      } else await importBackup(db, JSON.stringify(safeData));
+      return { ok: true, message: includedApiKey ? "数据已导入；为避免泄露，备份中的 API Key 未恢复" : "数据已导入" };
     } catch {
       return { ok: false, message: "文件格式无效，请选择 SALINGO 备份文件" };
     }
