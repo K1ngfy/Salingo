@@ -8,11 +8,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-[#58cc02] text-white shadow-[0_4px_0_#46a302] hover:bg-[#61d807]",
-        blue: "bg-[#1cb0f6] text-white shadow-[0_4px_0_#168fc7] hover:bg-[#29b8fa]",
-        secondary: "border-2 border-[#e5e5e5] bg-white text-[#4b4b4b] shadow-[0_3px_0_#e5e5e5] hover:bg-[#f7f7f7]",
-        danger: "bg-[#ff4b4b] text-white shadow-[0_4px_0_#d93b3b] hover:bg-[#ff5c5c]",
-        ghost: "bg-transparent text-[#777] hover:bg-[#f4f4f4]",
+        primary: "bg-[var(--c-58cc02)] text-white shadow-[0_4px_0_var(--c-46a302)] hover:bg-[var(--c-61d807)]",
+        blue: "bg-[var(--c-1cb0f6)] text-white shadow-[0_4px_0_var(--c-168fc7)] hover:bg-[var(--c-29b8fa)]",
+        secondary: "border-2 border-[var(--c-e5e5e5)] bg-[var(--surface)] text-[var(--c-4b4b4b)] shadow-[0_3px_0_var(--c-e5e5e5)] hover:bg-[var(--c-f7f7f7)]",
+        danger: "bg-[var(--c-ff4b4b)] text-white shadow-[0_4px_0_var(--c-d93b3b)] hover:bg-[var(--c-ff5c5c)]",
+        ghost: "bg-transparent text-[var(--c-777)] hover:bg-[var(--c-f4f4f4)]",
       },
       size: { sm: "min-h-9 rounded-xl px-3 text-xs", md: "", lg: "min-h-13 px-7 text-base" },
     },
