@@ -11,6 +11,7 @@ import {
   installQuestionBank,
   initialAppData,
   initializeDatabase,
+  mergeRemoteAnswers,
   readAppData,
   recordAnswer,
   resetDatabase,
@@ -169,6 +170,23 @@ describe("IndexedDB transactions and backups", () => {
     await expect(recordAnswer(database, sampleAnswer(), sampleReview())).rejects.toThrow("review failed");
     expect(await database.answers.count()).toBe(0);
     expect(await database.streaks.count()).toBe(0);
+  });
+
+  it("merges remote answers idempotently and restores their study dates", async () => {
+    const database = createDb();
+    await initializeDatabase(database, new MemoryStorage());
+    const first = sampleAnswer();
+    const second = {
+      ...sampleAnswer(),
+      id: "answer-2",
+      questionId: "d1-care-002",
+      answeredAt: "2026-07-16T10:00:00.000Z",
+    };
+    expect(await mergeRemoteAnswers(database, [first, second, first])).toBe(2);
+    expect(await mergeRemoteAnswers(database, [first, second])).toBe(0);
+    const snapshot = await readAppData(database);
+    expect(snapshot.answers.map((answer) => answer.id)).toEqual(["answer-1", "answer-2"]);
+    expect(snapshot.streakDates).toEqual(["2026-07-15", "2026-07-16"]);
   });
 
   it("adds only questions with new IDs", async () => {

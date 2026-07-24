@@ -50,6 +50,12 @@ export interface DaySyncEntry {
   domains: Array<{ domainId: DomainId; count: number; correct: number }>;
 }
 
+interface AnswerSyncEntry extends AnswerRecord {
+  date: string;
+}
+
+const ANSWER_SYNC_BATCH_SIZE = 100;
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
@@ -78,11 +84,34 @@ export async function restoreProfile(recoveryCode: string): Promise<CommunityPro
   return request<CommunityProfile>("/restore", { method: "POST", body: JSON.stringify({ recoveryCode }) });
 }
 
-export async function syncProgress(profile: CommunityProfile, days: DaySyncEntry[]): Promise<void> {
-  await request("/progress", {
+export async function syncProgress(profile: CommunityProfile, days: DaySyncEntry[], answers: AnswerRecord[]): Promise<void> {
+  const entries: AnswerSyncEntry[] = answers.map((answer) => ({
+    ...answer,
+    date: dateKey(new Date(answer.answeredAt)),
+  }));
+  const batches = entries.length
+    ? Array.from({ length: Math.ceil(entries.length / ANSWER_SYNC_BATCH_SIZE) }, (_, index) =>
+      entries.slice(index * ANSWER_SYNC_BATCH_SIZE, (index + 1) * ANSWER_SYNC_BATCH_SIZE))
+    : [[]];
+  for (let index = 0; index < batches.length; index += 1) {
+    await request("/progress", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: profile.userId,
+        recoveryCode: profile.recoveryCode,
+        days: index === 0 ? days : [],
+        answers: batches[index],
+      }),
+    });
+  }
+}
+
+export async function fetchProgress(profile: CommunityProfile): Promise<AnswerRecord[]> {
+  const data = await request<{ answers: AnswerRecord[] }>("/progress/restore", {
     method: "POST",
-    body: JSON.stringify({ userId: profile.userId, recoveryCode: profile.recoveryCode, days }),
+    body: JSON.stringify({ userId: profile.userId, recoveryCode: profile.recoveryCode }),
   });
+  return data.answers;
 }
 
 export async function fetchLeaderboard(type: "streak" | "today"): Promise<LeaderboardEntry[]> {

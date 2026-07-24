@@ -5,7 +5,10 @@
 const MAX_BODY_BYTES = 400_000;
 const MAX_NICKNAME = 24;
 const MAX_DAYS = 3660;
+const MAX_ANSWERS = 200;
 const DOMAIN_IDS = new Set(["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"]);
+const BANK_IDS = new Set(["salingo-original", "cissp2508-essentials", "official-practice-tests"]);
+const ANSWER_MODES = new Set(["practice", "review", "exam", "sweep"]);
 const RECOVERY_WORDS = [
   "apple", "tiger", "lake", "cloud", "stone", "river", "maple", "coral",
   "amber", "olive", "comet", "delta", "flint", "grove", "harbor", "ivory",
@@ -125,6 +128,66 @@ function sanitizeDays(value) {
   return days;
 }
 
+function cleanString(value, maxLength) {
+  return typeof value === "string"
+    ? value.trim().replace(/[\u0000-\u001f\u007f]/g, "").slice(0, maxLength)
+    : "";
+}
+
+function sanitizeResponse(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("答题内容格式无效");
+  if (value.kind === "choice" && Array.isArray(value.selectedAnswers)) {
+    return {
+      kind: "choice",
+      selectedAnswers: value.selectedAnswers.slice(0, 32).map((answer) => cleanString(answer, 80)).filter(Boolean),
+    };
+  }
+  if (value.kind === "matching" && value.matches && typeof value.matches === "object" && !Array.isArray(value.matches)) {
+    return {
+      kind: "matching",
+      matches: Object.fromEntries(Object.entries(value.matches).slice(0, 64)
+        .map(([key, answer]) => [cleanString(key, 80), cleanString(answer, 80)])
+        .filter(([key, answer]) => key && answer)),
+    };
+  }
+  throw new Error("答题内容格式无效");
+}
+
+function sanitizeAnswers(value) {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) throw new Error("答题记录格式无效");
+  const answers = [];
+  for (const entry of value.slice(0, MAX_ANSWERS)) {
+    const id = cleanString(entry?.id, 80);
+    const questionId = cleanString(entry?.questionId, 160);
+    const sectionId = cleanString(entry?.sectionId, 160);
+    const bankId = cleanString(entry?.bankId, 80);
+    const domainId = entry?.domainId === undefined ? undefined : cleanString(entry.domainId, 8);
+    const mode = cleanString(entry?.mode, 20);
+    const answeredAt = cleanString(entry?.answeredAt, 40);
+    const date = cleanString(entry?.date, 10);
+    if (!id || !questionId || !sectionId || !BANK_IDS.has(bankId) || !ANSWER_MODES.has(mode)
+      || (domainId && !DOMAIN_IDS.has(domainId)) || !isDateKey(date)
+      || !Number.isFinite(Date.parse(answeredAt))) {
+      throw new Error("答题记录字段无效");
+    }
+    answers.push({
+      id,
+      questionId,
+      bankId,
+      sectionId,
+      domainId,
+      response: sanitizeResponse(entry.response),
+      correct: Boolean(entry.correct),
+      answeredAt,
+      durationSeconds: Math.min(toCount(entry.durationSeconds), 86_400),
+      mode,
+      date,
+    });
+  }
+  return answers;
+}
+
 function randomWord() {
   return RECOVERY_WORDS[Math.floor(Math.random() * RECOVERY_WORDS.length)];
 }
@@ -180,14 +243,98 @@ async function restoreProfile(config, body) {
   return jsonResponse(200, { userId: row.user_id, publicId: row.public_id, nickname: row.nickname, recoveryCode: row.recovery_code });
 }
 
-async function syncProgress(config, body) {
+async function authenticateProfile(config, body) {
   const userId = typeof body?.userId === "string" ? body.userId : "";
   const recoveryCode = typeof body?.recoveryCode === "string" ? body.recoveryCode : "";
-  if (!userId || !recoveryCode) return jsonResponse(400, { error: "缺少身份信息" });
+  if (!userId || !recoveryCode) return { response: jsonResponse(400, { error: "缺少身份信息" }) };
   const owner = await d1Query(config, "SELECT recovery_code FROM users WHERE user_id = ? LIMIT 1", [userId]);
-  if (!owner.length || owner[0].recovery_code !== recoveryCode) return jsonResponse(403, { error: "身份校验失败" });
+  if (!owner.length || owner[0].recovery_code !== recoveryCode) {
+    return { response: jsonResponse(403, { error: "身份校验失败" }) };
+  }
+  return { userId };
+}
+
+async function mergeAnswerAggregates(config, userId) {
+  const eventDays = await d1Query(
+    config,
+    `SELECT date, COUNT(*) AS count, SUM(correct) AS correct_count
+     FROM answer_events WHERE user_id = ? GROUP BY date`,
+    [userId],
+  );
+  for (const group of chunk(eventDays, 20)) {
+    const placeholders = group.map(() => "(?, ?, ?, ?)").join(", ");
+    const params = group.flatMap((day) => [userId, day.date, day.count ?? 0, day.correct_count ?? 0]);
+    await d1Query(
+      config,
+      `INSERT INTO daily_stats (user_id, date, count, correct_count) VALUES ${placeholders}
+       ON CONFLICT(user_id, date) DO UPDATE SET
+         count = MAX(daily_stats.count, excluded.count),
+         correct_count = MAX(daily_stats.correct_count, excluded.correct_count)`,
+      params,
+    );
+  }
+
+  const eventDomains = await d1Query(
+    config,
+    `SELECT date, domain_id, COUNT(*) AS count, SUM(correct) AS correct_count
+     FROM answer_events WHERE user_id = ? AND domain_id IS NOT NULL
+     GROUP BY date, domain_id`,
+    [userId],
+  );
+  for (const group of chunk(eventDomains, 20)) {
+    const placeholders = group.map(() => "(?, ?, ?, ?, ?)").join(", ");
+    const params = group.flatMap((domain) => [
+      userId,
+      domain.date,
+      domain.domain_id,
+      domain.count ?? 0,
+      domain.correct_count ?? 0,
+    ]);
+    await d1Query(
+      config,
+      `INSERT INTO domain_stats (user_id, date, domain_id, count, correct_count) VALUES ${placeholders}
+       ON CONFLICT(user_id, date, domain_id) DO UPDATE SET
+         count = MAX(domain_stats.count, excluded.count),
+         correct_count = MAX(domain_stats.correct_count, excluded.correct_count)`,
+      params,
+    );
+  }
+}
+
+async function syncProgress(config, body) {
+  const identity = await authenticateProfile(config, body);
+  if (identity.response) return identity.response;
+  const { userId } = identity;
 
   const days = sanitizeDays(body?.days);
+  const answers = sanitizeAnswers(body?.answers);
+
+  for (const group of chunk(answers, 20)) {
+    const placeholders = group.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
+    const params = group.flatMap((answer) => [
+      userId,
+      answer.id,
+      answer.questionId,
+      answer.bankId,
+      answer.sectionId,
+      answer.domainId ?? null,
+      JSON.stringify(answer.response),
+      answer.correct ? 1 : 0,
+      answer.answeredAt,
+      answer.durationSeconds,
+      answer.mode,
+      answer.date,
+    ]);
+    await d1Query(
+      config,
+      `INSERT INTO answer_events
+         (user_id, answer_id, question_id, bank_id, section_id, domain_id, response_json,
+          correct, answered_at, duration_seconds, mode, date)
+       VALUES ${placeholders}
+       ON CONFLICT(user_id, answer_id) DO NOTHING`,
+      params,
+    );
+  }
 
   for (const group of chunk(days, 20)) {
     const placeholders = group.map(() => "(?, ?, ?, ?)").join(", ");
@@ -201,6 +348,8 @@ async function syncProgress(config, body) {
       params,
     );
   }
+
+  if (answers.length) await mergeAnswerAggregates(config, userId);
 
   const domainRows = days.flatMap((day) => day.domains.map((domain) => [userId, day.date, domain.domainId, domain.count, domain.correct]));
   for (const group of chunk(domainRows, 20)) {
@@ -228,6 +377,31 @@ async function syncProgress(config, body) {
     [current, longest, last?.count ?? 0, last?.date ?? null, total, last?.date ?? null, new Date().toISOString(), userId],
   );
   return jsonResponse(200, { ok: true, currentStreak: current, longestStreak: longest, totalAnswered: total });
+}
+
+async function restoreProgress(config, body) {
+  const identity = await authenticateProfile(config, body);
+  if (identity.response) return identity.response;
+  const rows = await d1Query(
+    config,
+    `SELECT answer_id, question_id, bank_id, section_id, domain_id, response_json,
+            correct, answered_at, duration_seconds, mode
+     FROM answer_events WHERE user_id = ? ORDER BY answered_at ASC`,
+    [identity.userId],
+  );
+  const answers = rows.map((row) => ({
+    id: row.answer_id,
+    questionId: row.question_id,
+    bankId: row.bank_id,
+    sectionId: row.section_id,
+    ...(row.domain_id ? { domainId: row.domain_id } : {}),
+    response: JSON.parse(row.response_json),
+    correct: Boolean(row.correct),
+    answeredAt: row.answered_at,
+    durationSeconds: row.duration_seconds ?? 0,
+    mode: row.mode,
+  }));
+  return jsonResponse(200, { answers });
 }
 
 async function leaderboard(config, url) {
@@ -310,6 +484,7 @@ export async function handleCommunityRequest(request, env) {
     if (request.method === "POST" && route === "/profile") return await createProfile(config, await parseBody(request));
     if (request.method === "POST" && route === "/restore") return await restoreProfile(config, await parseBody(request));
     if (request.method === "POST" && route === "/progress") return await syncProgress(config, await parseBody(request));
+    if (request.method === "POST" && route === "/progress/restore") return await restoreProgress(config, await parseBody(request));
     if (request.method === "GET" && route === "/leaderboard") return await leaderboard(config, url);
     if (request.method === "GET" && route === "/leaderboard/domain") return await domainLeaderboard(config, url);
     if (request.method === "GET" && route === "/user") return await userStats(config, url);
@@ -320,4 +495,4 @@ export async function handleCommunityRequest(request, env) {
   }
 }
 
-export const __test__ = { computeStreaks, sanitizeDays, sanitizeNickname, generateRecoveryCode };
+export const __test__ = { computeStreaks, sanitizeAnswers, sanitizeDays, sanitizeNickname, generateRecoveryCode };

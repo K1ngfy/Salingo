@@ -7,6 +7,7 @@ import {
   db,
   getCommunityHistorySynced,
   getCommunityProfile,
+  mergeRemoteAnswers,
   mergeStreakDates,
   saveCommunityProfile,
   setCommunityHistorySynced,
@@ -15,11 +16,13 @@ import {
   buildDayHistory,
   buildTodayEntry,
   createProfile as createProfileApi,
+  fetchProgress,
   fetchUserStats,
   restoreProfile as restoreProfileApi,
   syncProgress,
   todaySignature,
 } from "@/lib/community";
+import { dateKey } from "@/lib/utils";
 import { useAppData } from "./data-provider";
 import type { AnswerRecord, CommunityProfile } from "@/lib/types";
 
@@ -51,11 +54,15 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const answersRef = useRef<AnswerRecord[]>(data.answers);
   answersRef.current = data.answers;
 
-  // Pull the account's merged day-history from the backend and fold any missing days into
-  // the local streak table, so every device sharing this account shows the same streak.
+  // Pull immutable answer events as well as legacy day aggregates. The answer events
+  // restore exact daily/sweep progress; legacy dates keep pre-migration streaks intact.
   const reconcileFromServer = useCallback(async (target: CommunityProfile) => {
     try {
-      const stats = await fetchUserStats(target.publicId);
+      const [answers, stats] = await Promise.all([
+        fetchProgress(target),
+        fetchUserStats(target.publicId),
+      ]);
+      if (answers.length) await mergeRemoteAnswers(db, answers);
       const dates = stats.daily.map((day) => day.date);
       if (dates.length) await mergeStreakDates(db, dates).catch(() => {});
     } catch {
@@ -68,14 +75,15 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     const full = syncedFor !== target.userId;
     const today = buildTodayEntry(answersRef.current);
     const days = full ? buildDayHistory(answersRef.current) : today ? [today] : [];
-    if (!days.length) {
-      if (full) await setCommunityHistorySynced(db, target.userId).catch(() => {});
-      await reconcileFromServer(target);
-      return;
-    }
+    const todayKey = today?.date;
+    const answers = full
+      ? answersRef.current
+      : todayKey
+        ? answersRef.current.filter((answer) => dateKey(new Date(answer.answeredAt)) === todayKey)
+        : [];
     setSyncing(true);
     try {
-      await syncProgress(target, days);
+      await syncProgress(target, days, answers);
       if (full) await setCommunityHistorySynced(db, target.userId).catch(() => {});
       await reconcileFromServer(target);
       setSyncError(undefined);
@@ -106,14 +114,14 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const createProfile = useCallback(async (nickname: string) => {
     const created = await createProfileApi(nickname);
     await saveCommunityProfile(db, created);
-    void runSync(created);
+    await runSync(created);
     return created;
   }, [runSync]);
 
   const restoreProfile = useCallback(async (recoveryCode: string) => {
     const restored = await restoreProfileApi(recoveryCode);
     await saveCommunityProfile(db, restored);
-    void runSync(restored);
+    await runSync(restored);
     return restored;
   }, [runSync]);
 

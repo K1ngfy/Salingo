@@ -272,6 +272,24 @@ export async function mergeStreakDates(database: SalingoDatabase, dates: string[
   return missing.length;
 }
 
+// Cloud answer events are immutable and globally identified. Add only records that
+// are absent on this device, then restore their study dates in the same transaction.
+export async function mergeRemoteAnswers(database: SalingoDatabase, answers: AnswerRecord[]): Promise<number> {
+  if (!answers.length) return 0;
+  const unique = [...new Map(answers.map((answer) => [answer.id, answer])).values()];
+  const existing = await database.answers.bulkGet(unique.map((answer) => answer.id));
+  const missing = unique.filter((_, index) => !existing[index]);
+  if (!missing.length) return 0;
+  await database.transaction("rw", database.answers, database.streaks, async () => {
+    await database.answers.bulkAdd(missing);
+    await database.streaks.bulkPut(
+      [...new Set(missing.map((answer) => dateKey(new Date(answer.answeredAt))))]
+        .map((date) => ({ date })),
+    );
+  });
+  return missing.length;
+}
+
 export async function completeExam(database: SalingoDatabase, exam: ExamRecord, reviews: ReviewCardState[]) {
   await database.transaction("rw", database.exams, database.reviewTargets, database.streaks, async () => {
     await database.exams.add(exam);
@@ -348,7 +366,10 @@ export async function resetDatabase(database = db) {
   });
 }
 
-const COMMUNITY_HISTORY_KEY = "community:historySyncedFor";
+// v2 marks that immutable answer events (not just daily aggregates) were uploaded.
+// Changing the key intentionally makes upgraded devices perform one full backfill.
+const COMMUNITY_HISTORY_KEY = "community:answerHistorySyncedFor:v2";
+const LEGACY_COMMUNITY_HISTORY_KEY = "community:historySyncedFor";
 
 export async function getCommunityProfile(database = db): Promise<CommunityProfile | undefined> {
   const row = await database.settings.get("community");
@@ -362,7 +383,7 @@ export async function saveCommunityProfile(database: SalingoDatabase, profile: C
 export async function clearCommunityProfile(database: SalingoDatabase) {
   await database.transaction("rw", database.settings, database.metadata, async () => {
     await database.settings.delete("community");
-    await database.metadata.delete(COMMUNITY_HISTORY_KEY);
+    await database.metadata.bulkDelete([COMMUNITY_HISTORY_KEY, LEGACY_COMMUNITY_HISTORY_KEY]);
   });
 }
 

@@ -124,6 +124,69 @@ describe("community backend", () => {
     expect(await response.json()).toMatchObject({ currentStreak: 3, longestStreak: 3, totalAnswered: 16 });
   });
 
+  it("stores immutable answer events and merges their cross-device aggregates", async () => {
+    const writes = [];
+    stubD1((sql, params) => {
+      if (sql.includes("SELECT recovery_code")) return [{ recovery_code: "code" }];
+      if (sql.startsWith("INSERT INTO answer_events")) { writes.push(params); return []; }
+      if (sql.startsWith("SELECT date, COUNT(*)")) return [{ date: "2026-07-22", count: 8, correct_count: 6 }];
+      if (sql.startsWith("SELECT date, domain_id")) return [{ date: "2026-07-22", domain_id: "d1", count: 8, correct_count: 6 }];
+      if (sql.startsWith("SELECT date, count")) return [{ date: "2026-07-22", count: 8 }];
+      return [];
+    });
+    const answer = {
+      id: "answer-1",
+      questionId: "d1-care-001",
+      bankId: "salingo-original",
+      sectionId: "d1",
+      domainId: "d1",
+      response: { kind: "choice", selectedAnswers: ["A"] },
+      correct: true,
+      answeredAt: "2026-07-22T10:00:00.000Z",
+      durationSeconds: 12,
+      mode: "sweep",
+      date: "2026-07-22",
+    };
+    const response = await handleCommunityRequest(
+      post("progress", { userId: "u1", recoveryCode: "code", days: [], answers: [answer] }),
+      CONFIG,
+    );
+    expect(response.status).toBe(200);
+    expect(writes).toHaveLength(1);
+    expect(writes[0]).toContain("answer-1");
+    expect(await response.json()).toMatchObject({ totalAnswered: 8 });
+  });
+
+  it("restores exact answer records only after private profile verification", async () => {
+    stubD1((sql) => {
+      if (sql.includes("SELECT recovery_code")) return [{ recovery_code: "code" }];
+      if (sql.includes("FROM answer_events")) return [{
+        answer_id: "answer-1",
+        question_id: "d1-care-001",
+        bank_id: "salingo-original",
+        section_id: "d1",
+        domain_id: "d1",
+        response_json: JSON.stringify({ kind: "choice", selectedAnswers: ["A"] }),
+        correct: 1,
+        answered_at: "2026-07-22T10:00:00.000Z",
+        duration_seconds: 12,
+        mode: "sweep",
+      }];
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      post("progress/restore", { userId: "u1", recoveryCode: "code" }),
+      CONFIG,
+    );
+    expect(response.status).toBe(200);
+    expect((await response.json()).answers[0]).toMatchObject({
+      id: "answer-1",
+      questionId: "d1-care-001",
+      mode: "sweep",
+      correct: true,
+    });
+  });
+
   it("maps the streak leaderboard", async () => {
     stubD1(() => [
       { public_id: "p1", nickname: "阿力", current_streak: 12, longest_streak: 20, today_count: 4, today_date: "2026-07-22", total_answered: 300, last_active_date: "2026-07-22" },
@@ -157,5 +220,23 @@ describe("community helpers", () => {
     expect(days).toHaveLength(1);
     expect(days[0].correct).toBe(3);
     expect(days[0].domains).toHaveLength(1);
+  });
+
+  it("validates and normalizes uploaded answer events", () => {
+    const answers = __test__.sanitizeAnswers([{
+      id: "answer-1",
+      questionId: "d1-care-001",
+      bankId: "salingo-original",
+      sectionId: "d1",
+      domainId: "d1",
+      response: { kind: "choice", selectedAnswers: ["A"] },
+      correct: 1,
+      answeredAt: "2026-07-22T10:00:00.000Z",
+      durationSeconds: 999_999,
+      mode: "sweep",
+      date: "2026-07-22",
+    }]);
+    expect(answers[0]).toMatchObject({ correct: true, durationSeconds: 86_400 });
+    expect(() => __test__.sanitizeAnswers([{ id: "bad" }])).toThrow("字段无效");
   });
 });
