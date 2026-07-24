@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fetchProgress, syncProgress } from "./community";
+import { deleteProfile, fetchProgress, syncProgress } from "./community";
 import type { AnswerRecord, CommunityProfile } from "./types";
 
 const profile: CommunityProfile = {
@@ -44,5 +44,19 @@ describe("community progress transport", () => {
     vi.stubGlobal("fetch", vi.fn(async () =>
       new Response(JSON.stringify({ answers: [answer(1)] }), { status: 200 })));
     await expect(fetchProgress(profile)).resolves.toEqual([answer(1)]);
+  });
+
+  it("deletes the current cloud profile with its recovery credential", async () => {
+    const fetchMock = vi.fn<typeof fetch>();
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    await deleteProfile(profile);
+    expect(fetchMock).toHaveBeenCalledOnce();
+    const [, init] = fetchMock.mock.calls[0];
+    expect(init?.method).toBe("DELETE");
+    expect(JSON.parse(String(init?.body))).toEqual({
+      userId: profile.userId,
+      recoveryCode: profile.recoveryCode,
+    });
   });
 });

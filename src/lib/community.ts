@@ -84,6 +84,13 @@ export async function restoreProfile(recoveryCode: string): Promise<CommunityPro
   return request<CommunityProfile>("/restore", { method: "POST", body: JSON.stringify({ recoveryCode }) });
 }
 
+export async function deleteProfile(profile: CommunityProfile): Promise<void> {
+  await request("/profile", {
+    method: "DELETE",
+    body: JSON.stringify({ userId: profile.userId, recoveryCode: profile.recoveryCode }),
+  });
+}
+
 export async function syncProgress(profile: CommunityProfile, days: DaySyncEntry[], answers: AnswerRecord[]): Promise<void> {
   const entries: AnswerSyncEntry[] = answers.map((answer) => ({
     ...answer,

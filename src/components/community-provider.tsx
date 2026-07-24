@@ -16,6 +16,7 @@ import {
   buildDayHistory,
   buildTodayEntry,
   createProfile as createProfileApi,
+  deleteProfile as deleteProfileApi,
   fetchProgress,
   fetchUserStats,
   restoreProfile as restoreProfileApi,
@@ -32,6 +33,7 @@ interface CommunityContextValue {
   syncing: boolean;
   syncError?: string;
   createProfile: (nickname: string) => Promise<CommunityProfile>;
+  deleteAccount: () => Promise<void>;
   restoreProfile: (recoveryCode: string) => Promise<CommunityProfile>;
   signOut: () => Promise<void>;
 }
@@ -130,9 +132,16 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     setSyncError(undefined);
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    if (!profile) throw new Error("当前没有可删除的排行榜账号");
+    await deleteProfileApi(profile);
+    await clearCommunityProfile(db);
+    setSyncError(undefined);
+  }, [profile]);
+
   const value = useMemo(
-    () => ({ profile, ready, syncing, syncError, createProfile, restoreProfile, signOut }),
-    [profile, ready, syncing, syncError, createProfile, restoreProfile, signOut],
+    () => ({ profile, ready, syncing, syncError, createProfile, deleteAccount, restoreProfile, signOut }),
+    [profile, ready, syncing, syncError, createProfile, deleteAccount, restoreProfile, signOut],
   );
   return <CommunityContext.Provider value={value}>{children}</CommunityContext.Provider>;
 }

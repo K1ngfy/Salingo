@@ -6,6 +6,7 @@ const MAX_BODY_BYTES = 400_000;
 const MAX_NICKNAME = 24;
 const MAX_DAYS = 3660;
 const MAX_ANSWERS = 200;
+const D1_MAX_BOUND_PARAMETERS = 100;
 const DOMAIN_IDS = new Set(["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"]);
 const BANK_IDS = new Set(["salingo-original", "cissp2508-essentials", "official-practice-tests"]);
 const ANSWER_MODES = new Set(["practice", "review", "exam", "sweep"]);
@@ -69,6 +70,10 @@ function chunk(array, size) {
   const out = [];
   for (let i = 0; i < array.length; i += size) out.push(array.slice(i, i + size));
   return out;
+}
+
+function d1Chunk(array, variablesPerRow) {
+  return chunk(array, Math.max(1, Math.floor(D1_MAX_BOUND_PARAMETERS / variablesPerRow)));
 }
 
 function dayDiff(a, b) {
@@ -254,6 +259,18 @@ async function authenticateProfile(config, body) {
   return { userId };
 }
 
+async function deleteProfile(config, body) {
+  const identity = await authenticateProfile(config, body);
+  if (identity.response) return identity.response;
+  // Delete owned rows first and the identity last. If an intermediate query fails,
+  // the account remains authenticated so the user can safely retry cleanup.
+  await d1Query(config, "DELETE FROM answer_events WHERE user_id = ?", [identity.userId]);
+  await d1Query(config, "DELETE FROM domain_stats WHERE user_id = ?", [identity.userId]);
+  await d1Query(config, "DELETE FROM daily_stats WHERE user_id = ?", [identity.userId]);
+  await d1Query(config, "DELETE FROM users WHERE user_id = ?", [identity.userId]);
+  return jsonResponse(200, { ok: true });
+}
+
 async function mergeAnswerAggregates(config, userId) {
   const eventDays = await d1Query(
     config,
@@ -261,7 +278,7 @@ async function mergeAnswerAggregates(config, userId) {
      FROM answer_events WHERE user_id = ? GROUP BY date`,
     [userId],
   );
-  for (const group of chunk(eventDays, 20)) {
+  for (const group of d1Chunk(eventDays, 4)) {
     const placeholders = group.map(() => "(?, ?, ?, ?)").join(", ");
     const params = group.flatMap((day) => [userId, day.date, day.count ?? 0, day.correct_count ?? 0]);
     await d1Query(
@@ -281,7 +298,7 @@ async function mergeAnswerAggregates(config, userId) {
      GROUP BY date, domain_id`,
     [userId],
   );
-  for (const group of chunk(eventDomains, 20)) {
+  for (const group of d1Chunk(eventDomains, 5)) {
     const placeholders = group.map(() => "(?, ?, ?, ?, ?)").join(", ");
     const params = group.flatMap((domain) => [
       userId,
@@ -309,7 +326,7 @@ async function syncProgress(config, body) {
   const days = sanitizeDays(body?.days);
   const answers = sanitizeAnswers(body?.answers);
 
-  for (const group of chunk(answers, 20)) {
+  for (const group of d1Chunk(answers, 12)) {
     const placeholders = group.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
     const params = group.flatMap((answer) => [
       userId,
@@ -336,7 +353,7 @@ async function syncProgress(config, body) {
     );
   }
 
-  for (const group of chunk(days, 20)) {
+  for (const group of d1Chunk(days, 4)) {
     const placeholders = group.map(() => "(?, ?, ?, ?)").join(", ");
     const params = group.flatMap((day) => [userId, day.date, day.count, day.correct]);
     await d1Query(
@@ -352,7 +369,7 @@ async function syncProgress(config, body) {
   if (answers.length) await mergeAnswerAggregates(config, userId);
 
   const domainRows = days.flatMap((day) => day.domains.map((domain) => [userId, day.date, domain.domainId, domain.count, domain.correct]));
-  for (const group of chunk(domainRows, 20)) {
+  for (const group of d1Chunk(domainRows, 5)) {
     const placeholders = group.map(() => "(?, ?, ?, ?, ?)").join(", ");
     const params = group.flat();
     await d1Query(
@@ -482,6 +499,7 @@ export async function handleCommunityRequest(request, env) {
 
   try {
     if (request.method === "POST" && route === "/profile") return await createProfile(config, await parseBody(request));
+    if (request.method === "DELETE" && route === "/profile") return await deleteProfile(config, await parseBody(request));
     if (request.method === "POST" && route === "/restore") return await restoreProfile(config, await parseBody(request));
     if (request.method === "POST" && route === "/progress") return await syncProgress(config, await parseBody(request));
     if (request.method === "POST" && route === "/progress/restore") return await restoreProgress(config, await parseBody(request));

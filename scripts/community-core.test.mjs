@@ -28,6 +28,14 @@ function post(route, body, headers = {}) {
   });
 }
 
+function remove(route, body, headers = {}) {
+  return new Request(`https://salingo.example/api/community/${route}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json", Origin: "https://salingo.example", ...headers },
+    body: JSON.stringify(body),
+  });
+}
+
 function get(route, headers = {}) {
   return new Request(`https://salingo.example/api/community/${route}`, {
     headers: { Origin: "https://salingo.example", ...headers },
@@ -157,6 +165,35 @@ describe("community backend", () => {
     expect(await response.json()).toMatchObject({ totalAnswered: 8 });
   });
 
+  it("keeps every D1 write within the 100-bound-parameter limit", async () => {
+    const parameterCounts = [];
+    stubD1((sql, params) => {
+      parameterCounts.push(params.length);
+      if (sql.includes("SELECT recovery_code")) return [{ recovery_code: "code" }];
+      return [];
+    });
+    const answers = Array.from({ length: 17 }, (_, index) => ({
+      id: `answer-${index}`,
+      questionId: `d1-care-${index}`,
+      bankId: "salingo-original",
+      sectionId: "d1",
+      domainId: "d1",
+      response: { kind: "choice", selectedAnswers: ["A"] },
+      correct: true,
+      answeredAt: "2026-07-22T10:00:00.000Z",
+      durationSeconds: 12,
+      mode: "sweep",
+      date: "2026-07-22",
+    }));
+    const response = await handleCommunityRequest(
+      post("progress", { userId: "u1", recoveryCode: "code", days: [], answers }),
+      CONFIG,
+    );
+    expect(response.status).toBe(200);
+    expect(Math.max(...parameterCounts)).toBeLessThanOrEqual(100);
+    expect(parameterCounts.filter((count) => count > 1)).toEqual([96, 96, 12, 8]);
+  });
+
   it("restores exact answer records only after private profile verification", async () => {
     stubD1((sql) => {
       if (sql.includes("SELECT recovery_code")) return [{ recovery_code: "code" }];
@@ -185,6 +222,26 @@ describe("community backend", () => {
       mode: "sweep",
       correct: true,
     });
+  });
+
+  it("deletes owned cloud progress before deleting the authenticated account", async () => {
+    const statements = [];
+    stubD1((sql) => {
+      statements.push(sql);
+      if (sql.includes("SELECT recovery_code")) return [{ recovery_code: "code" }];
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      remove("profile", { userId: "u1", recoveryCode: "code" }),
+      CONFIG,
+    );
+    expect(response.status).toBe(200);
+    expect(statements.slice(1)).toEqual([
+      "DELETE FROM answer_events WHERE user_id = ?",
+      "DELETE FROM domain_stats WHERE user_id = ?",
+      "DELETE FROM daily_stats WHERE user_id = ?",
+      "DELETE FROM users WHERE user_id = ?",
+    ]);
   });
 
   it("maps the streak leaderboard", async () => {

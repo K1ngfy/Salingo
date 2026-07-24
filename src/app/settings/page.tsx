@@ -56,7 +56,7 @@ export default function SettingsPage() {
     catch { setNotice("AI 接口配置保存失败，请检查填写内容后重试"); }
   };
   const importBackup = async (file?: File) => { if (!file) return; const result = await importData(await file.text()); setNotice(result.message); if (fileRef.current) fileRef.current.value = ""; };
-  return <div className="mx-auto max-w-3xl"><p className="text-sm font-black text-[var(--c-777)]">SETTINGS</p><h1 className="mt-2 text-3xl font-black tracking-[-0.035em] sm:text-4xl">设置与本地数据</h1><p className="mt-2 font-semibold text-[var(--c-777)]">所有设置和学习记录仅保存在当前浏览器，不会上传到 SALINGO 服务器。</p>
+  return <div className="mx-auto max-w-3xl"><p className="text-sm font-black text-[var(--c-777)]">SETTINGS</p><h1 className="mt-2 text-3xl font-black tracking-[-0.035em] sm:text-4xl">设置与本地数据</h1><p className="mt-2 font-semibold text-[var(--c-777)]">题库、设置与本机学习数据保存在当前浏览器；加入排行榜后，答题进度会同步到云端以支持跨设备恢复。</p>
     {notice && <p className="mt-5 rounded-xl bg-[var(--c-edfadd)] p-3 text-sm font-bold text-[var(--c-4c8c17)]">{notice}</p>}
     <section className="mt-7 rounded-[1.7rem] border-2 border-[var(--c-e8e8e3)] bg-[var(--surface)] p-6"><div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-2xl bg-[var(--c-f2e9ff)] text-[var(--c-874eb0)]"><Palette size={24} weight="duotone" /></span><div><h2 className="text-lg font-black">外观</h2><p className="text-sm font-semibold text-[var(--c-888)]">选择浅色、深色，或跟随系统设置</p></div></div><div className="mt-5"><ThemeModeControl /></div></section>
     <section className="mt-5 rounded-[1.7rem] border-2 border-[var(--c-e8e8e3)] bg-[var(--surface)] p-6"><div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-2xl bg-[var(--c-e8f7ff)] text-[var(--c-1cb0f6)]"><Key size={24} weight="duotone" /></span><div><h2 className="text-lg font-black">AI 接口</h2><p className="text-sm font-semibold text-[var(--c-888)]">支持任意 OpenAI Chat Completions 兼容端点，常用服务可快速填充</p></div></div>{aiProxyUrl && <p className="mt-5 rounded-xl bg-[var(--c-e8f7ff)] p-3 text-xs font-semibold leading-5 text-[var(--c-1679a7)]">{aiProxyMode === "hosted" ? "Sites 同源 AI 代理已启用，不再由浏览器跨域直连。托管端已配置服务商时，接口地址和 Key 可以留空，只需填写模型。" : "统一 AI 代理已启用：更换兼容服务商时可修改下方地址、Key 和模型，无需修改代码。"}</p>}<div className="mt-6 grid gap-4"><label className="text-sm font-black">服务商<select value={providerPreset} onChange={(event) => applyProviderPreset(event.target.value as AIProviderPreset)} className="mt-2 h-12 w-full rounded-xl border-2 border-[var(--c-deded8)] bg-[var(--surface)] px-4 outline-none focus:border-[var(--c-1cb0f6)]">{Object.entries(AI_PROVIDER_PRESETS).map(([id, preset]) => <option key={id} value={id}>{preset.label}</option>)}</select></label><label className="text-sm font-black">接口地址<input value={settings.baseUrl} onChange={(event) => { setSettings({ ...settings, baseUrl: event.target.value }); setProviderPreset("custom"); }} placeholder="填写任意 OpenAI 兼容服务的 Base URL" className="mt-2 h-12 w-full rounded-xl border-2 border-[var(--c-deded8)] px-4 outline-none focus:border-[var(--c-1cb0f6)]" /></label><label className="text-sm font-black">API Key<input type="password" value={settings.apiKey} onChange={(event) => { setSettings({ ...settings, apiKey: event.target.value }); setClearSavedApiKey(false); }} placeholder={hasSavedApiKey && !clearSavedApiKey ? "已保存；留空表示保持不变" : "托管模式可留空；自定义时填写服务商 API Key"} autoComplete="new-password" spellCheck={false} className="mt-2 h-12 w-full rounded-xl border-2 border-[var(--c-deded8)] px-4 outline-none focus:border-[var(--c-1cb0f6)]" />{hasSavedApiKey && <span className="mt-2 flex items-center justify-between gap-3 text-xs font-semibold text-[var(--c-777)]"><span>{clearSavedApiKey ? "保存后将清除当前 Key" : "当前 Key 已保存，页面不会回显明文"}</span><button type="button" onClick={() => { setClearSavedApiKey((value) => !value); setSettings((current) => ({ ...current, apiKey: "" })); }} className="shrink-0 font-black text-[var(--c-c63838)]">{clearSavedApiKey ? "取消清除" : "清除已保存 Key"}</button></span>}</label><label className="text-sm font-black">模型名称<input value={settings.model} onChange={(e) => setSettings({ ...settings, model: e.target.value })} placeholder="填写该服务商提供的模型 ID" className="mt-2 h-12 w-full rounded-xl border-2 border-[var(--c-deded8)] px-4 outline-none focus:border-[var(--c-1cb0f6)]" /></label></div><p className="mt-4 rounded-xl bg-[var(--c-fff7e5)] p-3 text-xs font-semibold leading-5 text-[var(--c-89672c)]">安全提示：自定义 Key 仅保存在当前浏览器，设置页不会回填或显示已保存的明文。请求由同源代理转发到所选服务商。</p><Button variant="blue" className="mt-5" onClick={save}>保存 AI 配置</Button></section>
@@ -66,11 +66,12 @@ export default function SettingsPage() {
 }
 
 function CommunitySection() {
-  const { profile, ready, restoreProfile, signOut, syncing, syncError } = useCommunity();
+  const { profile, ready, deleteAccount, restoreProfile, signOut, syncing, syncError } = useCommunity();
   const [showCode, setShowCode] = useState(false);
   const [restoreCode, setRestoreCode] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmSignOut, setConfirmSignOut] = useState(false);
   const copy = async (value: string) => { try { await navigator.clipboard.writeText(value); setNotice("恢复码已复制"); } catch { setNotice("复制失败，请手动选择"); } };
   const restore = async () => {
@@ -100,7 +101,29 @@ function CommunitySection() {
           <div className="border-t-2 border-[var(--c-f0f0ec)] pt-4">
             {confirmSignOut ? (
               <div className="rounded-xl bg-[var(--c-fff0f0)] p-4"><p className="text-sm font-bold text-[var(--c-a73b3b)]">退出后本设备将不再关联该账号。请确认已保存恢复码，否则无法找回。</p><div className="mt-3 flex gap-2"><Button variant="danger" size="sm" onClick={async () => { await signOut(); setConfirmSignOut(false); setNotice("已退出排行榜账号"); }}>确认退出</Button><Button variant="secondary" size="sm" onClick={() => setConfirmSignOut(false)}>取消</Button></div></div>
-            ) : <Button variant="ghost" className="text-[var(--c-d83a3a)]" onClick={() => setConfirmSignOut(true)}>退出排行榜账号</Button>}
+            ) : <Button variant="ghost" className="text-[var(--c-d83a3a)]" onClick={() => { setConfirmSignOut(true); setConfirmDelete(false); }}>退出排行榜账号</Button>}
+          </div>
+          <div className="border-t-2 border-[var(--c-f0f0ec)] pt-4">
+            {confirmDelete ? (
+              <div className="rounded-xl bg-[var(--c-fff0f0)] p-4">
+                <p className="text-sm font-bold text-[var(--c-a73b3b)]">将永久删除 <b>{profile.nickname}</b> 的云端账号、恢复码、排名和同步进度，且无法撤销。本机学习记录会保留。</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button variant="danger" size="sm" disabled={busy || syncing} onClick={async () => {
+                    setBusy(true);
+                    try {
+                      await deleteAccount();
+                      setConfirmDelete(false);
+                      setNotice("排行榜账号已彻底删除；本机学习记录仍然保留");
+                    } catch (cause) {
+                      setNotice(cause instanceof Error ? cause.message : "账号删除失败，请稍后重试");
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}>{busy ? "删除中…" : syncing ? "请等待同步完成" : "确认永久删除"}</Button>
+                  <Button variant="secondary" size="sm" disabled={busy} onClick={() => setConfirmDelete(false)}>取消</Button>
+                </div>
+              </div>
+            ) : <Button variant="ghost" className="text-[var(--c-d83a3a)]" onClick={() => { setConfirmDelete(true); setConfirmSignOut(false); }}><Trash size={18} weight="bold" />彻底删除排行榜账号</Button>}
           </div>
         </div>
       ) : (
