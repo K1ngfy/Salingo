@@ -96,9 +96,9 @@ INSERT OR IGNORE INTO admins (
 ) VALUES (
   'primary-admin',
   'salingo-admin',
-  '1469d32a5d1ccdee53d98d95a9455fca40f5e83c0705fff602242ff324bc5c63',
+  'e79d5cf2dfa3b70960de9a1c4d3987c46916d3761ef18bb4635845c7d51fecfe',
   '8214df6c5cba92bc1b8dadea8c311288',
-  210000,
+  100000,
   1,
   '2026-07-25T00:00:00.000Z',
   '2026-07-25T00:00:00.000Z'
