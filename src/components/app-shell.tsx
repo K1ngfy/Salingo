@@ -91,5 +91,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return children;
   return <DataProvider><CommunityProvider><Shell>{children}</Shell></CommunityProvider></DataProvider>;
 }

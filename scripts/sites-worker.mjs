@@ -135,6 +135,7 @@ const worker = {
     const pathname = new URL(request.url).pathname;
     if (pathname.startsWith("/api/ai/")) return handleAIRequest(request, env);
     if (pathname.startsWith("/api/community/")) return handleCommunityRequest(request, env);
+    if (pathname.startsWith("/api/admin/")) return handleCommunityRequest(request, env);
     return serveAssets(request, env);
   },
 };

@@ -42,6 +42,18 @@ function get(route, headers = {}) {
   });
 }
 
+function adminRequest(route, method = "GET", body, headers = {}) {
+  return new Request(`https://salingo.example/api/admin/${route}`, {
+    method,
+    headers: {
+      Origin: "https://salingo.example",
+      ...(body ? { "Content-Type": "application/json" } : {}),
+      ...headers,
+    },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+  });
+}
+
 afterEach(() => vi.unstubAllGlobals());
 
 describe("community backend", () => {
@@ -295,5 +307,195 @@ describe("community helpers", () => {
     }]);
     expect(answers[0]).toMatchObject({ correct: true, durationSeconds: 86_400 });
     expect(() => __test__.sanitizeAnswers([{ id: "bad" }])).toThrow("字段无效");
+  });
+});
+
+describe("admin backend", () => {
+  it("creates a secure cookie for valid credentials and preserves forced password change", async () => {
+    const password = "InitialPassword123";
+    const salt = "00112233445566778899aabbccddeeff";
+    const hash = await __test__.passwordHash(password, salt, 1);
+    stubD1((sql) => {
+      if (sql.includes("FROM admins WHERE username")) {
+        return [{
+          admin_id: "admin-1",
+          username: "salingo-admin",
+          password_hash: hash,
+          password_salt: salt,
+          password_iterations: 1,
+          must_change_password: 1,
+          failed_attempts: 0,
+          locked_until: null,
+          disabled: 0,
+        }];
+      }
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      adminRequest("login", "POST", { username: "salingo-admin", password }),
+      CONFIG,
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      authenticated: true,
+      username: "salingo-admin",
+      mustChangePassword: true,
+    });
+    expect(response.headers.get("set-cookie")).toContain("HttpOnly");
+    expect(response.headers.get("set-cookie")).toContain("SameSite=Strict");
+    expect(response.headers.get("set-cookie")).toContain("Secure");
+  });
+
+  it("rejects an invalid admin password without creating a session", async () => {
+    const salt = "00112233445566778899aabbccddeeff";
+    const hash = await __test__.passwordHash("CorrectPassword123", salt, 1);
+    const statements = [];
+    stubD1((sql) => {
+      statements.push(sql);
+      if (sql.includes("FROM admins WHERE username")) {
+        return [{
+          admin_id: "admin-1",
+          username: "salingo-admin",
+          password_hash: hash,
+          password_salt: salt,
+          password_iterations: 1,
+          must_change_password: 1,
+          failed_attempts: 0,
+          locked_until: null,
+          disabled: 0,
+        }];
+      }
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      adminRequest("login", "POST", { username: "salingo-admin", password: "WrongPassword123" }),
+      CONFIG,
+    );
+    expect(response.status).toBe(401);
+    expect(statements.some((sql) => sql.startsWith("INSERT INTO admin_sessions"))).toBe(false);
+    expect(statements.some((sql) => sql.startsWith("UPDATE admins SET failed_attempts"))).toBe(true);
+  });
+
+  it("blocks account access until the initial admin password is changed", async () => {
+    stubD1((sql) => {
+      if (sql.includes("FROM admin_sessions s JOIN admins")) {
+        return [{
+          session_id: "session-1",
+          admin_id: "admin-1",
+          expires_at: "2099-01-01T00:00:00.000Z",
+          username: "salingo-admin",
+          must_change_password: 1,
+          disabled: 0,
+        }];
+      }
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      adminRequest("users", "GET", undefined, { Cookie: "salingo_admin_session=token" }),
+      CONFIG,
+    );
+    expect(response.status).toBe(403);
+    expect(await response.json()).toMatchObject({ mustChangePassword: true });
+  });
+
+  it("lists account metadata without exposing recovery codes", async () => {
+    stubD1((sql) => {
+      if (sql.includes("FROM admin_sessions s JOIN admins")) {
+        return [{
+          session_id: "session-1",
+          admin_id: "admin-1",
+          expires_at: "2099-01-01T00:00:00.000Z",
+          username: "salingo-admin",
+          must_change_password: 0,
+          disabled: 0,
+        }];
+      }
+      if (sql.includes("FROM users ORDER BY")) {
+        return [{
+          user_id: "u1",
+          public_id: "p1",
+          nickname: "阿力",
+          recovery_code: "must-never-be-returned",
+          current_streak: 3,
+          longest_streak: 5,
+          total_answered: 42,
+          last_active_date: "2026-07-25",
+          created_at: "2026-07-20T00:00:00.000Z",
+          updated_at: "2026-07-25T00:00:00.000Z",
+        }];
+      }
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      adminRequest("users", "GET", undefined, { Cookie: "salingo_admin_session=token" }),
+      CONFIG,
+    );
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.users[0]).toMatchObject({ userId: "u1", publicId: "p1", nickname: "阿力" });
+    expect(JSON.stringify(body)).not.toContain("must-never-be-returned");
+    expect(body.users[0]).not.toHaveProperty("recoveryCode");
+  });
+
+  it("rotates a user's recovery code and records an audit event", async () => {
+    const statements = [];
+    stubD1((sql) => {
+      statements.push(sql);
+      if (sql.includes("FROM admin_sessions s JOIN admins")) {
+        return [{
+          session_id: "session-1",
+          admin_id: "admin-1",
+          expires_at: "2099-01-01T00:00:00.000Z",
+          username: "salingo-admin",
+          must_change_password: 0,
+          disabled: 0,
+        }];
+      }
+      if (sql.startsWith("SELECT user_id, public_id, nickname")) {
+        return [{ user_id: "u1", public_id: "p1", nickname: "阿力" }];
+      }
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      adminRequest("recovery-code/reset", "POST", { userId: "u1" }, { Cookie: "salingo_admin_session=token" }),
+      CONFIG,
+    );
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.recoveryCode).toMatch(/^[a-z]+-[a-z]+-\d{3}-[a-z]+$/);
+    expect(statements.some((sql) => sql.startsWith("UPDATE users SET recovery_code"))).toBe(true);
+    expect(statements.some((sql) => sql.includes("INSERT INTO admin_audit_log"))).toBe(true);
+  });
+
+  it("deletes a selected account and all of its cloud progress", async () => {
+    const statements = [];
+    stubD1((sql) => {
+      statements.push(sql);
+      if (sql.includes("FROM admin_sessions s JOIN admins")) {
+        return [{
+          session_id: "session-1",
+          admin_id: "admin-1",
+          expires_at: "2099-01-01T00:00:00.000Z",
+          username: "salingo-admin",
+          must_change_password: 0,
+          disabled: 0,
+        }];
+      }
+      if (sql.startsWith("SELECT user_id, public_id, nickname")) {
+        return [{ user_id: "u1", public_id: "p1", nickname: "误建账号" }];
+      }
+      return [];
+    });
+    const response = await handleCommunityRequest(
+      adminRequest("user", "DELETE", { userId: "u1" }, { Cookie: "salingo_admin_session=token" }),
+      CONFIG,
+    );
+    expect(response.status).toBe(200);
+    expect(statements.filter((sql) => sql.startsWith("DELETE FROM ") && !sql.includes("admin_sessions"))).toEqual([
+      "DELETE FROM answer_events WHERE user_id = ?",
+      "DELETE FROM domain_stats WHERE user_id = ?",
+      "DELETE FROM daily_stats WHERE user_id = ?",
+      "DELETE FROM users WHERE user_id = ?",
+    ]);
   });
 });

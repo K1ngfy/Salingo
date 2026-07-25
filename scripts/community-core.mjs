@@ -7,6 +7,13 @@ const MAX_NICKNAME = 24;
 const MAX_DAYS = 3660;
 const MAX_ANSWERS = 200;
 const D1_MAX_BOUND_PARAMETERS = 100;
+const ADMIN_SESSION_COOKIE = "salingo_admin_session";
+const ADMIN_SESSION_SECONDS = 12 * 60 * 60;
+const ADMIN_PASSWORD_ITERATIONS = 210_000;
+const ADMIN_MAX_FAILED_LOGINS = 5;
+const ADMIN_LOCK_MINUTES = 15;
+const ADMIN_DUMMY_SALT = "6e6f742d612d7265616c2d61646d696e";
+const ADMIN_DUMMY_HASH = "0000000000000000000000000000000000000000000000000000000000000000";
 const DOMAIN_IDS = new Set(["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8"]);
 const BANK_IDS = new Set(["salingo-original", "cissp2508-essentials", "official-practice-tests"]);
 const ANSWER_MODES = new Set(["practice", "review", "exam", "sweep"]);
@@ -17,10 +24,14 @@ const RECOVERY_WORDS = [
   "raven", "sage", "topaz", "umbra", "violet", "willow", "xenon", "yarrow",
 ];
 
-function jsonResponse(status, body) {
+function jsonResponse(status, body, headers = {}) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...headers,
+    },
   });
 }
 
@@ -202,6 +213,88 @@ function generateRecoveryCode() {
   return `${randomWord()}-${randomWord()}-${digits}-${randomWord()}`;
 }
 
+function bytesToHex(bytes) {
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function hexToBytes(value) {
+  if (typeof value !== "string" || !/^[0-9a-f]+$/i.test(value) || value.length % 2 !== 0) {
+    throw new Error("管理员凭据配置无效");
+  }
+  return new Uint8Array(value.match(/.{2}/g).map((pair) => Number.parseInt(pair, 16)));
+}
+
+function randomToken(byteLength = 32) {
+  const bytes = new Uint8Array(byteLength);
+  crypto.getRandomValues(bytes);
+  return bytesToHex(bytes);
+}
+
+async function sha256(value) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return bytesToHex(new Uint8Array(digest));
+}
+
+async function passwordHash(password, saltHex, iterations = ADMIN_PASSWORD_ITERATIONS) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  );
+  const bits = await crypto.subtle.deriveBits({
+    name: "PBKDF2",
+    hash: "SHA-256",
+    salt: hexToBytes(saltHex),
+    iterations,
+  }, key, 256);
+  return bytesToHex(new Uint8Array(bits));
+}
+
+function constantTimeEqual(left, right) {
+  if (typeof left !== "string" || typeof right !== "string" || left.length !== right.length) return false;
+  let difference = 0;
+  for (let index = 0; index < left.length; index += 1) {
+    difference |= left.charCodeAt(index) ^ right.charCodeAt(index);
+  }
+  return difference === 0;
+}
+
+function parseCookies(request) {
+  const cookies = {};
+  for (const part of (request.headers.get("Cookie") || "").split(";")) {
+    const separator = part.indexOf("=");
+    if (separator < 1) continue;
+    cookies[part.slice(0, separator).trim()] = decodeURIComponent(part.slice(separator + 1).trim());
+  }
+  return cookies;
+}
+
+function sessionCookie(token) {
+  return `${ADMIN_SESSION_COOKIE}=${encodeURIComponent(token)}; HttpOnly; Secure; SameSite=Strict; Path=/api/admin; Max-Age=${ADMIN_SESSION_SECONDS}`;
+}
+
+function clearSessionCookie() {
+  return `${ADMIN_SESSION_COOKIE}=; HttpOnly; Secure; SameSite=Strict; Path=/api/admin; Max-Age=0`;
+}
+
+function sanitizeAdminUsername(value) {
+  return typeof value === "string"
+    ? value.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "").slice(0, 64)
+    : "";
+}
+
+function validateNewAdminPassword(value) {
+  if (typeof value !== "string" || value.length < 12 || value.length > 128) {
+    throw new Error("新密码需要 12 至 128 个字符");
+  }
+  if (!/[A-Za-z]/.test(value) || !/\d/.test(value)) {
+    throw new Error("新密码需要同时包含字母和数字");
+  }
+  return value;
+}
+
 function mapLeaderboardRow(row) {
   return {
     publicId: row.public_id,
@@ -259,15 +352,291 @@ async function authenticateProfile(config, body) {
   return { userId };
 }
 
+async function deleteUserData(config, userId) {
+  await d1Query(config, "DELETE FROM answer_events WHERE user_id = ?", [userId]);
+  await d1Query(config, "DELETE FROM domain_stats WHERE user_id = ?", [userId]);
+  await d1Query(config, "DELETE FROM daily_stats WHERE user_id = ?", [userId]);
+  await d1Query(config, "DELETE FROM users WHERE user_id = ?", [userId]);
+}
+
 async function deleteProfile(config, body) {
   const identity = await authenticateProfile(config, body);
   if (identity.response) return identity.response;
   // Delete owned rows first and the identity last. If an intermediate query fails,
   // the account remains authenticated so the user can safely retry cleanup.
-  await d1Query(config, "DELETE FROM answer_events WHERE user_id = ?", [identity.userId]);
-  await d1Query(config, "DELETE FROM domain_stats WHERE user_id = ?", [identity.userId]);
-  await d1Query(config, "DELETE FROM daily_stats WHERE user_id = ?", [identity.userId]);
-  await d1Query(config, "DELETE FROM users WHERE user_id = ?", [identity.userId]);
+  await deleteUserData(config, identity.userId);
+  return jsonResponse(200, { ok: true });
+}
+
+async function adminLogin(config, body) {
+  const username = sanitizeAdminUsername(body?.username);
+  const password = typeof body?.password === "string" ? body.password : "";
+  if (!username || !password) return jsonResponse(400, { error: "请输入管理员账号和密码" });
+
+  const rows = await d1Query(
+    config,
+    `SELECT admin_id, username, password_hash, password_salt, password_iterations,
+            must_change_password, failed_attempts, locked_until, disabled
+     FROM admins WHERE username = ? LIMIT 1`,
+    [username],
+  );
+  const admin = rows[0];
+  const now = new Date();
+  if (admin?.locked_until && Date.parse(admin.locked_until) > now.getTime()) {
+    return jsonResponse(429, { error: "登录失败次数过多，请 15 分钟后重试" });
+  }
+
+  const candidateHash = await passwordHash(
+    password,
+    admin?.password_salt || ADMIN_DUMMY_SALT,
+    admin?.password_iterations || ADMIN_PASSWORD_ITERATIONS,
+  );
+  if (!admin || admin.disabled || !constantTimeEqual(candidateHash, admin?.password_hash || ADMIN_DUMMY_HASH)) {
+    if (admin && !admin.disabled) {
+      const attempts = Number(admin.failed_attempts || 0) + 1;
+      const shouldLock = attempts >= ADMIN_MAX_FAILED_LOGINS;
+      const lockedUntil = shouldLock
+        ? new Date(now.getTime() + ADMIN_LOCK_MINUTES * 60_000).toISOString()
+        : null;
+      await d1Query(
+        config,
+        "UPDATE admins SET failed_attempts = ?, locked_until = ?, updated_at = ? WHERE admin_id = ?",
+        [shouldLock ? 0 : attempts, lockedUntil, now.toISOString(), admin.admin_id],
+      );
+    }
+    return jsonResponse(401, { error: "管理员账号或密码错误" });
+  }
+
+  const token = randomToken();
+  const tokenHash = await sha256(token);
+  const expiresAt = new Date(now.getTime() + ADMIN_SESSION_SECONDS * 1000).toISOString();
+  await d1Query(config, "DELETE FROM admin_sessions WHERE expires_at <= ?", [now.toISOString()]);
+  await d1Query(
+    config,
+    `INSERT INTO admin_sessions
+       (session_id, admin_id, token_hash, created_at, expires_at, last_used_at)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [crypto.randomUUID(), admin.admin_id, tokenHash, now.toISOString(), expiresAt, now.toISOString()],
+  );
+  await d1Query(
+    config,
+    "UPDATE admins SET failed_attempts = 0, locked_until = NULL, updated_at = ? WHERE admin_id = ?",
+    [now.toISOString(), admin.admin_id],
+  );
+  return jsonResponse(200, {
+    authenticated: true,
+    username: admin.username,
+    mustChangePassword: Boolean(admin.must_change_password),
+  }, { "Set-Cookie": sessionCookie(token) });
+}
+
+async function authenticateAdmin(config, request, allowPasswordChange = false) {
+  const token = parseCookies(request)[ADMIN_SESSION_COOKIE];
+  if (!token) return { response: jsonResponse(401, { error: "管理员登录已失效，请重新登录" }) };
+  const tokenHash = await sha256(token);
+  const rows = await d1Query(
+    config,
+    `SELECT s.session_id, s.admin_id, s.expires_at, a.username, a.must_change_password, a.disabled
+     FROM admin_sessions s JOIN admins a ON a.admin_id = s.admin_id
+     WHERE s.token_hash = ? LIMIT 1`,
+    [tokenHash],
+  );
+  const session = rows[0];
+  if (!session || session.disabled || Date.parse(session.expires_at) <= Date.now()) {
+    if (session?.session_id) {
+      await d1Query(config, "DELETE FROM admin_sessions WHERE session_id = ?", [session.session_id]);
+    }
+    return { response: jsonResponse(401, { error: "管理员登录已失效，请重新登录" }, { "Set-Cookie": clearSessionCookie() }) };
+  }
+  if (session.must_change_password && !allowPasswordChange) {
+    return { response: jsonResponse(403, { error: "首次登录必须先修改管理员密码", mustChangePassword: true }) };
+  }
+  await d1Query(config, "UPDATE admin_sessions SET last_used_at = ? WHERE session_id = ?", [
+    new Date().toISOString(),
+    session.session_id,
+  ]);
+  return {
+    adminId: session.admin_id,
+    username: session.username,
+    mustChangePassword: Boolean(session.must_change_password),
+    sessionId: session.session_id,
+  };
+}
+
+async function adminSession(config, request) {
+  const admin = await authenticateAdmin(config, request, true);
+  if (admin.response) return admin.response;
+  return jsonResponse(200, {
+    authenticated: true,
+    username: admin.username,
+    mustChangePassword: admin.mustChangePassword,
+  });
+}
+
+async function recordAdminAudit(config, values) {
+  try {
+    await d1Query(
+      config,
+      `INSERT INTO admin_audit_log
+         (audit_id, admin_id, action, target_user_id, target_public_id, target_nickname, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        crypto.randomUUID(),
+        values.adminId,
+        values.action,
+        values.targetUserId ?? null,
+        values.targetPublicId ?? null,
+        values.targetNickname ?? null,
+        values.createdAt,
+      ],
+    );
+  } catch (error) {
+    console.warn("Admin audit write failed", {
+      action: values.action,
+      targetUserId: values.targetUserId,
+      message: error instanceof Error ? error.message : "unknown error",
+    });
+  }
+}
+
+async function changeAdminPassword(config, request, body) {
+  const admin = await authenticateAdmin(config, request, true);
+  if (admin.response) return admin.response;
+  const newPassword = validateNewAdminPassword(body?.newPassword);
+  const salt = randomToken(16);
+  const hash = await passwordHash(newPassword, salt);
+  const now = new Date().toISOString();
+  await d1Query(
+    config,
+    `UPDATE admins SET password_hash = ?, password_salt = ?, password_iterations = ?,
+       must_change_password = 0, failed_attempts = 0, locked_until = NULL, updated_at = ?
+     WHERE admin_id = ?`,
+    [hash, salt, ADMIN_PASSWORD_ITERATIONS, now, admin.adminId],
+  );
+  await d1Query(config, "DELETE FROM admin_sessions WHERE admin_id = ?", [admin.adminId]);
+  await recordAdminAudit(config, {
+    adminId: admin.adminId,
+    action: "password_changed",
+    createdAt: now,
+  });
+  return jsonResponse(200, {
+    ok: true,
+    message: "密码已更新，请使用新密码重新登录",
+  }, { "Set-Cookie": clearSessionCookie() });
+}
+
+async function adminLogout(config, request) {
+  const token = parseCookies(request)[ADMIN_SESSION_COOKIE];
+  if (token) {
+    await d1Query(config, "DELETE FROM admin_sessions WHERE token_hash = ?", [await sha256(token)]);
+  }
+  return jsonResponse(200, { ok: true }, { "Set-Cookie": clearSessionCookie() });
+}
+
+function mapAdminUser(row) {
+  return {
+    userId: row.user_id,
+    publicId: row.public_id,
+    nickname: row.nickname,
+    currentStreak: row.current_streak ?? 0,
+    longestStreak: row.longest_streak ?? 0,
+    totalAnswered: row.total_answered ?? 0,
+    lastActiveDate: row.last_active_date ?? null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+async function adminUsers(config, request, url) {
+  const admin = await authenticateAdmin(config, request);
+  if (admin.response) return admin.response;
+  const query = cleanString(url.searchParams.get("q"), 60);
+  const escaped = query.replace(/[\\%_]/g, "\\$&");
+  const rows = query
+    ? await d1Query(
+      config,
+      `SELECT user_id, public_id, nickname, current_streak, longest_streak,
+              total_answered, last_active_date, created_at, updated_at
+       FROM users
+       WHERE nickname LIKE ? ESCAPE '\\' OR public_id LIKE ? ESCAPE '\\'
+       ORDER BY updated_at DESC LIMIT 50`,
+      [`%${escaped}%`, `%${escaped}%`],
+    )
+    : await d1Query(
+      config,
+      `SELECT user_id, public_id, nickname, current_streak, longest_streak,
+              total_answered, last_active_date, created_at, updated_at
+       FROM users ORDER BY updated_at DESC LIMIT 50`,
+    );
+  return jsonResponse(200, { users: rows.map(mapAdminUser) });
+}
+
+async function uniqueRecoveryCode(config) {
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    const recoveryCode = generateRecoveryCode();
+    const existing = await d1Query(config, "SELECT 1 FROM users WHERE recovery_code = ? LIMIT 1", [recoveryCode]);
+    if (!existing.length) return recoveryCode;
+  }
+  throw new Error("暂时无法生成唯一恢复码，请重试");
+}
+
+async function adminResetRecoveryCode(config, request, body) {
+  const admin = await authenticateAdmin(config, request);
+  if (admin.response) return admin.response;
+  const userId = cleanString(body?.userId, 64);
+  if (!userId) return jsonResponse(400, { error: "缺少用户标识" });
+  const users = await d1Query(
+    config,
+    "SELECT user_id, public_id, nickname FROM users WHERE user_id = ? LIMIT 1",
+    [userId],
+  );
+  if (!users.length) return jsonResponse(404, { error: "账号不存在或已被删除" });
+  const recoveryCode = await uniqueRecoveryCode(config);
+  const now = new Date().toISOString();
+  await d1Query(config, "UPDATE users SET recovery_code = ?, updated_at = ? WHERE user_id = ?", [
+    recoveryCode,
+    now,
+    userId,
+  ]);
+  await recordAdminAudit(config, {
+    adminId: admin.adminId,
+    action: "recovery_code_reset",
+    targetUserId: userId,
+    targetPublicId: users[0].public_id,
+    targetNickname: users[0].nickname,
+    createdAt: now,
+  });
+  return jsonResponse(200, {
+    recoveryCode,
+    user: {
+      publicId: users[0].public_id,
+      nickname: users[0].nickname,
+    },
+  });
+}
+
+async function adminDeleteUser(config, request, body) {
+  const admin = await authenticateAdmin(config, request);
+  if (admin.response) return admin.response;
+  const userId = cleanString(body?.userId, 64);
+  if (!userId) return jsonResponse(400, { error: "缺少用户标识" });
+  const users = await d1Query(
+    config,
+    "SELECT user_id, public_id, nickname FROM users WHERE user_id = ? LIMIT 1",
+    [userId],
+  );
+  if (!users.length) return jsonResponse(404, { error: "账号不存在或已被删除" });
+  const user = users[0];
+  const now = new Date().toISOString();
+  await deleteUserData(config, userId);
+  await recordAdminAudit(config, {
+    adminId: admin.adminId,
+    action: "user_deleted",
+    targetUserId: userId,
+    targetPublicId: user.public_id,
+    targetNickname: user.nickname,
+    createdAt: now,
+  });
   return jsonResponse(200, { ok: true });
 }
 
@@ -489,15 +858,32 @@ async function userStats(config, url) {
 export async function handleCommunityRequest(request, env) {
   if (!isSameOrigin(request)) return jsonResponse(403, { error: "Origin not allowed" });
   const url = new URL(request.url);
-  const route = url.pathname.replace(/^\/api\/community/, "") || "/";
+  const isAdminRoute = url.pathname === "/api/admin" || url.pathname.startsWith("/api/admin/");
+  const route = url.pathname.replace(isAdminRoute ? /^\/api\/admin/ : /^\/api\/community/, "") || "/";
   const config = d1Config(env);
 
-  if (request.method === "GET" && route === "/health") {
+  if (!isAdminRoute && request.method === "GET" && route === "/health") {
     return jsonResponse(200, { ok: true, configured: Boolean(config) });
   }
   if (!config) return jsonResponse(503, { error: "排行榜服务尚未配置，请在 Sites 托管环境设置 CF_ACCOUNT_ID / CF_D1_DATABASE_ID / CF_D1_API_TOKEN" });
 
   try {
+    if (isAdminRoute) {
+      if (request.method === "POST" && route === "/login") return await adminLogin(config, await parseBody(request));
+      if (request.method === "GET" && route === "/session") return await adminSession(config, request);
+      if (request.method === "POST" && route === "/password") {
+        return await changeAdminPassword(config, request, await parseBody(request));
+      }
+      if (request.method === "POST" && route === "/logout") return await adminLogout(config, request);
+      if (request.method === "GET" && route === "/users") return await adminUsers(config, request, url);
+      if (request.method === "POST" && route === "/recovery-code/reset") {
+        return await adminResetRecoveryCode(config, request, await parseBody(request));
+      }
+      if (request.method === "DELETE" && route === "/user") {
+        return await adminDeleteUser(config, request, await parseBody(request));
+      }
+      return jsonResponse(404, { error: "Not found" });
+    }
     if (request.method === "POST" && route === "/profile") return await createProfile(config, await parseBody(request));
     if (request.method === "DELETE" && route === "/profile") return await deleteProfile(config, await parseBody(request));
     if (request.method === "POST" && route === "/restore") return await restoreProfile(config, await parseBody(request));
@@ -513,4 +899,11 @@ export async function handleCommunityRequest(request, env) {
   }
 }
 
-export const __test__ = { computeStreaks, sanitizeAnswers, sanitizeDays, sanitizeNickname, generateRecoveryCode };
+export const __test__ = {
+  computeStreaks,
+  sanitizeAnswers,
+  sanitizeDays,
+  sanitizeNickname,
+  generateRecoveryCode,
+  passwordHash,
+};
