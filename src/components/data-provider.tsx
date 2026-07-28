@@ -22,6 +22,7 @@ import {
   saveOutlineProgress,
   savePrepProfile,
   savePreferences,
+  setQuestionFavorite as setQuestionFavoriteInDb,
   upsertReview as upsertReviewInDb,
 } from "@/lib/db";
 import { aiSettingsSchema, appDataSchema, questionArraySchema } from "@/lib/validation";
@@ -42,6 +43,7 @@ interface DataContextValue {
   recordAnswer: (answer: AnswerRecord, review?: ReviewCardState) => Promise<void>;
   completeExam: (exam: ExamRecord, reviews: ReviewCardState[]) => Promise<void>;
   upsertReview: (review: ReviewCardState) => Promise<void>;
+  setQuestionFavorite: (questionId: string, favorite: boolean) => Promise<void>;
   addQuestions: (questions: Question[]) => Promise<number>;
   ensureBankLoaded: (bankId: BankId) => Promise<void>;
   setAI: (settings: AISettings) => Promise<void>;
@@ -140,6 +142,23 @@ export function DataProvider({ children }: { children: ReactNode }) {
       return;
     }
     try { await upsertReviewInDb(db, review); } catch (cause) { fail(cause); }
+  }, [assertInitialized, fail, storageStatus]);
+
+  const setQuestionFavorite = useCallback(async (questionId: string, favorite: boolean) => {
+    assertInitialized();
+    if (storageStatus === "volatile") {
+      setMemoryData((current) => {
+        const existing = current.questionFavorites.find((item) => item.questionId === questionId);
+        return {
+          ...current,
+          questionFavorites: favorite
+            ? existing ? current.questionFavorites : [{ questionId, createdAt: new Date().toISOString() }, ...current.questionFavorites]
+            : current.questionFavorites.filter((item) => item.questionId !== questionId),
+        };
+      });
+      return;
+    }
+    try { await setQuestionFavoriteInDb(db, questionId, favorite); } catch (cause) { fail(cause); }
   }, [assertInitialized, fail, storageStatus]);
 
   const addQuestions = useCallback(async (questions: Question[]) => {
@@ -255,7 +274,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, [assertInitialized, storageStatus]);
 
-  const value = useMemo(() => ({ data, hydrated, storageStatus, storageError, loadingBankId, recordAnswer, completeExam, upsertReview, addQuestions, ensureBankLoaded, setAI, setPreferences, setPrepProfile, setOutlineProgress, setChecklistProgress, reset, exportData, importData }), [data, hydrated, storageStatus, storageError, loadingBankId, recordAnswer, completeExam, upsertReview, addQuestions, ensureBankLoaded, setAI, setPreferences, setPrepProfile, setOutlineProgress, setChecklistProgress, reset, exportData, importData]);
+  const value = useMemo(() => ({ data, hydrated, storageStatus, storageError, loadingBankId, recordAnswer, completeExam, upsertReview, setQuestionFavorite, addQuestions, ensureBankLoaded, setAI, setPreferences, setPrepProfile, setOutlineProgress, setChecklistProgress, reset, exportData, importData }), [data, hydrated, storageStatus, storageError, loadingBankId, recordAnswer, completeExam, upsertReview, setQuestionFavorite, addQuestions, ensureBankLoaded, setAI, setPreferences, setPrepProfile, setOutlineProgress, setChecklistProgress, reset, exportData, importData]);
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 

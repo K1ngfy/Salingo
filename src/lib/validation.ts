@@ -133,7 +133,23 @@ export const reviewCardSchema = z.object({
   state: z.number(),
   last_review: z.string().optional(),
   mistakeType: z.enum(["概念盲区", "审题失误", "混淆考点"]),
-  favorite: z.boolean(),
+});
+
+const legacyReviewTargetSchema = reviewCardSchema.extend({
+  favorite: z.boolean().default(false),
+});
+
+export const questionFavoriteSchema = z.object({
+  questionId: z.string().min(1),
+  createdAt: z.string(),
+});
+
+const questionFavoriteArraySchema = z.array(questionFavoriteSchema).superRefine((favorites, context) => {
+  const seen = new Set<string>();
+  favorites.forEach((favorite, index) => {
+    if (seen.has(favorite.questionId)) context.addIssue({ code: "custom", path: [index, "questionId"], message: "收藏题目 ID 不能重复" });
+    seen.add(favorite.questionId);
+  });
 });
 
 export const examRecordSchema = z.object({
@@ -181,11 +197,26 @@ const checklistProgressSchema = z.object({
   updatedAt: z.string(),
 });
 
+const appDataV4Schema = z.object({
+  version: z.literal(4),
+  questions: questionArraySchema,
+  answers: z.array(answerRecordSchema),
+  reviews: z.array(reviewCardSchema),
+  questionFavorites: questionFavoriteArraySchema,
+  exams: z.array(examRecordSchema),
+  streakDates: z.array(z.string()),
+  ai: aiSettingsSchema,
+  preferences: userPreferencesSchema,
+  prepProfile: prepProfileSchema,
+  outlineProgress: z.array(outlineProgressSchema),
+  checklistProgress: z.array(checklistProgressSchema),
+});
+
 const appDataV3Schema = z.object({
   version: z.literal(3),
   questions: questionArraySchema,
   answers: z.array(answerRecordSchema),
-  reviews: z.array(reviewCardSchema),
+  reviews: z.array(legacyReviewTargetSchema),
   exams: z.array(examRecordSchema),
   streakDates: z.array(z.string()),
   ai: aiSettingsSchema,
@@ -208,7 +239,7 @@ const legacyReviewCardSchema = z.object({
   state: z.number(),
   last_review: z.string().optional(),
   mistakeType: z.enum(["概念盲区", "审题失误", "混淆考点"]),
-  favorite: z.boolean(),
+  favorite: z.boolean().default(false),
 });
 
 const legacyPreferencesSchema = z.object({
@@ -261,23 +292,49 @@ const legacyAppDataSchema = z.object({
 });
 
 function migrateReview(review: z.infer<typeof legacyReviewCardSchema>) {
-  const { questionId, ...state } = review;
+  const { questionId, favorite: _favorite, ...state } = review;
+  void _favorite;
   return { ...state, id: `question:${questionId}`, targetType: "question" as const, targetId: questionId };
 }
 
-export const appDataSchema: z.ZodType<AppData> = z.union([appDataV3Schema, appDataV2Schema, legacyAppDataSchema]).transform((data): AppData => {
-  if (data.version === 3) return { ...data, prepProfile: { ...data.prepProfile, favoriteCardIds: data.prepProfile.favoriteCardIds ?? [] } } as AppData;
+function migratedFavorite(questionId: string, createdAt: string) {
+  return { questionId, createdAt };
+}
+
+function stripLegacyReviewTarget(review: z.infer<typeof legacyReviewTargetSchema>) {
+  const { favorite, ...state } = review;
+  void favorite;
+  return state;
+}
+
+export const appDataSchema: z.ZodType<AppData> = z.union([appDataV4Schema, appDataV3Schema, appDataV2Schema, legacyAppDataSchema]).transform((data): AppData => {
+  if (data.version === 4) return data;
+  if (data.version === 3) {
+    const questionFavorites = data.reviews
+      .filter((review) => review.targetType === "question" && review.favorite)
+      .map((review) => migratedFavorite(review.targetId, review.last_review ?? review.due));
+    return {
+      ...data,
+      version: 4,
+      reviews: data.reviews.map(stripLegacyReviewTarget),
+      questionFavorites,
+      prepProfile: { ...data.prepProfile, favoriteCardIds: data.prepProfile.favoriteCardIds ?? [] },
+    };
+  }
   if (data.version === 2) return {
     ...data,
-    version: 3,
+    version: 4,
     reviews: data.reviews.map(migrateReview),
+    questionFavorites: data.reviews
+      .filter((review) => review.favorite)
+      .map((review) => migratedFavorite(review.questionId, review.last_review ?? review.due)),
     preferences: { ...DEFAULT_PREFERENCES, ...data.preferences },
     prepProfile: { studyWeekdays: [1, 2, 3, 4, 5, 6], dailyQuestionTarget: 20, startedAt: new Date().toISOString(), favoriteCardIds: [] },
     outlineProgress: [],
     checklistProgress: [],
   };
   return {
-    version: 3,
+    version: 4,
     questions: data.questions.map((question) => normalizeSeedQuestion(question)),
     answers: data.answers.map((answer) => ({
       id: answer.id,
@@ -292,6 +349,9 @@ export const appDataSchema: z.ZodType<AppData> = z.union([appDataV3Schema, appDa
       mode: answer.mode,
     })),
     reviews: data.reviews.map(migrateReview),
+    questionFavorites: data.reviews
+      .filter((review) => review.favorite)
+      .map((review) => migratedFavorite(review.questionId, review.last_review ?? review.due)),
     exams: data.exams.map((exam) => ({
       ...exam,
       bankId: ORIGINAL_BANK_ID,

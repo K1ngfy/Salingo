@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from "dexie";
 import { INITIAL_QUESTIONS } from "@/data/full-bank";
-import type { AISettings, AnswerRecord, AppData, ChecklistProgress, CommunityProfile, ExamRecord, OutlineProgress, PrepProfile, Question, ReviewCardState, UserPreferences } from "./types";
+import type { AISettings, AnswerRecord, AppData, ChecklistProgress, CommunityProfile, ExamRecord, OutlineProgress, PrepProfile, Question, QuestionFavorite, ReviewCardState, UserPreferences } from "./types";
 import { appDataSchema } from "./validation";
 import { dateKey } from "./utils";
 import { DEFAULT_PREFERENCES, ESSENTIALS_BANK_ID, ORIGINAL_BANK_ID, normalizeSeedQuestion, questionBankId, questionSectionId } from "./question-banks";
@@ -20,13 +20,15 @@ export const DEFAULT_AI_SETTINGS: AISettings = {
 interface StreakRow { date: string }
 interface SettingRow { key: "ai" | "preferences" | "prepProfile" | "community"; value: AISettings | UserPreferences | PrepProfile | CommunityProfile }
 interface MetadataRow { key: string; value: string | number | boolean }
-interface LegacyReviewRow extends Omit<ReviewCardState, "id" | "targetType" | "targetId"> { questionId: string }
+interface LegacyReviewRow extends Omit<ReviewCardState, "id" | "targetType" | "targetId"> { questionId: string; favorite?: boolean }
+type LegacyFavoriteReview = ReviewCardState & { favorite?: boolean };
 
 export class SalingoDatabase extends Dexie {
   questions!: EntityTable<Question, "id">;
   answers!: EntityTable<AnswerRecord, "id">;
   reviews!: EntityTable<LegacyReviewRow, "questionId">;
   reviewTargets!: EntityTable<ReviewCardState, "id">;
+  questionFavorites!: EntityTable<QuestionFavorite, "questionId">;
   exams!: EntityTable<ExamRecord, "id">;
   streaks!: EntityTable<StreakRow, "date">;
   settings!: EntityTable<SettingRow, "key">;
@@ -118,6 +120,28 @@ export class SalingoDatabase extends Dexie {
         .filter((exam) => exam.questionIds.length > 0 && exam.questionIds.every((id) => id.startsWith("cissp2508-")));
       if (essentialsExams.length) await transaction.table("exams").bulkPut(essentialsExams.map((exam) => ({ ...exam, bankId: ESSENTIALS_BANK_ID })));
     });
+    this.version(5).stores({
+      questions: "id, bankId, sectionId, domainId, difficulty, source, createdAt, *tags, [bankId+sectionId]",
+      answers: "id, questionId, bankId, sectionId, domainId, answeredAt, mode, [bankId+answeredAt]",
+      reviews: "questionId, due, mistakeType",
+      reviewTargets: "id, targetType, targetId, due, mistakeType, [targetType+due]",
+      questionFavorites: "questionId, createdAt",
+      exams: "id, bankId, startedAt, finishedAt",
+      streaks: "date",
+      settings: "key",
+      metadata: "key",
+      outlineProgress: "objectiveId, status, updatedAt",
+      checklistProgress: "itemId, completed, updatedAt",
+    }).upgrade(async (transaction) => {
+      const reviews = await transaction.table("reviewTargets").toArray() as LegacyFavoriteReview[];
+      const favorites = reviews
+        .filter((review) => review.targetType === "question" && review.favorite)
+        .map((review) => ({ questionId: review.targetId, createdAt: review.last_review ?? review.due }));
+      if (favorites.length) await transaction.table("questionFavorites").bulkPut(favorites);
+      await transaction.table("reviewTargets").toCollection().modify((review: LegacyFavoriteReview) => {
+        delete review.favorite;
+      });
+    });
   }
 }
 
@@ -125,10 +149,11 @@ export const db = new SalingoDatabase();
 
 export function initialAppData(): AppData {
   return {
-    version: 3,
+    version: 4,
     questions: INITIAL_QUESTIONS,
     answers: [],
     reviews: [],
+    questionFavorites: [],
     exams: [],
     streakDates: [],
     ai: DEFAULT_AI_SETTINGS,
@@ -169,6 +194,7 @@ async function replaceBusinessData(database: SalingoDatabase, data: AppData) {
     database.answers.clear(),
     database.reviews.clear(),
     database.reviewTargets.clear(),
+    database.questionFavorites.clear(),
     database.exams.clear(),
     database.streaks.clear(),
     database.settings.clear(),
@@ -180,6 +206,7 @@ async function replaceBusinessData(database: SalingoDatabase, data: AppData) {
     database.questions.bulkPut(data.questions),
     database.answers.bulkPut(data.answers),
     database.reviewTargets.bulkPut(data.reviews),
+    database.questionFavorites.bulkPut(data.questionFavorites),
     database.exams.bulkPut(data.exams),
     database.streaks.bulkPut(data.streakDates.map((date) => ({ date }))),
     database.settings.put({ key: "ai", value: data.ai }),
@@ -228,10 +255,11 @@ export async function initializeDatabase(database = db, storage?: Pick<Storage, 
 }
 
 export async function readAppData(database = db): Promise<AppData> {
-  const [questions, answers, reviews, exams, streaks, ai, preferences, prepProfile, outlineProgress, checklistProgress] = await Promise.all([
+  const [questions, answers, reviews, questionFavorites, exams, streaks, ai, preferences, prepProfile, outlineProgress, checklistProgress] = await Promise.all([
     database.questions.toArray(),
     database.answers.toArray(),
     database.reviewTargets.toArray(),
+    database.questionFavorites.toArray(),
     database.exams.toArray(),
     database.streaks.toArray(),
     database.settings.get("ai"),
@@ -241,10 +269,11 @@ export async function readAppData(database = db): Promise<AppData> {
     database.checklistProgress.toArray(),
   ]);
   return {
-    version: 3,
+    version: 4,
     questions,
     answers: answers.sort((a, b) => a.answeredAt.localeCompare(b.answeredAt)),
     reviews,
+    questionFavorites: questionFavorites.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     exams: exams.sort((a, b) => a.startedAt.localeCompare(b.startedAt)),
     streakDates: streaks.map((item) => item.date).sort(),
     ai: (ai?.value as AISettings | undefined) ?? DEFAULT_AI_SETTINGS,
@@ -300,6 +329,17 @@ export async function completeExam(database: SalingoDatabase, exam: ExamRecord, 
 
 export async function upsertReview(database: SalingoDatabase, review: ReviewCardState) {
   await database.reviewTargets.put(review);
+}
+
+export async function setQuestionFavorite(database: SalingoDatabase, questionId: string, favorite: boolean, createdAt = new Date().toISOString()) {
+  await database.transaction("rw", database.questionFavorites, async () => {
+    if (!favorite) {
+      await database.questionFavorites.delete(questionId);
+      return;
+    }
+    const existing = await database.questionFavorites.get(questionId);
+    await database.questionFavorites.put(existing ?? { questionId, createdAt });
+  });
 }
 
 export async function addQuestions(database: SalingoDatabase, questions: Question[]) {

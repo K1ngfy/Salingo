@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, CheckCircle, Lightbulb, MapPin, Shuffle, Sparkle, XCircle } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle, Heart, Lightbulb, MapPin, Shuffle, Sparkle, XCircle } from "@phosphor-icons/react";
 import { useAppData } from "./data-provider";
 import { Button } from "./ui/button";
 import { ContentLanguageToggle } from "./bank-controls";
@@ -17,32 +17,34 @@ import { sampleWithoutReplacement } from "@/lib/random";
 import { cn } from "@/lib/utils";
 import type { AnswerResponse, BankId, Explanation, MistakeType, Question, ReviewCardState } from "@/lib/types";
 
-export function PracticeSession({ bankId, domainId, sectionId, reviewMode = false, questionIds, sessionMode = "practice" }: {
+export function PracticeSession({ bankId, domainId, sectionId, reviewMode = false, questionIds, sessionMode = "practice", onExit }: {
   bankId?: BankId;
   domainId?: string;
   sectionId?: string;
   reviewMode?: boolean;
   questionIds?: string[];
-  sessionMode?: "practice" | "sweep";
+  sessionMode?: "practice" | "sweep" | "favorites";
+  onExit?: () => void;
 }) {
-  const { data, recordAnswer, setPreferences, upsertReview } = useAppData();
+  const { data, recordAnswer, setPreferences, setQuestionFavorite, upsertReview } = useAppData();
   const activeBankId = bankId ?? data.preferences.activeBankId;
   const candidateQuestions = useMemo(() => reviewMode
     ? data.reviews
       .filter((review) => review.targetType === "question" && new Date(review.due) <= new Date() && (!questionIds || questionIds.includes(review.targetId)))
       .map((review) => data.questions.find((question) => question.id === review.targetId))
       .filter((question): question is Question => Boolean(question))
-    : data.questions.filter((question) => questionBankId(question) === activeBankId
+    : data.questions.filter((question) => (sessionMode === "favorites" || questionBankId(question) === activeBankId)
       && isPracticeEnabled(question)
       && (!domainId || question.domainId === domainId)
       && (!sectionId || questionSectionId(question) === sectionId)
-      && (!questionIds || questionIds.includes(question.id))), [activeBankId, data.questions, data.reviews, domainId, questionIds, reviewMode, sectionId]);
+      && (!questionIds || questionIds.includes(question.id))), [activeBankId, data.questions, data.reviews, domainId, questionIds, reviewMode, sectionId, sessionMode]);
   const proposedQuestionIds = useMemo(() => {
     if (sessionMode === "sweep") {
       const available = new Set(candidateQuestions.map((question) => question.id));
       return questionIds ? questionIds.filter((id) => available.has(id)) : candidateQuestions.map((question) => question.id);
     }
     if (reviewMode) return candidateQuestions.slice(0, 10).map((question) => question.id);
+    if (sessionMode === "favorites") return sampleWithoutReplacement(candidateQuestions, 10).map((question) => question.id);
     return sampleWithoutReplacement(candidateQuestions, 10).map((question) => question.id);
   }, [candidateQuestions, questionIds, reviewMode, sessionMode]);
   const [frozenQuestionIds, setFrozenQuestionIds] = useState<string[]>();
@@ -67,15 +69,17 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
   const [saving, setSaving] = useState(false);
   const [mistakeType, setMistakeType] = useState<MistakeType>("概念盲区");
   const [currentReview, setCurrentReview] = useState<ReviewCardState>();
+  const [favoriteSaving, setFavoriteSaving] = useState(false);
+  const [favoriteError, setFavoriteError] = useState("");
 
   const question = questions[index];
   if (!question && !finished) {
-    return <div className="mx-auto max-w-2xl rounded-[2rem] border-2 border-[var(--c-ecece8)] bg-[var(--surface)] p-8 text-center"><CheckCircle className="mx-auto text-[var(--c-58cc02)]" size={56} weight="duotone" /><h1 className="mt-4 text-2xl font-black">{reviewMode ? "今天的复习已完成" : sessionMode === "sweep" ? "今日通刷任务已完成" : "当前范围暂时没有可作答题目"}</h1><p className="mt-2 font-semibold text-[var(--c-777)]">{reviewMode ? "新的错题和到期卡片会自动出现在这里。" : sessionMode === "sweep" ? "明天继续，直到刷完整个题库。" : "缺少原图的题目可在题库浏览，但不会进入闯关。"}</p><Button asChild className="mt-6"><Link href={reviewMode ? "/review" : sessionMode === "sweep" ? `/learn?bank=${activeBankId}&mode=sweep` : "/learn"}>返回</Link></Button></div>;
+    return <div className="mx-auto max-w-2xl rounded-[2rem] border-2 border-[var(--c-ecece8)] bg-[var(--surface)] p-8 text-center"><CheckCircle className="mx-auto text-[var(--c-58cc02)]" size={56} weight="duotone" /><h1 className="mt-4 text-2xl font-black">{reviewMode ? "今天的复习已完成" : sessionMode === "sweep" ? "今日通刷任务已完成" : sessionMode === "favorites" ? "没有符合条件的收藏题目" : "当前范围暂时没有可作答题目"}</h1><p className="mt-2 font-semibold text-[var(--c-777)]">{reviewMode ? "新的错题和到期卡片会自动出现在这里。" : sessionMode === "sweep" ? "明天继续，直到刷完整个题库。" : sessionMode === "favorites" ? "调整筛选条件或在刷题时收藏更多重点题。" : "缺少原图的题目可在题库浏览，但不会进入闯关。"}</p>{onExit ? <Button className="mt-6" onClick={onExit}>返回收藏列表</Button> : <Button asChild className="mt-6"><Link href={reviewMode ? "/review" : sessionMode === "sweep" ? `/learn?bank=${activeBankId}&mode=sweep` : "/learn"}>返回</Link></Button>}</div>;
   }
 
   if (finished) {
     const rate = questions.length ? Math.round((sessionCorrect / questions.length) * 100) : 0;
-    return <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="mx-auto max-w-2xl rounded-[2rem] bg-[var(--c-effbe5)] p-8 text-center sm:p-12"><span className="mx-auto grid size-20 place-items-center rounded-[1.6rem] bg-[var(--c-58cc02)] text-white shadow-[0_6px_0_var(--c-46a302)]"><Check size={44} weight="bold" /></span><p className="mt-7 text-sm font-black tracking-[0.16em] text-[var(--c-58a700)]">SESSION COMPLETE</p><h1 className="mt-2 text-3xl font-black">{sessionMode === "sweep" ? "今日通刷完成" : "这一关完成了"}</h1><p className="mt-3 font-bold text-[var(--c-6d8061)]">答对 {sessionCorrect} / {questions.length} 题 · 正确率 {rate}%</p><div className="mt-8 flex justify-center"><Button asChild><Link href={reviewMode ? "/review" : sessionMode === "sweep" ? `/learn?bank=${activeBankId}&mode=sweep` : "/learn"}>返回</Link></Button></div></motion.div>;
+    return <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="mx-auto max-w-2xl rounded-[2rem] bg-[var(--c-effbe5)] p-8 text-center sm:p-12"><span className="mx-auto grid size-20 place-items-center rounded-[1.6rem] bg-[var(--c-58cc02)] text-white shadow-[0_6px_0_var(--c-46a302)]"><Check size={44} weight="bold" /></span><p className="mt-7 text-sm font-black tracking-[0.16em] text-[var(--c-58a700)]">SESSION COMPLETE</p><h1 className="mt-2 text-3xl font-black">{sessionMode === "sweep" ? "今日通刷完成" : sessionMode === "favorites" ? "收藏题练习完成" : "这一关完成了"}</h1><p className="mt-3 font-bold text-[var(--c-6d8061)]">答对 {sessionCorrect} / {questions.length} 题 · 正确率 {rate}%</p><div className="mt-8 flex justify-center">{onExit ? <Button onClick={onExit}>返回收藏列表</Button> : <Button asChild><Link href={reviewMode ? "/review" : sessionMode === "sweep" ? `/learn?bank=${activeBankId}&mode=sweep` : "/learn"}>返回</Link></Button>}</div></motion.div>;
   }
 
   const domain = question.domainId ? getDomain(question.domainId) : undefined;
@@ -96,7 +100,14 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
   };
   const next = () => {
     if (index >= questions.length - 1) setFinished(true);
-    else { setIndex((value) => value + 1); setResponse(choiceResponse([])); setChecked(false); setCorrect(false); setMistakeType("概念盲区"); setCurrentReview(undefined); setAIExplanation(null); setAIError(""); setSubmitError(""); setStartedAt(Date.now()); }
+    else { setIndex((value) => value + 1); setResponse(choiceResponse([])); setChecked(false); setCorrect(false); setMistakeType("概念盲区"); setCurrentReview(undefined); setAIExplanation(null); setAIError(""); setSubmitError(""); setFavoriteError(""); setStartedAt(Date.now()); }
+  };
+  const favorite = data.questionFavorites.some((item) => item.questionId === question.id);
+  const toggleFavorite = async () => {
+    setFavoriteSaving(true); setFavoriteError("");
+    try { await setQuestionFavorite(question.id, !favorite); }
+    catch (cause) { setFavoriteError(cause instanceof Error ? cause.message : "收藏状态保存失败，请重试"); }
+    finally { setFavoriteSaving(false); }
   };
   const requestAIExplanation = async () => {
     setAILoading(true); setAIError("");
@@ -109,7 +120,8 @@ export function PracticeSession({ bankId, domainId, sectionId, reviewMode = fals
   const hasOptionAnalysis = Object.values(shownExplanation.optionAnalysis).some(Boolean);
 
   return <div className="mx-auto max-w-3xl">
-    <div className="mb-5 flex flex-wrap items-center gap-3"><Link href={reviewMode ? "/review" : sessionMode === "sweep" ? `/learn?bank=${activeBankId}&mode=sweep` : "/learn"} aria-label="退出本次练习" className="grid size-10 place-items-center rounded-xl text-[var(--c-888)] hover:bg-[var(--c-eee)]"><ArrowLeft size={22} weight="bold" /></Link><div className="h-3 min-w-28 flex-1 overflow-hidden rounded-full bg-[var(--c-e8e8e3)]"><motion.div className="h-full rounded-full bg-[var(--c-58cc02)]" animate={{ width: `${((index + (checked ? 1 : 0)) / questions.length) * 100}%` }} /></div><span className="text-sm font-black text-[var(--c-888)]">{index + 1}/{questions.length}</span><button type="button" onClick={() => void setPreferences({ ...data.preferences, questionAssistEnabled: !data.preferences.questionAssistEnabled })} className={cn("rounded-xl px-3 py-2 text-xs font-black", data.preferences.questionAssistEnabled ? "bg-[var(--c-fff2b8)] text-[var(--c-8a681d)]" : "bg-[var(--c-f1f1ed)] text-[var(--c-888)]")}>审题辅助</button><ContentLanguageToggle /></div>
+    <div className="mb-5 flex flex-wrap items-center gap-3">{onExit ? <button type="button" onClick={onExit} aria-label="退出本次练习" className="grid size-10 place-items-center rounded-xl text-[var(--c-888)] hover:bg-[var(--c-eee)]"><ArrowLeft size={22} weight="bold" /></button> : <Link href={reviewMode ? "/review" : sessionMode === "sweep" ? `/learn?bank=${activeBankId}&mode=sweep` : "/learn"} aria-label="退出本次练习" className="grid size-10 place-items-center rounded-xl text-[var(--c-888)] hover:bg-[var(--c-eee)]"><ArrowLeft size={22} weight="bold" /></Link>}<div className="h-3 min-w-28 flex-1 overflow-hidden rounded-full bg-[var(--c-e8e8e3)]"><motion.div className="h-full rounded-full bg-[var(--c-58cc02)]" animate={{ width: `${((index + (checked ? 1 : 0)) / questions.length) * 100}%` }} /></div><span className="text-sm font-black text-[var(--c-888)]">{index + 1}/{questions.length}</span><button type="button" onClick={() => void toggleFavorite()} disabled={favoriteSaving} aria-label={favorite ? "取消收藏题目" : "收藏题目"} aria-pressed={favorite} title={favorite ? "取消收藏" : "收藏这道题"} className={cn("grid size-10 place-items-center rounded-xl transition", favorite ? "bg-[var(--c-fff0f0)] text-[var(--c-ff4b4b)]" : "bg-[var(--c-f1f1ed)] text-[var(--c-999)] hover:text-[var(--c-ff4b4b)]")}><Heart size={20} weight={favorite ? "fill" : "bold"} /></button><button type="button" onClick={() => void setPreferences({ ...data.preferences, questionAssistEnabled: !data.preferences.questionAssistEnabled })} className={cn("rounded-xl px-3 py-2 text-xs font-black", data.preferences.questionAssistEnabled ? "bg-[var(--c-fff2b8)] text-[var(--c-8a681d)]" : "bg-[var(--c-f1f1ed)] text-[var(--c-888)]")}>审题辅助</button><ContentLanguageToggle /></div>
+    {favoriteError && <p role="alert" className="mb-4 rounded-xl bg-[var(--c-fff0f0)] p-3 text-sm font-bold text-[var(--c-c63838)]">{favoriteError}</p>}
     <div className="mb-5 flex flex-wrap gap-2"><span className="rounded-lg bg-[var(--c-eef8fd)] px-2.5 py-1 text-xs font-black text-[var(--c-168fc7)]">{domain ? `D${domain.number} · ${domain.shortName}` : section?.name ?? "综合模拟"}</span><span className="rounded-lg bg-[var(--c-f0f0ec)] px-2.5 py-1 text-xs font-black text-[var(--c-777)]">{question.type === "matching" ? "匹配题" : question.type === "multiple" ? "多选题" : "单选题"}</span></div>
     <AnimatePresence mode="wait"><motion.div key={question.id} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}><QuestionStem question={question} language={data.preferences.contentLanguage} assistEnabled={data.preferences.questionAssistEnabled} />{question.type === "multiple" && <p className="mt-2 text-sm font-bold text-[var(--c-168fc7)]">可选择多个答案</p>}<QuestionAnswerInput question={question} response={response} onChange={setResponse} language={data.preferences.contentLanguage} disabled={checked} reveal={checked} /></motion.div></AnimatePresence>
     <AnimatePresence>{checked && <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className={cn("mt-7 rounded-[1.6rem] p-5 sm:p-6", correct ? "bg-[var(--c-eefbdc)]" : "bg-[var(--c-fff0f0)]")}>

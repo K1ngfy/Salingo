@@ -3,7 +3,7 @@ import { INITIAL_QUESTIONS } from "@/data/full-bank";
 import { appDataSchema, questionArraySchema, questionSchema } from "./validation";
 
 describe("AppData backup migration", () => {
-  it("migrates version 1 choice answers, exams and preferences to version 3", () => {
+  it("migrates version 1 choice answers, exams and preferences to version 4", () => {
     const question = { ...INITIAL_QUESTIONS[0], bankId: undefined, sectionId: undefined, practiceEnabled: undefined };
     const parsed = appDataSchema.parse({
       version: 1,
@@ -14,7 +14,7 @@ describe("AppData backup migration", () => {
       streakDates: [],
       ai: { baseUrl: "", apiKey: "", model: "gpt-5-mini" },
     });
-    expect(parsed.version).toBe(3);
+    expect(parsed.version).toBe(4);
     expect(parsed.questions[0].bankId).toBe("salingo-original");
     expect(parsed.answers[0].response).toEqual({ kind: "choice", selectedAnswers: ["A"] });
     expect(parsed.exams[0].answers[question.id]).toEqual({ kind: "choice", selectedAnswers: ["A"] });
@@ -22,7 +22,7 @@ describe("AppData backup migration", () => {
     expect(parsed.prepProfile.dailyQuestionTarget).toBe(20);
   });
 
-  it("migrates version 2 review targets without losing FSRS state", () => {
+  it("migrates version 2 review targets and separates favorites without losing FSRS state", () => {
     const base = appDataSchema.parse({ version: 1, questions: [], answers: [], reviews: [], exams: [], streakDates: [], ai: { baseUrl: "", apiKey: "", model: "gpt-5-mini" } });
     const parsed = appDataSchema.parse({
       ...base,
@@ -30,8 +30,21 @@ describe("AppData backup migration", () => {
       preferences: { activeBankId: "salingo-original", contentLanguage: "bilingual" },
       reviews: [{ questionId: "q1", due: "2026-07-17T00:00:00.000Z", stability: 2, difficulty: 4, elapsed_days: 1, scheduled_days: 2, learning_steps: 0, reps: 3, lapses: 1, state: 2, mistakeType: "审题失误", favorite: true }],
     });
-    expect(parsed.reviews[0]).toMatchObject({ id: "question:q1", targetType: "question", targetId: "q1", reps: 3, mistakeType: "审题失误", favorite: true });
+    expect(parsed.reviews[0]).toMatchObject({ id: "question:q1", targetType: "question", targetId: "q1", reps: 3, mistakeType: "审题失误" });
+    expect(parsed.reviews[0]).not.toHaveProperty("favorite");
+    expect(parsed.questionFavorites).toEqual([{ questionId: "q1", createdAt: "2026-07-17T00:00:00.000Z" }]);
     expect(parsed.preferences.questionAssistEnabled).toBe(true);
+  });
+
+  it("migrates version 3 review favorites into the dedicated collection", () => {
+    const base = appDataSchema.parse({ version: 1, questions: [], answers: [], reviews: [], exams: [], streakDates: [], ai: { baseUrl: "", apiKey: "", model: "gpt-5-mini" } });
+    const parsed = appDataSchema.parse({
+      ...base,
+      version: 3,
+      reviews: [{ ...base.reviews[0], id: "question:q1", targetType: "question", targetId: "q1", due: "2026-07-17T00:00:00.000Z", stability: 2, difficulty: 4, elapsed_days: 1, scheduled_days: 2, learning_steps: 0, reps: 3, lapses: 1, state: 2, mistakeType: "审题失误", favorite: true }],
+    });
+    expect(parsed.reviews[0]).not.toHaveProperty("favorite");
+    expect(parsed.questionFavorites).toEqual([{ questionId: "q1", createdAt: "2026-07-17T00:00:00.000Z" }]);
   });
 
   it("rejects semantically invalid choice answers", () => {

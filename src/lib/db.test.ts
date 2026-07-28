@@ -15,6 +15,7 @@ import {
   readAppData,
   recordAnswer,
   resetDatabase,
+  setQuestionFavorite,
 } from "./db";
 
 class MemoryStorage {
@@ -44,7 +45,7 @@ function sampleAnswer(): AnswerRecord {
 }
 
 function sampleReview(): ReviewCardState {
-  return { id: "question:d1-care-001", targetType: "question", targetId: "d1-care-001", due: "2026-07-16T10:00:00.000Z", stability: 1, difficulty: 5, elapsed_days: 0, scheduled_days: 1, learning_steps: 0, reps: 1, lapses: 1, state: 1, mistakeType: "概念盲区", favorite: false };
+  return { id: "question:d1-care-001", targetType: "question", targetId: "d1-care-001", due: "2026-07-16T10:00:00.000Z", stability: 1, difficulty: 5, elapsed_days: 0, scheduled_days: 1, learning_steps: 0, reps: 1, lapses: 1, state: 1, mistakeType: "概念盲区" };
 }
 
 describe("IndexedDB initialization", () => {
@@ -104,7 +105,7 @@ describe("IndexedDB initialization", () => {
     expect(await database.questions.count()).toBe(INITIAL_QUESTIONS.length);
   });
 
-  it("upgrades Dexie v2 question reviews to generic v3 review targets", async () => {
+  it("upgrades legacy review favorites into independent question favorites", async () => {
     const name = `salingo-v2-upgrade-${crypto.randomUUID()}`;
     const legacy = new Dexie(name);
     legacy.version(2).stores({ questions: "id, bankId", answers: "id", reviews: "questionId, due", exams: "id", streaks: "date", settings: "key", metadata: "key" });
@@ -117,7 +118,9 @@ describe("IndexedDB initialization", () => {
     databases.push(database);
     await database.open();
     const review = await database.reviewTargets.get("question:legacy-q");
-    expect(review).toMatchObject({ targetType: "question", targetId: "legacy-q", reps: 2, mistakeType: "审题失误", favorite: true });
+    expect(review).toMatchObject({ targetType: "question", targetId: "legacy-q", reps: 2, mistakeType: "审题失误" });
+    expect(review).not.toHaveProperty("favorite");
+    expect(await database.questionFavorites.get("legacy-q")).toEqual({ questionId: "legacy-q", createdAt: "2026-07-16T00:00:00.000Z" });
     expect((await database.settings.get("preferences"))?.value).toMatchObject({ questionAssistEnabled: true });
   });
 
@@ -161,6 +164,20 @@ describe("IndexedDB transactions and backups", () => {
     expect(snapshot.answers).toHaveLength(1);
     expect(snapshot.reviews).toHaveLength(1);
     expect(snapshot.streakDates).toEqual(["2026-07-15"]);
+  });
+
+  it("stores favorites idempotently without creating or deleting review cards", async () => {
+    const database = createDb();
+    await initializeDatabase(database, new MemoryStorage());
+    await setQuestionFavorite(database, "d1-care-001", true, "2026-07-20T10:00:00.000Z");
+    await setQuestionFavorite(database, "d1-care-001", true, "2026-07-21T10:00:00.000Z");
+    expect(await database.questionFavorites.toArray()).toEqual([{ questionId: "d1-care-001", createdAt: "2026-07-20T10:00:00.000Z" }]);
+    expect(await database.reviewTargets.count()).toBe(0);
+
+    await database.reviewTargets.put(sampleReview());
+    await setQuestionFavorite(database, "d1-care-001", false);
+    expect(await database.questionFavorites.count()).toBe(0);
+    expect(await database.reviewTargets.get(sampleReview().id)).toEqual(sampleReview());
   });
 
   it("rolls back answer and streak when review persistence fails", async () => {
@@ -232,10 +249,11 @@ describe("IndexedDB transactions and backups", () => {
   it("imports version 1 backups, rejects invalid input, and resets to seeds", async () => {
     const database = createDb();
     await initializeDatabase(database, new MemoryStorage());
-    const backup: AppData = { ...initialAppData(), answers: [sampleAnswer()], reviews: [sampleReview()], ai: { baseUrl: "https://example.test/v1", apiKey: "must-not-import", model: "test-model" } };
+    const backup: AppData = { ...initialAppData(), answers: [sampleAnswer()], reviews: [sampleReview()], questionFavorites: [{ questionId: "d1-care-001", createdAt: "2026-07-20T10:00:00.000Z" }], ai: { baseUrl: "https://example.test/v1", apiKey: "must-not-import", model: "test-model" } };
     await importBackup(database, JSON.stringify(backup));
     const restored = await readAppData(database);
     expect(restored.answers).toHaveLength(1);
+    expect(restored.questionFavorites).toEqual(backup.questionFavorites);
     expect(restored.ai).toEqual({ ...backup.ai, apiKey: "" });
     await expect(importBackup(database, JSON.stringify({ version: 1 }))).rejects.toBeDefined();
     await resetDatabase(database);
@@ -243,5 +261,6 @@ describe("IndexedDB transactions and backups", () => {
     expect(reset.questions).toHaveLength(INITIAL_QUESTIONS.length);
     expect(reset.answers).toHaveLength(0);
     expect(reset.reviews).toHaveLength(0);
+    expect(reset.questionFavorites).toHaveLength(0);
   });
 });

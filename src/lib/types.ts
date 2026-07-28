@@ -99,7 +99,11 @@ export interface ReviewCardState {
   state: number;
   last_review?: string;
   mistakeType: MistakeType;
-  favorite: boolean;
+}
+
+export interface QuestionFavorite {
+  questionId: string;
+  createdAt: string;
 }
 
 export interface ExamRecord {
@@ -227,10 +231,11 @@ export interface CommunityProfile {
 }
 
 export interface AppData {
-  version: 3;
+  version: 4;
   questions: Question[];
   answers: AnswerRecord[];
   reviews: ReviewCardState[];
+  questionFavorites: QuestionFavorite[];
   exams: ExamRecord[];
   streakDates: string[];
   ai: AISettings;

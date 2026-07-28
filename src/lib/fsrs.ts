@@ -43,6 +43,5 @@ export function scheduleReview(
     state: result.card.state,
     last_review: result.card.last_review?.toISOString(),
     mistakeType: previous?.mistakeType ?? mistakeType,
-    favorite: previous?.favorite ?? false,
   };
 }
