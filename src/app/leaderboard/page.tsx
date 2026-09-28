@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ArrowClockwise, Fire, Trophy, X } from "@phosphor-icons/react";
+import { ArrowClockwise, ChartBar, Fire, PencilSimpleLine, Trophy, X } from "@phosphor-icons/react";
 import { useCommunity } from "@/components/community-provider";
 import { Button } from "@/components/ui/button";
 import { DOMAINS } from "@/lib/domains";
@@ -20,13 +20,6 @@ import {
 } from "@/lib/community";
 import type { CommunityProfile, DomainId } from "@/lib/types";
 
-type Tab = "streak" | "today" | "domain";
-const TABS: Array<{ id: Tab; label: string }> = [
-  { id: "streak", label: "连续天数" },
-  { id: "today", label: "今日答题" },
-  { id: "domain", label: "分领域正确率" },
-];
-
 const MEDALS = ["#ffb100", "#b8c4cf", "#d9945b"];
 
 function rankBadge(index: number) {
@@ -41,31 +34,50 @@ function rankBadge(index: number) {
   );
 }
 
-export default function LeaderboardPage() {
-  const { profile, ready, createProfile, syncing } = useCommunity();
-  const [tab, setTab] = useState<Tab>("streak");
-  const [domainId, setDomainId] = useState<DomainId>("d1");
+function useStandardLeaderboard(type: "streak" | "today", userId: string | undefined, refreshKey: number) {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
-  const [domainEntries, setDomainEntries] = useState<DomainLeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    if (!userId) return;
+    let active = true;
+    setLoading(true);
+    setError(undefined);
+    void fetchLeaderboard(type)
+      .then((result) => { if (active) setEntries(result); })
+      .catch((cause) => { if (active) setError(cause instanceof Error ? cause.message : "排行榜加载失败"); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [type, userId, refreshKey]);
+
+  return { entries, loading, error };
+}
+
+export default function LeaderboardPage() {
+  const { profile, ready, createProfile, syncing } = useCommunity();
+  const [domainId, setDomainId] = useState<DomainId>("d1");
+  const [refreshKey, setRefreshKey] = useState(0);
+  const userId = profile?.userId;
+  const streak = useStandardLeaderboard("streak", userId, refreshKey);
+  const today = useStandardLeaderboard("today", userId, refreshKey);
+  const [domainEntries, setDomainEntries] = useState<DomainLeaderboardEntry[]>([]);
+  const [domainLoading, setDomainLoading] = useState(false);
+  const [domainError, setDomainError] = useState<string>();
   const [selected, setSelected] = useState<string | null>(null);
   const [newProfile, setNewProfile] = useState<CommunityProfile>();
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(undefined);
-    try {
-      if (tab === "domain") setDomainEntries(await fetchDomainLeaderboard(domainId));
-      else setEntries(await fetchLeaderboard(tab));
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "排行榜加载失败");
-    } finally {
-      setLoading(false);
-    }
-  }, [tab, domainId]);
-
-  useEffect(() => { void load(); }, [load, profile?.userId]);
+  useEffect(() => {
+    if (!userId) return;
+    let active = true;
+    setDomainLoading(true);
+    setDomainError(undefined);
+    void fetchDomainLeaderboard(domainId)
+      .then((entries) => { if (active) setDomainEntries(entries); })
+      .catch((cause) => { if (active) setDomainError(cause instanceof Error ? cause.message : "排行榜加载失败"); })
+      .finally(() => { if (active) setDomainLoading(false); });
+    return () => { active = false; };
+  }, [domainId, userId, refreshKey]);
 
   if (!ready) return <p className="mt-10 text-center font-bold text-[var(--c-999)]">正在加载…</p>;
 
@@ -83,35 +95,38 @@ export default function LeaderboardPage() {
     <>
       <PageHeader />
       {newProfile && <RecoveryModal profile={newProfile} onClose={() => setNewProfile(undefined)} />}
-      <div className="mt-7 flex flex-wrap items-center gap-2">
-        <div className="flex flex-wrap gap-1 rounded-2xl bg-[var(--c-f0f0eb)] p-1">
-          {TABS.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`rounded-xl px-4 py-2 text-sm font-black transition ${tab === id ? "bg-[var(--surface)] text-[var(--c-58a700)] shadow-sm" : "text-[var(--c-888)] hover:text-[var(--c-555)]"}`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+      <div className="mt-7 flex justify-end">
         <button
-          onClick={() => void load()}
-          className="ml-auto grid size-10 place-items-center rounded-xl text-[var(--c-888)] transition hover:bg-[var(--c-f0f0eb)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100"
+          onClick={() => setRefreshKey((key) => key + 1)}
+          className="grid size-10 place-items-center rounded-xl text-[var(--c-888)] transition hover:bg-[var(--c-f0f0eb)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100"
           aria-label="刷新排行榜"
           title={syncing ? "正在同步你的成绩…" : "刷新"}
         >
-          <ArrowClockwise size={20} weight="bold" className={loading || syncing ? "animate-spin" : ""} />
+          <ArrowClockwise size={20} weight="bold" className={streak.loading || today.loading || domainLoading || syncing ? "animate-spin" : ""} />
         </button>
       </div>
 
-      {tab === "domain" && (
-        <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-2 grid gap-4 lg:grid-cols-2">
+        <LeaderboardPanel icon={<Fire size={22} weight="fill" />} title="连续天数" description="坚持练习的伙伴" iconClassName="bg-[var(--c-fff0d4)] text-[var(--c-ff9600)]">
+          <ListContent loading={streak.loading} error={streak.error}>
+            <StandardList tab="streak" entries={streak.entries} selfId={profile.publicId} onSelect={setSelected} />
+          </ListContent>
+        </LeaderboardPanel>
+        <LeaderboardPanel icon={<PencilSimpleLine size={22} weight="bold" />} title="今日答题" description="今天的练习进度" iconClassName="bg-[var(--c-eaf8ff)] text-[var(--c-1cb0f6)]">
+          <ListContent loading={today.loading} error={today.error}>
+            <StandardList tab="today" entries={today.entries} selfId={profile.publicId} onSelect={setSelected} />
+          </ListContent>
+        </LeaderboardPanel>
+      </div>
+
+      <LeaderboardPanel icon={<ChartBar size={22} weight="bold" />} title="分领域正确率" description="选择知识域查看排名" iconClassName="bg-[var(--c-e8f7d8)] text-[var(--c-58a700)]" className="mt-4">
+        <div className="mb-4 flex gap-2 overflow-x-auto pb-1 sm:flex-wrap" aria-label="选择知识域">
           {DOMAINS.map((domain) => (
             <button
               key={domain.id}
               onClick={() => setDomainId(domain.id)}
-              className="rounded-xl px-3 py-1.5 text-xs font-black transition"
+              aria-pressed={domainId === domain.id}
+              className="shrink-0 rounded-xl px-3 py-1.5 text-xs font-black transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-100"
               style={domainId === domain.id
                 ? { backgroundColor: domain.color, color: "#fff" }
                 : { backgroundColor: domain.softColor, color: domain.color }}
@@ -120,22 +135,39 @@ export default function LeaderboardPage() {
             </button>
           ))}
         </div>
-      )}
-
-      <div className="mt-5">
-        {error && <p className="rounded-xl bg-[var(--c-fff0f0)] p-4 text-center text-sm font-bold text-[var(--c-b83232)]">{error}</p>}
-        {!error && loading && <p className="py-10 text-center font-bold text-[var(--c-999)]">加载中…</p>}
-        {!error && !loading && tab !== "domain" && (
-          <StandardList tab={tab} entries={entries} selfId={profile.publicId} onSelect={setSelected} />
-        )}
-        {!error && !loading && tab === "domain" && (
+        <ListContent loading={domainLoading} error={domainError}>
           <DomainList entries={domainEntries} selfId={profile.publicId} onSelect={setSelected} />
-        )}
-      </div>
+        </ListContent>
+      </LeaderboardPanel>
 
       {selected && <UserStatsModal publicId={selected} onClose={() => setSelected(null)} />}
     </>
   );
+}
+
+function LeaderboardPanel({ icon, title, description, iconClassName, className = "", children }: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  iconClassName: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className={`min-w-0 rounded-[1.6rem] border-2 border-[var(--c-ecece8)] bg-[var(--surface)] p-4 sm:p-5 ${className}`}>
+      <div className="mb-4 flex items-center gap-3">
+        <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${iconClassName}`}>{icon}</span>
+        <div><h2 className="text-lg font-black">{title}</h2><p className="text-xs font-semibold text-[var(--c-999)]">{description}</p></div>
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function ListContent({ loading, error, children }: { loading: boolean; error?: string; children: React.ReactNode }) {
+  if (error) return <p className="rounded-xl bg-[var(--c-fff0f0)] p-4 text-center text-sm font-bold text-[var(--c-b83232)]">{error}</p>;
+  if (loading) return <p className="py-10 text-center font-bold text-[var(--c-999)]">加载中…</p>;
+  return children;
 }
 
 function PageHeader() {
@@ -240,7 +272,7 @@ function DomainList({ entries, selfId, onSelect }: {
 }) {
   if (!entries.length) return <EmptyState />;
   return (
-    <ul className="space-y-2">
+    <ul className="grid gap-2 sm:grid-cols-2">
       {entries.map((entry, index) => {
         const isSelf = entry.publicId === selfId;
         return (
